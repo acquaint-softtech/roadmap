@@ -1,0 +1,13 @@
+{% extends "home/base.html" %}
+    {% block content %}
+        <h1 class="mb-3 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Tasks</h1>
+
+        <ul>
+            {% for task in tasks %}
+                <li>Task name: {{ task.name }}</li>
+                <li>Task Created By : {{ task.created_by.username }}</li>
+                <li>Task Created On : {{ task.created }}</li>
+                <hr/>
+            {% endfor %}
+        </ul>
+    {% endblock content %}

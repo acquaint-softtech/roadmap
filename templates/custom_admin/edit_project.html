@@ -1,0 +1,39 @@
+{% extends "custom_admin/admin_base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="ml-4 mt-3">
+    <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Edit project</h1>
+    <form enctype="multipart/form-data" method="post" class="mt-2">{% csrf_token %}
+        {{form.media}}
+        <div class="mb-6 mt-2">
+            <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Title:</label>
+            <input type="text" name="title" maxlength="150" autofocus="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.title.value|default_if_none:'' }}">
+            <span>{{form.errors.title}}</span>
+        </div>
+        <div class="mb-6 mt-2">
+            <label for="url" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">URL:</label>
+            <input type="text" name="url" maxlength="150" autofocus="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.url.value|default_if_none:'' }}">
+            <span>{{form.errors.url}}</span>
+        </div>
+        <div class="mb-6 mt-2">
+            <input name="is_private" class="form-check-input appearance-none w-12 -ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" id="flexSwitchCheckChecked"  {% if form.is_private.value%}checked{% endif %}>
+            <label class="form-check-label inline-block text-gray-800" for="flexSwitchCheckChecked">Private (Private projects are only visible for employees and admins)
+            </label>
+            <span>{{form.errors.is_private}}</span>
+          </div>
+        </div>
+        <div class="mb-6 mt-2">
+            <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Description</label>
+            {{ form.description|add_class:"ckeditor"}}
+            <span>{{form.errors.description}}</span>
+        </div>
+        <button class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out mt-3" type="submit">Save</button>
+
+    </form>
+
+</div>
+
+
+
+{% endblock content %}

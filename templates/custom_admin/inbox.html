@@ -1,0 +1,73 @@
+{% extends 'custom_admin/admin_base.html' %}
+{% block content %}
+
+<div class="antialiased sans-serif bg-gray-200 h-screen">
+
+	<div class="container mx-auto py-6 px-4"  x-cloak>
+		<h1 class="text-3xl py-4 border-b mb-10">Inbox</h1>
+
+		<table class="table-fixed">
+<div class="overflow-x-auto relative">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="py-3 px-6">
+                    Title
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Comments
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    User
+                </th>
+				<th scope="col" class="py-3 px-6">
+                    Date
+                </th>
+				<th scope="col" class="py-3 px-6">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+			{% for inbox in inboxes %}
+				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+					<td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+						{{inbox.name}}
+					</td>
+					<th scope="row" class="py-4 px-6">
+						0
+					</th>
+					<td class="py-4 px-6">
+						{{inbox.created_by}}
+					</td>
+					<td class="py-4 px-6">
+						{{inbox.created}}
+					</td>
+					<td class="py-4 px-6">
+						<a href="{% url 'custom_admin:update_task' inbox.slug %}"><button class="inline-block px-6 py-2.5 bg-yellow-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out">Edit</button></a>
+                		<a href="{% url 'custom_admin:delete_task' inbox.slug %}"><button class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out">Delete</button></a>
+					</td>
+				</tr>
+			{% endfor %}
+        </tbody>
+    </table>
+
+		{% if is_paginated %}
+			<div class="pagination">
+				<span class="page-links">
+					{% if page_obj.has_previous %}
+						<a href="{% url 'custom_admin:inbox' %}?page={{ page_obj.previous_page_number }}">previous</a>
+					{% endif %}
+					<span class="page-current">
+						Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+					</span>
+					{% if page_obj.has_next %}
+						<a href="{% url 'custom_admin:inbox' %}?page={{ page_obj.next_page_number }}">next</a>
+					{% endif %}
+				</span>
+			</div>
+		{% endif %}
+</div>
+</div>
+
+{% endblock %}

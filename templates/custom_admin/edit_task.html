@@ -1,0 +1,86 @@
+{% extends 'custom_admin/admin_base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="ml-4 mt-3">
+    <h1 class="ml-3 mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Edit Task</h1>
+    <form enctype="multipart/form-data" method="post" class="mt-2 ml-3">{% csrf_token %}
+    {{ form.media }}
+        <div class="mb-6 mt-2">
+            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Name:</label>
+            <input type="text" name="name" maxlength="150" autofocus="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{form.name.value}}">
+            <span>{{form.errors.name}}</span>
+        </div>
+        <div class="mb-6 mt-2">
+            <label for="created_by" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">User:</label>
+                {{form.created_by}}
+            <span>{{form.errors.created_by}}</span>
+        </div>
+
+        <div class="mb-6 mt-2">
+            <label for="project" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Project:</label>
+                {{form.project}}
+            <span>{{form.errors.project}}</span>
+        </div>
+
+        <div class="mb-6 mt-2">
+            <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Board:</label>
+                {{form.type}}
+            <span>{{form.errors.type}}</span>
+        </div>
+
+        <div class="mb-6 mt-2">
+            <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Description</label>
+            {{ form.description|add_class:"ckeditor"}}
+            <span>{{form.errors.description}}</span>
+        </div>
+        <button class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out mt-3" type="submit">Save</button>
+    </form>
+
+<div class="overflow-x-auto relative">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="py-3 px-6">
+                    Content
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Item
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    User
+                </th>
+				<th scope="col" class="py-3 px-6">
+                    Date
+                </th>
+				<th scope="col" class="py-3 px-6">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+			{% for comment in comments %}
+				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+					<td class="py-4 px-6">
+						{{comment.text | safe}}
+					</td>
+					<td class="py-4 px-6">
+						{{comment.task.name}}
+					</td>
+					<td class="py-4 px-6">
+						{{comment.user.email}}
+					</td>
+					<td class="py-4 px-6">
+						{{comment.created}}
+					</td>
+					<td class="py-4 px-6">
+                		<a href="{% url 'custom_admin:delete_comment' comment.id %}" ><button class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out">Delete</button></a>
+					</td>
+				</tr>
+			{% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,47 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %}Registration{% endblock title %}
+{% block content %}
+    <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white ml-3">Registration</h1>
+    <form enctype="multipart/form-data" method="post" class="ml-3">{% csrf_token %}
+        <div class="mb-6 mt-2">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{% block trans %}Username:{% endblock %}</label>
+            <input type="text" name="username" maxlength="150" autofocus=""
+                   class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   id="id_username"
+                   value="{{ form.username.value|default_if_none:'' }}">
+            <span>{{form.errors.username}}</span>
+        </div>
+        <div class="mb-6 mt-2">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">First name:</label>
+            <input type="text" name="first_name" maxlength="150" autofocus="" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.first_name.value|default_if_none:'' }}"  id="id_first_name">
+            <span>{{form.errors.first_name}}</span>
+        </div>
+        <div class="mb-6 mt-2">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Last name:</label>
+            <input type="text" name="last_name" maxlength="150" autofocus="" value="{{ form.last_name.value|default_if_none:'' }}" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="id_last_name">
+            <span>{{form.errors.last_name}}</span>
+        </div>
+        <div class="mb-6 mt-2">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email address:</label>
+            <input type="email" name="email" value="{{ form.email.value|default_if_none:'' }}" maxlength="150" autofocus="" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  id="id_email">
+            <span>{{form.errors.email}}</span>
+        </div>
+        <div class="mb-6 mt-2">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">Photo</label>
+            <input type="file" name="photo" accept="image/*" class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
+            <span>{{form.errors.photo}}</span>
+        </div>
+        <div class="mb-6 mt-2">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Password:</label>
+            <input type="password" name="password1" maxlength="150" autofocus="" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  id="id_password1">
+            <span>{{form.errors.password1}}</span>
+        </div>
+        <div class="mb-6 mt-2">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Password confirmation:</label>
+            <input type="password" name="password2" maxlength="150" autofocus="" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  id="id_password2">
+            <span>{{form.errors.password2}}</span>
+        </div>
+        <button class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out mt-3" type="submit">Register</button>
+    </form>
+{% endblock content %}

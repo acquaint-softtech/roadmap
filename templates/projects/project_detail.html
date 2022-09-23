@@ -1,0 +1,65 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %}Home page{% endblock title %}
+{% block content %}
+
+<div class="inline-flex h-full w-full min-w-full gap-4 flex-nowrap overflow-scroll justify-center">
+
+
+    {% for task in tasks %}
+        {% for key,task_data in task.items %}
+            <section class="h-full">
+                <div class="bg-gray-100 rounded-xl min-w-[18rem] lg:w-[23rem] flex flex-col max-h-full">
+                    <div class="p-2 font-semibold text-center text-gray-800 border-b bg-gray-100/80 rounded-t-xl backdrop-blur-xl backdrop-saturate-150">
+                        <a href="#" class="border-b border-dotted border-black">
+                            {{key}}
+                        </a>
+                    </div>
+                    <ul class="p-2 space-y-2 overflow-y-scroll flex-1">
+
+                        {% if task_data %}
+                            {% for data in task_data %}
+                                <li>
+                                    <a href="{% url 'project:task_detail' data.slug %}" class="block p-4 space-y-4 bg-white shadow rounded-xl hover:bg-gray-50">
+                                        <div class="flex justify-between">
+                                            <p>
+                                                {{data.name}}
+                                            </p>
+                                            {% if data.is_pinned %}
+                                                <div class="flex items-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" x-data="" x-tooltip.raw="This item is pinned" class="text-gray-500 fill-gray-500">
+                                                            <path d="M15 11.586V6h2V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2h2v5.586l-2.707 1.707A.996.996 0 0 0 6 14v2a1 1 0 0 0 1 1h4v3l1 2 1-2v-3h4a1 1 0 0 0 1-1v-2a.996.996 0 0 0-.293-.707L15 11.586z"></path>
+                                                        </svg>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <footer class="flex items-end justify-between">
+                                            <span class="inline-flex items-center justify-center h-6 px-2 text-sm font-semibold tracking-tight text-gray-700 rounded-full bg-gray-50">
+                                                {{data.created}}
+                                            </span>
+                                            <div class="text-gray-500 text-sm">
+                                                2 votes
+                                            </div>
+                                        </footer>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li>
+                                <div class="p-3 font-medium text-center text-gray-500 border border-gray-300 border-dashed rounded-xl opacity-70">
+                                    <p>There are no items here.</p>
+                                </div>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </section>
+
+        {% endfor %}
+    {% endfor %}
+
+
+            </div>
+{% endblock content %}
+
+
