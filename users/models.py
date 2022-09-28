@@ -1,12 +1,15 @@
 from django.contrib.auth.models import AbstractUser, Group
 from django.db import models
+from users.manager import  CustomUserManager
 
 
 class User(AbstractUser):
+    username = None
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['']
+    REQUIRED_FIELDS = []
     email = models.EmailField("email address", unique=True)
     role = models.ForeignKey(Group, related_name='user_group', on_delete=models.SET_NULL, null=True)
+    objects = CustomUserManager()
 
 
 class Profile(models.Model):

@@ -3,6 +3,7 @@
 {% block title %}Home page{% endblock title %}
 {% block content %}
 
+
 <div class="inline-flex h-full w-full min-w-full gap-4 flex-nowrap overflow-scroll justify-center">
     {% for task in tasks %}
         {% for key,task_data in task.items %}
@@ -35,9 +36,11 @@
                                             <span class="inline-flex items-center justify-center h-6 px-2 text-sm font-semibold tracking-tight text-gray-700 rounded-full bg-gray-50">
                                                 {{data.created}}
                                             </span>
-                                            <div class="text-gray-500 text-sm">
-                                                2 votes
-                                            </div>
+                                            {% if data.num_votes != 0 %}
+                                                <div class="text-gray-500 text-sm">
+                                                    {{data.num_votes}} votes
+                                                </div>
+                                            {% endif %}
                                         </footer>
                                     </a>
                                 </li>
@@ -55,6 +58,10 @@
         {% endfor %}
     {% endfor %}
 </div>
+
+
+
+
 {% endblock content %}
 
 

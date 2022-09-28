@@ -154,7 +154,7 @@ class AdminUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
-            "username",
+            "first_name",
             "email",
             "role",
         )
@@ -169,7 +169,7 @@ class AdminUserForm(forms.ModelForm):
                             focus:border-blue-600 focus:outline-none'
 
         self.fields['role'].required = True
-        self.fields["username"].error_messages[
+        self.fields["first_name"].error_messages[
             "required"
         ] = "Please enter username."
         self.fields["email"].error_messages[

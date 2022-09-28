@@ -1,6 +1,7 @@
 # Create your views here.
 from django.contrib import messages
 from django.db import connection
+from django.db.models import Count
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -32,17 +33,20 @@ class TaskList(BaseContextView, LoginRequiredMixin, ListView):
     def get_queryset(self, *args, **kwargs):
         tasks = []
         task_data = super(TaskList, self).get_queryset(*args, **kwargs)
-        task_data = task_data.select_related('type').filter(project__slug=self.kwargs.get('slug')).values('name',
-                                                                                                          'created',
-                                                                                                          'type__name',
-                                                                                                          'slug',
-                                                                                                          'is_pinned')
-        boards = Board.objects.filter(project__slug = self.kwargs.get('slug')).values_list('name',flat=True).distinct()
+        task_data = task_data.select_related('type').annotate(num_votes=Count('user_task')).filter(
+            project__slug=self.kwargs.get('slug')).values('name',
+                                                          'created',
+                                                          'type__name',
+                                                          'slug',
+                                                          'is_pinned', 'num_votes')
+
+        boards = Board.objects.filter(project__slug=self.kwargs.get('slug')).values_list('name', flat=True).distinct()
 
         for board in boards:
             tasks.append({
-                board : task_data.filter(type__name=board)
+                board: task_data.filter(type__name=board)
             })
+
         return tasks
 
 
@@ -54,8 +58,10 @@ class TaskDetailView(BaseContextView, LoginRequiredMixin, DetailView):
         context = super(TaskDetailView,
                         self).get_context_data(*args, **kwargs)
         context["message_form"] = MessageForm()
-        context["boards"] = Board.objects.filter(project = self.object.project).values('name','id')
-        context['votes'] = list(Votes.objects.select_related('task','user').filter(task = self.object).values_list('user__username',flat=True).distinct())
+        context["boards"] = Board.objects.filter(project=self.object.project).values('name', 'id')
+        context['votes'] = list(
+            Votes.objects.select_related('task', 'user').filter(task=self.object).values_list('user__email',
+                                                                                              flat=True).distinct())
         context['message_data'] = Message.objects.select_related('task', 'user').filter(
             task__slug=self.kwargs.get('slug'))
         context['history_data'] = TaskHistory.objects.select_related('task', 'action_by').filter(
