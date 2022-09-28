@@ -1,8 +1,9 @@
-{% extends "custom_admin/admin_base.html" %}
+{% extends "custom_admin/old_admin_base.html" %}
 {% load widget_tweaks %}
+{% load static %}
 {% block content %}
 
-<div class="ml-4 mt-3">
+<div class="ml-4 mt-3" x-data="">
     <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Edit project</h1>
     <form enctype="multipart/form-data" method="post" class="mt-2">{% csrf_token %}
         {{form.media}}
@@ -32,10 +33,7 @@
              <table class="table">
                  {{ boards.management_form }}
 
-                {% for form in boards.forms %}
-                    {% for hidden in form.hidden_fields %}
-                        {{ hidden }}
-                    {% endfor %}
+                 {% for form in boards.forms %}
                     {% if forloop.first %}
                         <thead>
                         <tr>
@@ -45,9 +43,15 @@
                         </tr>
                         </thead>
                     {% endif %}
-                    <tr class="formset_row">
+                    <tr class="{% cycle 'row1' 'row2' %} formset_row">
                         {% for field in form.visible_fields %}
                             <td>
+                                {# Include the hidden fields in the form #}
+                                {% if forloop.first %}
+                                    {% for hidden in form.hidden_fields %}
+                                        {{ hidden }}
+                                    {% endfor %}
+                                {% endif %}
                                 {{ field.errors.as_ul }}
                                 {{ field }}
                             </td>
@@ -55,12 +59,20 @@
                     </tr>
                 {% endfor %}
             </table>
+            <input type="button" value="Add More" id="add_more"  @click="addmore()">
+
         </div>
         <button class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out mt-3" type="submit">Save</button>
     </form>
 
 </div>
 
+<script type="text/javascript">
+
+    function addmore(){
+        console.log("add more here")
+    }
+</script>
 
 
 {% endblock content %}

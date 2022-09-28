@@ -46,9 +46,9 @@ class Task(TimeStampModel):
     created_by = models.ForeignKey(User, related_name='assign_user',
                                    on_delete=models.CASCADE, null=True, blank=True)
     project = models.ForeignKey(Project, related_name='task_project',
-                                on_delete=models.CASCADE, null=True, blank=True)
+                                on_delete=models.SET_NULL, null=True, blank=True)
     type = models.ForeignKey(Board, related_name='task_type',
-                             on_delete=models.CASCADE, null=True, blank=True)
+                             on_delete=models.SET_NULL, null=True, blank=True)
     description = RichTextField(null=True)
     is_pinned = models.BooleanField(default=False)
     is_private = models.BooleanField(default=False)

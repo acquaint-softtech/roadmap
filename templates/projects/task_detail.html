@@ -49,7 +49,7 @@
 Task histories :
 <ul class="mt-2 mb-2">
     {% for data in history_data %}
-        <li># {{data.action_by.username}} {{data.note}}  ---------{{data.created | naturaltime }}</li>
+        <li># {{data.action_by.email}} {{data.note}}  ---------{{data.created | naturaltime }}</li>
     {% endfor %}
 </ul>
 
