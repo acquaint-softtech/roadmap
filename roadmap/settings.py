@@ -62,6 +62,7 @@ TAILWIND_APP_NAME = 'user_themes'
 # Ckeditor Configs
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 CKEDITOR_CONFIGS = {
     'default':

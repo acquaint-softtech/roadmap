@@ -6,7 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView, FormView, TemplateView
 from django.views.generic import View
 
 from common.custom_messages import message_dict
@@ -45,7 +45,7 @@ class RegisterView(CreateView):
         return super(RegisterView, self).form_invalid(form)
 
 
-class EditProfileView(LoginRequiredMixin,BaseContextView, FormView):
+class EditProfileView(LoginRequiredMixin, BaseContextView, FormView):
     form_class = UpdateUserForm
     template_name = "users/edit_profile.html"
     success_url = reverse_lazy("home:home")
@@ -69,12 +69,12 @@ class CustomLoginView(LoginView):
     template_name = "users/login.html"
     form_class = LoginForm
     success_message = 'Login sucessfully'
+    success_url = reverse_lazy("home:home")
 
     def get_success_url(self):
         if self.get_redirect_url():
-            return reverse_lazy(self.get_redirect_url())
-        else:
-            return reverse_lazy("home:home")
+            self.success_url = self.get_redirect_url()
+            return self.success_url
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -100,3 +100,7 @@ class LogoutView(LoginRequiredMixin, View):
         logout(self.request)
         messages.success(self.request, message_dict.get('logout'))
         return redirect("home:home")
+
+
+class MyItemView(LoginRequiredMixin, BaseContextView, TemplateView):
+    template_name = 'users/my_items.html'

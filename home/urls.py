@@ -5,5 +5,4 @@ app_name = 'home'
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
-    path("my/", views.MyItemView.as_view(), name="my_items"),
 ]
