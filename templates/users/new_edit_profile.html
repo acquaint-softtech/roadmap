@@ -1,0 +1,888 @@
+{% extends 'home/new_base.html' %}
+{% load static %}
+{% block title %}Edit Profile{% endblock title %}
+{% block content %}
+    <main class="flex-1 h-full col-span-6 lg:col-span-5 lg:border-l lg:pl-5">
+        <div class="pb-4">
+            <ul class="flex items-center space-x-0.5 text-sm font-medium text-gray-600">
+
+                <li>
+                    <a class="transition hover:underline focus:outline-none focus:text-gray-800 focus:underline"
+                       href="#">
+                        Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div wire:id="Qbq3081dYEefClm3R1GH" class="space-y-6"
+             wire:initial-data="{&quot;fingerprint&quot;:{&quot;id&quot;:&quot;Qbq3081dYEefClm3R1GH&quot;,&quot;name&quot;:&quot;profile&quot;,&quot;locale&quot;:&quot;en&quot;,&quot;path&quot;:&quot;profile&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;v&quot;:&quot;acj&quot;},&quot;effects&quot;:{&quot;listeners&quot;:[],&quot;path&quot;:&quot;http:\/\/192.168.1.163:8001\/profile&quot;},&quot;serverMemo&quot;:{&quot;children&quot;:[],&quot;errors&quot;:[],&quot;htmlHash&quot;:&quot;cbd4418a&quot;,&quot;data&quot;:{&quot;name&quot;:&quot;hiren.khatavara@acquaintsoft.com&quot;,&quot;email&quot;:&quot;hiren.khatavara@acquaintsoft.com&quot;,&quot;user&quot;:[],&quot;componentFileAttachments&quot;:[],&quot;mountedFormComponentAction&quot;:null,&quot;mountedFormComponentActionData&quot;:[],&quot;mountedFormComponentActionComponent&quot;:null,&quot;tableRecordsPerPage&quot;:10,&quot;page&quot;:1,&quot;paginators&quot;:{&quot;page&quot;:1},&quot;isTableReordering&quot;:false,&quot;tableColumnSearchQueries&quot;:[],&quot;tableSearchQuery&quot;:&quot;&quot;,&quot;selectedTableRecords&quot;:[],&quot;tableSortColumn&quot;:null,&quot;tableSortDirection&quot;:null,&quot;toggledTableColumns&quot;:[],&quot;mountedTableAction&quot;:null,&quot;mountedTableActionData&quot;:[],&quot;mountedTableActionRecord&quot;:null,&quot;mountedTableBulkAction&quot;:null,&quot;mountedTableBulkActionData&quot;:[],&quot;tableFilters&quot;:null,&quot;username&quot;:&quot;hirenkhatavara-at-acquaintsoftcom&quot;,&quot;notification_settings&quot;:[&quot;receive_mention_notifications&quot;,&quot;receive_comment_reply_notifications&quot;],&quot;per_page_setting&quot;:[&quot;5&quot;,&quot;15&quot;,&quot;25&quot;],&quot;&quot;:null},&quot;dataMeta&quot;:{&quot;models&quot;:{&quot;user&quot;:{&quot;class&quot;:&quot;App\\Models\\User&quot;,&quot;id&quot;:1,&quot;relations&quot;:[],&quot;connection&quot;:&quot;mysql&quot;,&quot;collectionClass&quot;:null}}},&quot;checksum&quot;:&quot;d510538c37ea02596f317f805f1d37c2460c47bed3ac6654d3b23b1552325279&quot;}}">
+            <form class="space-y-4" wire:submit.prevent="submit">
+                <div class="grid grid-cols-1      filament-forms-component-container gap-6">
+                    <div class=" col-span-full     ">
+                        <div x-data="{ isCollapsed: false }"
+                             x-on:open-form-section.window="if ($event.detail.id == $el.id) isCollapsed = false"
+                             x-on:collapse-form-section.window="if ($event.detail.id == $el.id) isCollapsed = true"
+                             x-on:toggle-form-section.window="if ($event.detail.id == $el.id) isCollapsed = ! isCollapsed"
+                             x-on:expand-concealing-component.window="
+            if ($event.detail.id === $el.id) {
+                isCollapsed = false
+
+                setTimeout(() => $el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' }), 100)
+            }
+        " id="profile" class="filament-forms-section-component bg-white rounded-xl border border-gray-300">
+                            <div class="filament-forms-section-header-wrapper flex items-center px-4 py-2 bg-gray-100 rtl:space-x-reverse overflow-hidden rounded-t-xl min-h-[40px] min-h-[56px]"
+                                 x-bind:class="{ 'rounded-b-xl': isCollapsed }" x-on:click="
+                isCollapsed = ! isCollapsed
+
+                if (isCollapsed) {
+                    return
+                }
+
+                setTimeout(
+                    () => $el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' }),
+                    100,
+                )
+            ">
+                                <div class="filament-forms-section-header flex-1 cursor-pointer">
+                                    <h3 class="font-bold tracking-tight pointer-events-none text-xl font-bold">
+                                        Profile
+                                    </h3>
+
+                                </div>
+
+                                <button x-on:click.stop="isCollapsed = ! isCollapsed" x-bind:class="{
+                    '-rotate-180': !isCollapsed,
+                }" type="button"
+                                        class="flex items-center justify-center transform rounded-full text-primary-500 hover:bg-gray-500/5 focus:bg-primary-500/10 focus:outline-none w-10 h-10 -rotate-180">
+                                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                         viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div x-bind:class="{ 'invisible h-0 !m-0 overflow-y-hidden': isCollapsed }"
+                                 x-bind:aria-expanded="(! isCollapsed).toString()"
+                                 class="filament-forms-section-content-wrapper" aria-expanded="true">
+                                <div class="filament-forms-section-content p-6">
+                                    <div class="grid grid-cols-1      filament-forms-component-container gap-6">
+                                        <div wire:key="Qbq3081dYEefClm3R1GH.name.Filament\Forms\Components\TextInput"
+                                             class=" col-span-1     ">
+                                            <div class="filament-forms-field-wrapper">
+
+                                                <div class="space-y-2">
+                                                    <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                        <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
+                                                               for="name">
+
+
+    <span class="text-sm font-medium leading-4 text-gray-700">
+        Name
+
+                    <sup class="font-medium text-danger-700">*</sup>
+            </span>
+
+
+                                                        </label>
+
+                                                    </div>
+
+                                                    <div class="filament-forms-text-input-component flex items-center space-x-2 rtl:space-x-reverse group">
+
+
+                                                        <div class="flex-1">
+                                                            <input x-data="{}" wire:model.defer="name" type="text"
+                                                                   dusk="filament.forms.name" id="name"
+                                                                   class="block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm ring-gray-300"
+                                                                   x-bind:class="{
+                    'ring-gray-300': ! ('name' in $wire.__instance.serverMemo.errors),
+                    'dark:ring-gray-600': ! ('name' in $wire.__instance.serverMemo.errors) &amp;&amp; false,
+                    'ring-danger-500': ('name' in $wire.__instance.serverMemo.errors),
+                }">
+                                                        </div>
+
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div wire:key="Qbq3081dYEefClm3R1GH.username.Filament\Forms\Components\TextInput"
+                                             class=" col-span-1     ">
+                                            <div class="filament-forms-field-wrapper">
+
+                                                <div class="space-y-2">
+                                                    <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                        <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
+                                                               for="username">
+
+
+    <span class="text-sm font-medium leading-4 text-gray-700">
+        Username
+
+                    <sup class="font-medium text-danger-700">*</sup>
+            </span>
+
+
+                                                        </label>
+
+                                                    </div>
+
+                                                    <div class="filament-forms-text-input-component flex items-center space-x-2 rtl:space-x-reverse group">
+
+
+                                                        <div class="flex-1">
+                                                            <input x-data="{}" wire:model.defer="username" type="text"
+                                                                   dusk="filament.forms.username" id="username"
+                                                                   class="block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm ring-gray-300"
+                                                                   x-bind:class="{
+                    'ring-gray-300': ! ('username' in $wire.__instance.serverMemo.errors),
+                    'dark:ring-gray-600': ! ('username' in $wire.__instance.serverMemo.errors) &amp;&amp; false,
+                    'ring-danger-500': ('username' in $wire.__instance.serverMemo.errors),
+                }">
+                                                        </div>
+
+
+                                                    </div>
+
+
+                                                    <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600">
+                                                        <p>This username will be used to mention your name in
+                                                            comments.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div wire:key="Qbq3081dYEefClm3R1GH.email.Filament\Forms\Components\TextInput"
+                                             class=" col-span-1     ">
+                                            <div class="filament-forms-field-wrapper">
+
+                                                <div class="space-y-2">
+                                                    <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                        <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
+                                                               for="email">
+
+
+    <span class="text-sm font-medium leading-4 text-gray-700">
+        Email address
+
+                    <sup class="font-medium text-danger-700">*</sup>
+            </span>
+
+
+                                                        </label>
+
+                                                    </div>
+
+                                                    <div class="filament-forms-text-input-component flex items-center space-x-2 rtl:space-x-reverse group">
+
+
+                                                        <div class="flex-1">
+                                                            <input x-data="{}" wire:model.defer="email" type="email"
+                                                                   dusk="filament.forms.email" id="email"
+                                                                   class="block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm ring-gray-300"
+                                                                   x-bind:class="{
+                    'ring-gray-300': ! ('email' in $wire.__instance.serverMemo.errors),
+                    'dark:ring-gray-600': ! ('email' in $wire.__instance.serverMemo.errors) &amp;&amp; false,
+                    'ring-danger-500': ('email' in $wire.__instance.serverMemo.errors),
+                }">
+                                                        </div>
+
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class=" col-span-full     ">
+                        <div x-data="{ isCollapsed: false }"
+                             x-on:open-form-section.window="if ($event.detail.id == $el.id) isCollapsed = false"
+                             x-on:collapse-form-section.window="if ($event.detail.id == $el.id) isCollapsed = true"
+                             x-on:toggle-form-section.window="if ($event.detail.id == $el.id) isCollapsed = ! isCollapsed"
+                             x-on:expand-concealing-component.window="
+            if ($event.detail.id === $el.id) {
+                isCollapsed = false
+
+                setTimeout(() => $el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' }), 100)
+            }
+        " id="notifications" class="filament-forms-section-component bg-white rounded-xl border border-gray-300">
+                            <div class="filament-forms-section-header-wrapper flex items-center px-4 py-2 bg-gray-100 rtl:space-x-reverse overflow-hidden rounded-t-xl min-h-[40px] min-h-[56px]"
+                                 x-bind:class="{ 'rounded-b-xl': isCollapsed }" x-on:click="
+                isCollapsed = ! isCollapsed
+
+                if (isCollapsed) {
+                    return
+                }
+
+                setTimeout(
+                    () => $el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' }),
+                    100,
+                )
+            ">
+                                <div class="filament-forms-section-header flex-1 cursor-pointer">
+                                    <h3 class="font-bold tracking-tight pointer-events-none text-xl font-bold">
+                                        Notifications
+                                    </h3>
+
+                                </div>
+
+                                <button x-on:click.stop="isCollapsed = ! isCollapsed" x-bind:class="{
+                    '-rotate-180': !isCollapsed,
+                }" type="button"
+                                        class="flex items-center justify-center transform rounded-full text-primary-500 hover:bg-gray-500/5 focus:bg-primary-500/10 focus:outline-none w-10 h-10 -rotate-180">
+                                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                         viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div x-bind:class="{ 'invisible h-0 !m-0 overflow-y-hidden': isCollapsed }"
+                                 x-bind:aria-expanded="(! isCollapsed).toString()"
+                                 class="filament-forms-section-content-wrapper" aria-expanded="true">
+                                <div class="filament-forms-section-content p-6">
+                                    <div class="grid grid-cols-1      filament-forms-component-container gap-6">
+                                        <div wire:key="Qbq3081dYEefClm3R1GH.notification_settings.Filament\Forms\Components\CheckboxList"
+                                             class=" col-span-1     ">
+                                            <div class="filament-forms-field-wrapper">
+
+                                                <div class="space-y-2">
+                                                    <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                        <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
+                                                               for="notification_settings">
+
+
+    <span class="text-sm font-medium leading-4 text-gray-700">
+        Notification settings
+
+            </span>
+
+
+                                                        </label>
+
+                                                    </div>
+
+                                                    <div class="columns-1      filament-forms-checkbox-list-component gap-1">
+                                                        <label class="flex items-center space-x-3 rtl:space-x-reverse">
+                                                            <input type="checkbox" value="receive_mention_notifications"
+                                                                   dusk="filament.forms.notification_settings"
+                                                                   wire:model.defer="notification_settings"
+                                                                   class="text-primary-600 transition duration-75 rounded shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500 disabled:opacity-70 border-gray-300">
+
+                                                            <span class="text-sm font-medium text-gray-700">
+                    Receive mention notifications
+                </span>
+                                                        </label>
+                                                        <label class="flex items-center space-x-3 rtl:space-x-reverse">
+                                                            <input type="checkbox"
+                                                                   value="receive_comment_reply_notifications"
+                                                                   dusk="filament.forms.notification_settings"
+                                                                   wire:model.defer="notification_settings"
+                                                                   class="text-primary-600 transition duration-75 rounded shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500 disabled:opacity-70 border-gray-300">
+
+                                                            <span class="text-sm font-medium text-gray-700">
+                    Receive comment reply notifications
+                </span>
+                                                        </label>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class=" col-span-full     ">
+                        <div x-data="{ isCollapsed: false }"
+                             x-on:open-form-section.window="if ($event.detail.id == $el.id) isCollapsed = false"
+                             x-on:collapse-form-section.window="if ($event.detail.id == $el.id) isCollapsed = true"
+                             x-on:toggle-form-section.window="if ($event.detail.id == $el.id) isCollapsed = ! isCollapsed"
+                             x-on:expand-concealing-component.window="
+            if ($event.detail.id === $el.id) {
+                isCollapsed = false
+
+                setTimeout(() => $el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' }), 100)
+            }
+        " id="settings" class="filament-forms-section-component bg-white rounded-xl border border-gray-300">
+                            <div class="filament-forms-section-header-wrapper flex items-center px-4 py-2 bg-gray-100 rtl:space-x-reverse overflow-hidden rounded-t-xl min-h-[40px] min-h-[56px]"
+                                 x-bind:class="{ 'rounded-b-xl': isCollapsed }" x-on:click="
+                isCollapsed = ! isCollapsed
+
+                if (isCollapsed) {
+                    return
+                }
+
+                setTimeout(
+                    () => $el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' }),
+                    100,
+                )
+            ">
+                                <div class="filament-forms-section-header flex-1 cursor-pointer">
+                                    <h3 class="font-bold tracking-tight pointer-events-none text-xl font-bold">
+                                        Settings
+                                    </h3>
+
+                                </div>
+
+                                <button x-on:click.stop="isCollapsed = ! isCollapsed" x-bind:class="{
+                    '-rotate-180': !isCollapsed,
+                }" type="button"
+                                        class="flex items-center justify-center transform rounded-full text-primary-500 hover:bg-gray-500/5 focus:bg-primary-500/10 focus:outline-none w-10 h-10 -rotate-180">
+                                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                         viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div x-bind:class="{ 'invisible h-0 !m-0 overflow-y-hidden': isCollapsed }"
+                                 x-bind:aria-expanded="(! isCollapsed).toString()"
+                                 class="filament-forms-section-content-wrapper" aria-expanded="true">
+                                <div class="filament-forms-section-content p-6">
+                                    <div class="grid grid-cols-1      filament-forms-component-container gap-6">
+                                        <div wire:key="Qbq3081dYEefClm3R1GH.per_page_setting.Filament\Forms\Components\MultiSelect"
+                                             class=" col-span-1     ">
+                                            <div class="filament-forms-field-wrapper">
+
+                                                <div class="space-y-2">
+                                                    <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                        <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
+                                                               for="per_page_setting">
+
+
+    <span class="text-sm font-medium leading-4 text-gray-700">
+        Per page setting
+
+                    <sup class="font-medium text-danger-700">*</sup>
+            </span>
+
+
+                                                        </label>
+
+                                                    </div>
+
+                                                    <div class="filament-forms-select-component flex items-center space-x-1 rtl:space-x-reverse group">
+
+
+                                                        <div class="flex-1 min-w-0">
+                                                            <div x-data="selectFormComponent({
+                        isHtmlAllowed: false,
+                        getOptionLabelUsing: async () => {
+                            return await $wire.getSelectOptionLabel('per_page_setting')
+                        },
+                        getOptionLabelsUsing: async () => {
+                            return await $wire.getSelectOptionLabels('per_page_setting')
+                        },
+                        getOptionsUsing: async () => {
+                            return await $wire.getSelectOptions('per_page_setting')
+                        },
+                        getSearchResultsUsing: async (search) => {
+                            return await $wire.getSelectSearchResults('per_page_setting', search)
+                        },
+                        isAutofocused: false,
+                        isMultiple: true,
+                        hasDynamicOptions: false,
+                        hasDynamicSearchResults: false,
+                        loadingMessage: 'Loading...',
+                        maxItems: null,
+                        noSearchResultsMessage: 'No options match your search.',
+                        options: JSON.parse('{\u00225\u0022:\u00225\u0022,\u002210\u0022:\u002210\u0022,\u002215\u0022:\u002215\u0022,\u002225\u0022:\u002225\u0022,\u002250\u0022:\u002250\u0022}'),
+                        optionsLimit: 50,
+                        placeholder: 'Select an option',
+                        searchingMessage: 'Searching...',
+                        searchPrompt: 'Start typing to search...',
+                        state: $wire.entangle('per_page_setting').defer,
+                    })" wire:ignore="">
+                                                                <div class="choices" data-type="select-multiple"
+                                                                     role="combobox" aria-autocomplete="list"
+                                                                     aria-haspopup="true" aria-expanded="false">
+                                                                    <div class="choices__inner"><select x-ref="input"
+                                                                                                        id="per_page_setting"
+                                                                                                        multiple=""
+                                                                                                        class="choices__input"
+                                                                                                        hidden=""
+                                                                                                        tabindex="-1"
+                                                                                                        data-choice="active">
+                                                                        <option value="5"
+                                                                                data-custom-properties="[object Object]">
+                                                                            5
+                                                                        </option>
+                                                                        <option value="15"
+                                                                                data-custom-properties="[object Object]">
+                                                                            15
+                                                                        </option>
+                                                                        <option value="25"
+                                                                                data-custom-properties="[object Object]">
+                                                                            25
+                                                                        </option>
+                                                                    </select>
+                                                                        <div class="choices__list choices__list--multiple">
+                                                                            <div class="choices__item choices__item--selectable"
+                                                                                 data-item="" data-id="1" data-value="5"
+                                                                                 data-custom-properties="[object Object]"
+                                                                                 aria-selected="true" data-deletable="">
+                                                                                5
+                                                                                <button type="button"
+                                                                                        class="choices__button"
+                                                                                        aria-label="Remove item: '5'"
+                                                                                        data-button="">Remove item
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="choices__item choices__item--selectable"
+                                                                                 data-item="" data-id="2"
+                                                                                 data-value="15"
+                                                                                 data-custom-properties="[object Object]"
+                                                                                 aria-selected="true" data-deletable="">
+                                                                                15
+                                                                                <button type="button"
+                                                                                        class="choices__button"
+                                                                                        aria-label="Remove item: '15'"
+                                                                                        data-button="">Remove item
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="choices__item choices__item--selectable"
+                                                                                 data-item="" data-id="3"
+                                                                                 data-value="25"
+                                                                                 data-custom-properties="[object Object]"
+                                                                                 aria-selected="true" data-deletable="">
+                                                                                25
+                                                                                <button type="button"
+                                                                                        class="choices__button"
+                                                                                        aria-label="Remove item: '25'"
+                                                                                        data-button="">Remove item
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="search" name="search_terms"
+                                                                               class="choices__input choices__input--cloned"
+                                                                               autocomplete="off" autocapitalize="off"
+                                                                               spellcheck="false" role="textbox"
+                                                                               aria-autocomplete="list"
+                                                                               aria-label="Select an option"
+                                                                               placeholder="Select an option"
+                                                                               style="min-width: 17ch; width: 1ch;">
+                                                                    </div>
+                                                                    <div class="choices__list choices__list--dropdown"
+                                                                         aria-expanded="false">
+                                                                        <div class="choices__list"
+                                                                             aria-multiselectable="true" role="listbox">
+                                                                            <div id="choices--per_page_setting-item-choice-2"
+                                                                                 class="choices__item choices__item--choice choices__item--selectable is-highlighted"
+                                                                                 role="option" data-choice=""
+                                                                                 data-id="2" data-value="10"
+                                                                                 data-select-text=""
+                                                                                 data-choice-selectable=""
+                                                                                 aria-selected="true">10
+                                                                            </div>
+                                                                            <div id="choices--per_page_setting-item-choice-5"
+                                                                                 class="choices__item choices__item--choice choices__item--selectable"
+                                                                                 role="option" data-choice=""
+                                                                                 data-id="5" data-value="50"
+                                                                                 data-select-text=""
+                                                                                 data-choice-selectable="">50
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+
+
+                                                    <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600">
+                                                        <p>Determine how many pages should be available for the items in
+                                                            the "My" page for example.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="flex justify-between">
+                    <div>
+                        <button type="button" wire:loading.attr="disabled"
+                                wire:loading.class.delay="opacity-70 cursor-wait" wire:target="submit" x-data="{
+            form: null,
+            isUploadingFile: false,
+        }" x-bind:class="{ 'opacity-70 cursor-wait': isUploadingFile }" x-bind:disabled="isUploadingFile" x-init="
+            form = $el.closest('form')
+
+            form?.addEventListener('file-upload-started', () => {
+                isUploadingFile = true
+            })
+
+            form?.addEventListener('file-upload-finished', () => {
+                isUploadingFile = false
+            })
+        "
+                                class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-[#2563eb] hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-[#1d4ed8]"
+                                wire:click="submit">
+
+                            <span class="flex items-center gap-1">
+                            <span class="">
+                    Save
+                </span>
+                    </span>
+
+                        </button>
+
+                        <button type="button" wire:loading.attr="disabled"
+                                wire:loading.class.delay="opacity-70 cursor-wait" wire:target="logoutConfirm" x-data="{
+            form: null,
+            isUploadingFile: false,
+        }" x-bind:class="{ 'opacity-70 cursor-wait': isUploadingFile }" x-bind:disabled="isUploadingFile" x-init="
+            form = $el.closest('form')
+
+            form?.addEventListener('file-upload-started', () => {
+                isUploadingFile = true
+            })
+
+            form?.addEventListener('file-upload-finished', () => {
+                isUploadingFile = false
+            })
+        "
+                                class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+                                wire:click="logoutConfirm">
+
+                            <span class="flex items-center gap-1">
+                            <span class="">
+                    Logout
+                </span>
+                    </span>
+
+                        </button>
+                    </div>
+
+                    <div>
+                        <button type="button"
+                                class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-[#E11D48] hover:bg-[#f43f5e] focus:bg-[#E11D48] focus:ring-offset-[#f43f5e]">
+                            <span class="flex items-center gap-1">
+                            <span class="">
+                    Remove account
+                </span>
+                    </span>
+
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+
+            <div x-data="{ isOpen: false }" x-trap.noscroll="isOpen"
+                 x-on:close-modal.window="if ($event.detail.id === 'logoutConfirm') isOpen = false"
+                 x-on:open-modal.window="if ($event.detail.id === 'logoutConfirm') isOpen = true"
+                 aria-labelledby="logoutConfirm.heading" role="dialog" aria-modal="true"
+                 class="filament-modal inline-block">
+
+
+                <div x-show="isOpen" x-transition:enter="ease duration-300" x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100" x-transition:leave="ease duration-300"
+                     x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                     class="fixed inset-0 z-40 flex items-center min-h-screen overflow-y-auto transition p-4"
+                     style="display: none;">
+                    <div x-on:click="$dispatch('close-modal', { id: 'logoutConfirm' })" aria-hidden="true"
+                         class="filament-modal-close-overlay fixed inset-0 w-full h-full bg-black/50 cursor-pointer"></div>
+
+                    <div x-show="isOpen" x-on:keydown.window.escape="$dispatch('close-modal', { id: 'logoutConfirm' })"
+                         x-transition:enter="ease duration-300" x-transition:leave="ease duration-300"
+                         x-transition:enter-start="translate-y-8" x-transition:enter-end="translate-y-0"
+                         x-transition:leave-start="translate-y-0" x-transition:leave-end="translate-y-8"
+                         class="relative w-full cursor-pointer pointer-events-none my-auto" style="display: none;">
+                        <div class="filament-modal-window w-full p-2 bg-white cursor-default pointer-events-auto dark:bg-gray-800 relative rounded-xl mx-auto max-w-md">
+                            <button tabindex="-1" type="button" class="absolute top-2 right-2">
+                                <svg title="__('filament-support::components/modal.actions.close.label')"
+                                     x-on:click="isOpen = false" tabindex="-1"
+                                     class="filament-modal-close-button h-4 w-4 cursor-pointer text-gray-400"
+                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                     aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="sr-only">
+                            Close
+                        </span>
+                            </button>
+
+                            <div class="space-y-2">
+
+
+                                <div class="filament-modal-content space-y-2">
+                                    <div class="p-4 space-y-2 text-center dark:text-white">
+                                        <h2 class="filament-modal-heading text-xl font-bold tracking-tight"
+                                            id="logoutConfirm.heading">
+                                            Are you sure?
+                                        </h2>
+
+                                    </div>
+
+                                    <div class="px-4 py-2 space-y-4">
+                                        <p>Are you sure you want to log out?</p>
+                                    </div>
+
+
+                                </div>
+
+                                <div aria-hidden="true" class="filament-hr border-t dark:border-gray-700"></div>
+
+                                <div class="filament-modal-footer px-4 py-2">
+                                    <div class="filament-modal-actions grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
+                                        <button type="button" wire:loading.attr="disabled"
+                                                wire:loading.class.delay="opacity-70 cursor-wait"
+                                                wire:target="closeLogoutConfirm" x-data="{
+            form: null,
+            isUploadingFile: false,
+        }" x-bind:class="{ 'opacity-70 cursor-wait': isUploadingFile }" x-bind:disabled="isUploadingFile" x-init="
+            form = $el.closest('form')
+
+            form?.addEventListener('file-upload-started', () => {
+                isUploadingFile = true
+            })
+
+            form?.addEventListener('file-upload-finished', () => {
+                isUploadingFile = false
+            })
+        "
+                                                class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+                                                wire:click="closeLogoutConfirm">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                 class="animate-spin filament-button-icon w-5 h-5 mr-1 -ml-2 rtl:ml-1 rtl:-mr-2"
+                                                 wire:loading.delay="wire:loading.delay"
+                                                 wire:target="closeLogoutConfirm">
+                                                <path opacity="0.2" fill-rule="evenodd" clip-rule="evenodd"
+                                                      d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                      fill="currentColor"></path>
+                                                <path d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z"
+                                                      fill="currentColor"></path>
+                                            </svg>
+
+                                            <span class="flex items-center gap-1">
+                            <span class="">
+                    No, stay logged in
+                </span>
+                    </span>
+
+                                        </button>
+
+                                        <button type="button" wire:loading.attr="disabled"
+                                                wire:loading.class.delay="opacity-70 cursor-wait" wire:target="logout"
+                                                x-data="{
+            form: null,
+            isUploadingFile: false,
+        }" x-bind:class="{ 'opacity-70 cursor-wait': isUploadingFile }" x-bind:disabled="isUploadingFile" x-init="
+            form = $el.closest('form')
+
+            form?.addEventListener('file-upload-started', () => {
+                isUploadingFile = true
+            })
+
+            form?.addEventListener('file-upload-finished', () => {
+                isUploadingFile = false
+            })
+        "
+                                                class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700"
+                                                wire:click="logout">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                 class="animate-spin filament-button-icon w-5 h-5 mr-1 -ml-2 rtl:ml-1 rtl:-mr-2"
+                                                 wire:loading.delay="wire:loading.delay" wire:target="logout">
+                                                <path opacity="0.2" fill-rule="evenodd" clip-rule="evenodd"
+                                                      d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                      fill="currentColor"></path>
+                                                <path d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z"
+                                                      fill="currentColor"></path>
+                                            </svg>
+
+                                            <span class="flex items-center gap-1">
+                            <span class="">
+                    Logout
+                </span>
+                    </span>
+
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div x-data="{ isOpen: false }" x-trap.noscroll="isOpen"
+                 x-on:close-modal.window="if ($event.detail.id === 'deleteAccount') isOpen = false"
+                 x-on:open-modal.window="if ($event.detail.id === 'deleteAccount') isOpen = true"
+                 aria-labelledby="deleteAccount.heading" role="dialog" aria-modal="true"
+                 class="filament-modal inline-block">
+
+
+                <div x-show="isOpen" x-transition:enter="ease duration-300" x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100" x-transition:leave="ease duration-300"
+                     x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                     class="fixed inset-0 z-40 flex items-center min-h-screen overflow-y-auto transition p-4"
+                     style="display: none;">
+                    <div x-on:click="$dispatch('close-modal', { id: 'deleteAccount' })" aria-hidden="true"
+                         class="filament-modal-close-overlay fixed inset-0 w-full h-full bg-black/50 cursor-pointer"></div>
+
+                    <div x-show="isOpen" x-on:keydown.window.escape="$dispatch('close-modal', { id: 'deleteAccount' })"
+                         x-transition:enter="ease duration-300" x-transition:leave="ease duration-300"
+                         x-transition:enter-start="translate-y-8" x-transition:enter-end="translate-y-0"
+                         x-transition:leave-start="translate-y-0" x-transition:leave-end="translate-y-8"
+                         class="relative w-full cursor-pointer pointer-events-none my-auto" style="display: none;">
+                        <div class="filament-modal-window w-full p-2 bg-white cursor-default pointer-events-auto dark:bg-gray-800 relative rounded-xl mx-auto max-w-md">
+                            <button tabindex="-1" type="button" class="absolute top-2 right-2">
+                                <svg title="__('filament-support::components/modal.actions.close.label')"
+                                     x-on:click="isOpen = false" tabindex="-1"
+                                     class="filament-modal-close-button h-4 w-4 cursor-pointer text-gray-400"
+                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                     aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="sr-only">
+                            Close
+                        </span>
+                            </button>
+
+                            <div class="space-y-2">
+
+
+                                <div class="filament-modal-content space-y-2">
+                                    <div class="p-4 space-y-2 text-center dark:text-white">
+                                        <h2 class="filament-modal-heading text-xl font-bold tracking-tight"
+                                            id="deleteAccount.heading">
+                                            Are you sure you'd like to delete?
+                                        </h2>
+
+                                    </div>
+
+                                    <div class="px-4 py-2 space-y-4">
+                                        <p>Take note that this action cannot be undone, all your comment and votes will
+                                            be deleted. Items will be unlinked from your account.</p>
+                                    </div>
+
+
+                                </div>
+
+                                <div aria-hidden="true" class="filament-hr border-t dark:border-gray-700"></div>
+
+                                <div class="filament-modal-footer px-4 py-2">
+                                    <div class="filament-modal-actions grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
+                                        <button type="button" wire:loading.attr="disabled"
+                                                wire:loading.class.delay="opacity-70 cursor-wait"
+                                                wire:target="closeDeleteConfirm" x-data="{
+            form: null,
+            isUploadingFile: false,
+        }" x-bind:class="{ 'opacity-70 cursor-wait': isUploadingFile }" x-bind:disabled="isUploadingFile" x-init="
+            form = $el.closest('form')
+
+            form?.addEventListener('file-upload-started', () => {
+                isUploadingFile = true
+            })
+
+            form?.addEventListener('file-upload-finished', () => {
+                isUploadingFile = false
+            })
+        "
+                                                class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+                                                wire:click="closeDeleteConfirm">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                 class="animate-spin filament-button-icon w-5 h-5 mr-1 -ml-2 rtl:ml-1 rtl:-mr-2"
+                                                 wire:loading.delay="wire:loading.delay"
+                                                 wire:target="closeDeleteConfirm">
+                                                <path opacity="0.2" fill-rule="evenodd" clip-rule="evenodd"
+                                                      d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                      fill="currentColor"></path>
+                                                <path d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z"
+                                                      fill="currentColor"></path>
+                                            </svg>
+
+                                            <span class="flex items-center gap-1">
+                            <span class="">
+                    No, keep my account
+                </span>
+                    </span>
+
+                                        </button>
+
+                                        <button type="button" wire:loading.attr="disabled"
+                                                wire:loading.class.delay="opacity-70 cursor-wait" wire:target="delete"
+                                                x-data="{
+            form: null,
+            isUploadingFile: false,
+        }" x-bind:class="{ 'opacity-70 cursor-wait': isUploadingFile }" x-bind:disabled="isUploadingFile" x-init="
+            form = $el.closest('form')
+
+            form?.addEventListener('file-upload-started', () => {
+                isUploadingFile = true
+            })
+
+            form?.addEventListener('file-upload-finished', () => {
+                isUploadingFile = false
+            })
+        "
+                                                class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-danger-600 hover:bg-danger-500 focus:bg-danger-700 focus:ring-offset-danger-700"
+                                                wire:click="delete">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                 class="animate-spin filament-button-icon w-5 h-5 mr-1 -ml-2 rtl:ml-1 rtl:-mr-2"
+                                                 wire:loading.delay="wire:loading.delay" wire:target="delete">
+                                                <path opacity="0.2" fill-rule="evenodd" clip-rule="evenodd"
+                                                      d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                      fill="currentColor"></path>
+                                                <path d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z"
+                                                      fill="currentColor"></path>
+                                            </svg>
+
+                                            <span class="flex items-center gap-1">
+                            <span class="">
+                    Remove account
+                </span>
+                    </span>
+
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock content %}

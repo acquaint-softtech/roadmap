@@ -51,7 +51,7 @@ class RegisterView(CreateView):
 
 class EditProfileView(LoginRequiredMixin, FormView):
     form_class = UpdateUserForm
-    template_name = "users/edit_profile.html"
+    template_name = "users/new_edit_profile.html"
     success_url = reverse_lazy("home:home")
 
     def get_instace(self):

@@ -2,15 +2,15 @@
 
 {% block content %}
 
-    <div x-data="{ open_test_data: false }" x-bind:class="{
+    <div x-data="{ open_test_data: false }" x-data = "{sidebar = true}" x-bind:class="{
                     'lg:pl-[20rem] rtl:lg:pr-[20rem]': ! $store.sidebar.isOpen,
                     'filament-main-sidebar-open lg:pl-[var(--sidebar-width)] rtl:lg:pr-[var(--sidebar-width)]': $store.sidebar.isOpen,
                 }" x-bind:style="'display: flex'"
          class="filament-main flex-col gap-y-6 w-screen flex-1 rtl:lg:pl-0 hidden h-full transition-all lg:pl-[20rem] rtl:lg:pr-[20rem]"
          style="display: flex;">
-        <header class="filament-main-topbar sticky top-0 z-10 flex h-16 w-full shrink-0 items-center border-b bg-white dark:bg-gray-800 dark:border-gray-700">
-            <div class="flex items-center w-full px-2 sm:px-4 md:px-6 lg:px-8">
-                <button @click="sidebarOpen = !sidebarOpen"
+        <header  class="filament-main-topbar sticky top-0 z-10 flex h-16 w-full shrink-0 items-center border-b bg-white dark:bg-gray-800 dark:border-gray-700">
+            <div x-data = "{sidebar = true}" class="flex items-center w-full px-2 sm:px-4 md:px-6 lg:px-8">
+                <button @click="sidebar = !sidebar"
                         class="filament-sidebar-open-button shrink-0 flex items-center justify-center w-10 h-10 transition text-primary-500 rounded-full hover:bg-gray-500/5 focus:bg-primary-500/10 focus:outline-none lg:z-10 lg:hover:bg-white lg:focus:bg-white lg:hover:text-gray-600 lg:focus:text-gray-600 lg:-ml-[44px] lg:w-6 lg:h-6 lg:text-gray-500 lg:bg-white lg:shadow lg:dark:bg-gray-900 lg:dark:hover:text-gray-400 lg:dark:focus:text-gray-400 lg:mr-4 rtl:lg:ml-4 rtl:lg:-mr-[44px]">
                     <div class="relative lg:absolute visible lg:invisible">
                         <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="#52525bb3" viewBox="0 0 24 24"
@@ -20,14 +20,14 @@
                     </div>
 
                     <div class="absolute ltr:lg:relative invisible ltr:lg:visible">
-                        <svg x-show="$store.sidebar.isOpen" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
-                             viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="display: none;">
+                        <svg x-show="   sidebar" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 20 20" fill="black" aria-hidden="true" style="display: none;">
                             <path fill-rule="evenodd"
                                   d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                                   clip-rule="evenodd"></path>
                         </svg>
-                        <svg x-show="!$store.sidebar.isOpen" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
-                             viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <svg x-show="!sidebar" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 20 20" fill="black" aria-hidden="true">
                             <path fill-rule="evenodd"
                                   d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                   clip-rule="evenodd"></path>
