@@ -8,8 +8,50 @@
 {{form.media}}
 {% load mptt_tags %}
 
+<div x-data="">
+    <button x-on:click="GiveVote()"
+            class="mt-2 mb-3 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out mt-3">
+        Vote here
+    </button>
+</div>
+
+<!--{% if votes %}-->
+<!--    Voter users :-->
+<!--    <ul class="mt-2 mb-2">-->
+<!--        {% for user in votes %}-->
+<!--            <li># {{user}}</li>-->
+<!--        {% endfor %}-->
+<!--    </ul>-->
+<!--{% endif %}-->
 
 
+
+
+<div x-data="{ sub_btn_text: {% if object.is_subscribed %}'Unsubscribe'{% else %}'Subscribe'{% endif %} }">
+    <button @click="TaskSubscription()"
+            class="mt-2 mb-3 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out mt-3"
+             x-text="sub_btn_text" x-on:click="sub_btn_text === 'Unsubscribe' ? 'Subscribe' : 'Unsubscribe'">
+    </button>
+</div>
+
+<div class="flex-1">
+    <form method="post" action="{% url 'custom_admin:change_task_status' %}">
+        <input type="hidden" value="{{object.slug}}" name="task_slug">
+        {% csrf_token %}
+        <select onchange="this.form.submit()" name="task_status">
+             {% for board in boards %}
+                <option value="{{board.id}}" {% if board.name == object.type.name %}selected{% endif %}>{{board.name}}</option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+Task histories :
+<ul class="mt-2 mb-2">
+    {% for data in history_data %}
+        <li># {{data.action_by.username}} {{data.note}}  ---------{{data.created | naturaltime }}</li>
+    {% endfor %}
+</ul>
 
 <div class="flex items-center space-x-3 overflow-hidden">
     <div class="relative flex-shrink-0 w-10 h-10 rounded-full">
@@ -79,9 +121,6 @@
 {% endrecursetree %}
 
 
-
-
-
 <div class="ml-4 mt-3">
     <form enctype="multipart/form-data" action="{% url 'project:save_comment' %}" method="post" class="mt-2">{% csrf_token %}
         <div class="mb-6 mt-2">
@@ -95,7 +134,52 @@
     </form>
 </div>
 
+<script>
+ function GiveVote() {
+      console.log("Yes function is working")
+      this.message = ''
+      this.formData = {'task_id':'{{object.id}}'}
+        fetch('/admin/change_task_vote/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json','X-CSRFToken':'{{csrf_token}}' },
+            body: JSON.stringify(this.formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data,"data")
+            if (data.message == 'success'){
 
+
+            }
+        })
+ }
+
+
+  function TaskSubscription() {
+
+
+      console.log("Yes subscription")
+      this.formData = {'task_id':'{{object.id}}'}
+        fetch('/admin/change_task_subscription_status/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json','X-CSRFToken':'{{csrf_token}}' },
+            body: JSON.stringify(this.formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data,"data")
+            this.sub_btn_text = 'test'
+
+        })
+
+      return {
+        sub_btn_text : 'test'
+    }
+ }
+
+
+
+</script>
 
 
 {% endblock content %}

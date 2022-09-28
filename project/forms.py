@@ -2,6 +2,7 @@ from ckeditor.widgets import CKEditorWidget
 from django import forms
 
 from project.models import Project, Task, Message, Board
+from users.models import User
 
 
 class ProjectCreateForm(forms.ModelForm):
@@ -34,6 +35,12 @@ class ProjectCreateForm(forms.ModelForm):
         if Project.objects.filter(title=title, created_by=self.user).exists():
             raise forms.ValidationError("Project already exits.")
         return title
+
+
+class BoardForm(forms.ModelForm):
+    class Meta:
+        model = Board
+        exclude = ('created', 'modified',)
 
 
 class TaskCreateForm(forms.Form):
@@ -75,8 +82,8 @@ class AdminTaskForm(forms.ModelForm):
             "description"
         )
 
-    def __init__(self,project, *args, **kwargs):
-        super(AdminTaskForm, self).__init__(*args, **kwargs)
+    def __init__(self, project, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.fields["type"].queryset = Board.objects.none()
 
         if project:
@@ -103,9 +110,6 @@ class AdminTaskForm(forms.ModelForm):
         self.fields['project'].required = True
         self.fields['created_by'].required = True
         self.fields['type'].required = True
-
-
-
 
         self.fields["name"].error_messages[
             "required"
@@ -144,3 +148,47 @@ class AdminCommentForm(forms.ModelForm):
         self.fields["text"].error_messages[
             "required"
         ] = "Please enter description."
+
+
+class AdminUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = (
+            "username",
+            "email",
+            "role",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(AdminUserForm, self).__init__(*args, **kwargs)
+        self.fields['role'].widget.attrs['class'] = 'form-select appearance-none \
+                           block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white \
+                           bg-clip-padding bg-no-repeat \
+                            border border-solid border-gray-300 rounded transition ease-in-out m-0 \
+                            focus:text-gray-700 focus:bg-white \
+                            focus:border-blue-600 focus:outline-none'
+
+        self.fields['role'].required = True
+        self.fields["username"].error_messages[
+            "required"
+        ] = "Please enter username."
+        self.fields["email"].error_messages[
+            "required"
+        ] = "Please enter email."
+
+    def clean(self):
+
+        super(AdminUserForm, self).clean()
+
+        username = self.cleaned_data.get('username')
+        email = self.cleaned_data.get('email')
+
+        if username and User.objects.exclude(id=self.instance.id).filter(username=username).exists():
+            self._errors['username'] = self.error_class([
+                'Username already exits'])
+
+        if email and User.objects.exclude(id=self.instance.id).filter(email=email).exists():
+            self._errors['email'] = self.error_class([
+                'Email already exits'])
+
+        return self.cleaned_data

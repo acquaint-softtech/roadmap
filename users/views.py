@@ -10,8 +10,8 @@ from django.views.generic import CreateView, FormView
 from django.views.generic import View
 
 from common.custom_messages import message_dict
+from home.views import BaseContextView
 from users.forms import RegisterUserForm, UpdateUserForm, LoginForm
-from users.models import Profile
 
 
 class LoginRequiredMixin(object):
@@ -32,13 +32,9 @@ class RegisterView(CreateView):
         return redirect("home:home")
 
     def form_valid(self, form):
-        obj = form.save(commit = False)
-        obj.role = Group.objects.get_or_create(name = 'user')[0]
+        obj = form.save(commit=False)
+        obj.role = Group.objects.get_or_create(name='user')[0]
         obj.save()
-        profile = Profile.objects.get(user=obj)
-        profile.photo = self.request.FILES.get("photo")
-        profile.save()
-
         messages.success(
             self.request,
             message_dict.get('registration')
@@ -49,7 +45,7 @@ class RegisterView(CreateView):
         return super(RegisterView, self).form_invalid(form)
 
 
-class EditProfileView(LoginRequiredMixin, FormView):
+class EditProfileView(LoginRequiredMixin,BaseContextView, FormView):
     form_class = UpdateUserForm
     template_name = "users/edit_profile.html"
     success_url = reverse_lazy("home:home")

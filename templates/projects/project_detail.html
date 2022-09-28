@@ -4,8 +4,6 @@
 {% block content %}
 
 <div class="inline-flex h-full w-full min-w-full gap-4 flex-nowrap overflow-scroll justify-center">
-
-
     {% for task in tasks %}
         {% for key,task_data in task.items %}
             <section class="h-full">
@@ -54,12 +52,9 @@
                     </ul>
                 </div>
             </section>
-
         {% endfor %}
     {% endfor %}
-
-
-            </div>
+</div>
 {% endblock content %}
 
 

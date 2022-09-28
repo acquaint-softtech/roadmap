@@ -6,34 +6,24 @@ from users.models import User
 
 
 class RegisterUserForm(UserCreationForm):
-    photo = forms.ImageField(label="Photo")
 
     class Meta:
         model = User
         fields = (
-            "username",
             "first_name",
-            "last_name",
             "email",
-            "photo",
             "password1",
             "password2",
         )
 
     def __init__(self, *args, **kwargs):
         super(RegisterUserForm, self).__init__(*args, **kwargs)
-        self.fields["username"].error_messages[
-            "required"
-        ] = "Please enter your username."
         self.fields["email"].error_messages[
             "required"
         ] = "Please enter your email address."
         self.fields["password1"].error_messages[
             "required"
         ] = "Please enter your password."
-        self.fields["photo"].error_messages["required"] = (
-            "Please upload  " "image here. "
-        )
 
 
 class UpdateUserForm(forms.ModelForm):

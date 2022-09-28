@@ -1,0 +1,176 @@
+<html>
+
+<head>
+{% load static tailwind_tags %}
+    {% load widget_tweaks %}
+
+{% tailwind_css %}
+    <script src="//unpkg.com/alpinejs" defer></script>
+
+</head>
+<body>
+
+{% if messages %}
+    {% for message in messages %}
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"  class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800 mt-2 mb-2" role="alert">
+            <span class="font-medium">{{message}}</span>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<nav class="p-4 bg-white rounded-lg shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800">
+     <a href="#" class="flex items-center mr-4">
+        <img src="https://flowbite.com/docs/images/logo.svg" class="mr-3 h-6 sm:h-10" alt="Flowbite Logo" />
+        <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Roadmap</span>
+    </a>
+    <div class="hidden w-full md:block md:w-auto" id="mobile-menu">
+      <ul class="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <li>
+          <a href="{% url 'home:home' %}" class="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Dashboard</a>
+        </li>
+          <li>
+              <div x-data="{'showModal':false}" @keydown.escape="showModal = false" x-cloak>
+    <button type="button" class="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" @click="showModal = true">Add new Task</button>
+
+<div class="overflow-auto" style="background-color: rgba(0,0,0,0.5)" x-show="showModal" :class="{ 'absolute inset-0 z-10 flex items-center justify-center': showModal }">
+			<!--Dialog-->
+    <div class="bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg py-4 text-left px-6" x-show="showModal" @click.away="showModal = false" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="ease-in duration-300" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90">
+
+        <!--Title-->
+        <div class="flex justify-between items-center pb-3">
+            <p class="text-2xl font-bold">New task !</p>
+            <div class="cursor-pointer z-50" @click="showModal = false">
+                <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                    <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                </svg>
+            </div>
+        </div>
+
+         <form enctype="multipart/form-data" method="post" class="mt-2 ml-3" action="{% url 'project:save_task' %}">{% csrf_token %}
+            {{ task_form.media }}
+            <div class="mb-6 mt-2">
+                <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Title:</label>
+                <input type="text" name="name" maxlength="150" required autofocus="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.name.value|default_if_none:'' }}">
+                <span>{{task_form.errors.title}}</span>
+            </div>
+            <div class="mb-6 mt-2">
+                <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Description</label>
+                {{ task_form.description|add_class:"ckeditor"}}
+                <span>{{task_form.errors.description}}</span>
+            </div>
+             <div class="flex justify-end pt-2 mt-3">
+                <button type='submit' class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Save</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+</div>
+
+          </li>
+          {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser or request.user.role == 'admin' %}
+               <li>
+                  <a href="/admin" class="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Settings</a>
+                </li>
+            {% endif %}
+                <li>
+                  <div
+                    x-data="{ open: false }"
+                    class="relative"
+                  >
+                    <button
+                      x-on:click="open = true"
+                      class="flex items-center bg-white focus:bg-gray-400 text-gray-700 focus:text-gray-900 font-semibold rounded focus:outline-none focus:shadow-inner py-2 px-4"
+                      type="button"
+                    >
+                       <span class="mr-1">Hello {{request.user.email}}</s pan>
+                       <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"  style="margin-top:3px">
+                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                       </svg>
+                    </button>
+                    <ul
+                      x-show="open"
+                      x-on:click.away="open = false"
+                      class="bg-white text-gray-700 rounded shadow-lg absolute py-2 mt-1"
+                      style="min-width:15rem"
+                     >
+                      <li>
+                        <a href="{% url 'users:profile' %}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit profile</a>
+                      </li>
+                        <li>
+                        <a href="{% url 'users:remove_account' %}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Remove account</a>
+                      </li>
+                      <li>
+                        <a href="{% url 'users:logout' %}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+
+
+                <li>
+                  <div
+                    x-data="{ open: false }"
+                    class="relative ml-3"
+                  >
+                    <button
+                      x-on:click="open = true"
+                      class="flex items-center bg-white focus:bg-gray-400 text-gray-700 focus:text-gray-900 font-semibold rounded focus:outline-none focus:shadow-inner py-2 px-4"
+                      type="button"
+                    >
+                       <span class="mr-1">Projects</span>
+                       <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"  style="margin-top:3px">
+                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                       </svg>
+                    </button>
+                    <ul
+                      x-show="open"
+                      x-on:click.away="open = false"
+                      class="bg-white text-gray-700 rounded shadow-lg absolute py-2 mt-1"
+                      style="min-width:15rem"
+                     >
+                        {% for project in projects %}
+                            <li>
+                                <a href="{% url 'project:project_detail' project.project__slug %}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">#{{project.project__title}}</a>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                  </div>
+                </li>
+          {% else %}
+          <li>
+              <a href="{% url 'users:signin' %}" class="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Login</a>
+            </li>
+          <li>
+              <a href="{% url 'users:register' %}" class="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Register</a>
+          </li>
+          {% endif %}
+      </ul>
+    </div>
+</nav>
+
+
+
+
+
+
+
+
+
+
+{% block content %}
+
+{% endblock %}
+
+<footer class="p-4 bg-white rounded-lg shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800">
+    <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2022 <a href="https://flowbite.com/" class="hover:underline">Roadmap™</a>. All Rights Reserved.
+    </span>
+</footer>
+</body>
+
+
+
+
+</html>

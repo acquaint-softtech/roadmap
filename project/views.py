@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView
 
 from home.views import BaseContextView
 from project.forms import MessageForm
-from project.models import Project, Task, Message, TaskHistory
+from project.models import Project, Task, Message, TaskHistory, Board, Votes
 from users.views import LoginRequiredMixin
 
 print(connection.queries)
@@ -37,13 +37,12 @@ class TaskList(BaseContextView, LoginRequiredMixin, ListView):
                                                                                                           'type__name',
                                                                                                           'slug',
                                                                                                           'is_pinned')
-        tasks.append({
-            'Review': task_data.filter(type__name='Review'),
-            'General': task_data.filter(type__name='General'),
-            'In-progress': task_data.filter(type__name='In-progress'),
-            'In-discussion': task_data.filter(type__name='In-discussion'),
-            'closed': task_data.filter(type__name='closed'),
-        })
+        boards = Board.objects.filter(project__slug = self.kwargs.get('slug')).values_list('name',flat=True).distinct()
+
+        for board in boards:
+            tasks.append({
+                board : task_data.filter(type__name=board)
+            })
         return tasks
 
 
@@ -55,18 +54,19 @@ class TaskDetailView(BaseContextView, LoginRequiredMixin, DetailView):
         context = super(TaskDetailView,
                         self).get_context_data(*args, **kwargs)
         context["message_form"] = MessageForm()
+        context["boards"] = Board.objects.filter(project = self.object.project).values('name','id')
+        context['votes'] = list(Votes.objects.select_related('task','user').filter(task = self.object).values_list('user__username',flat=True).distinct())
         context['message_data'] = Message.objects.select_related('task', 'user').filter(
             task__slug=self.kwargs.get('slug'))
         context['history_data'] = TaskHistory.objects.select_related('task', 'action_by').filter(
-            task__slug=self.kwargs.get('slug'))
-        print(context['history_data'], "context['history_data']")
+            task__slug=self.kwargs.get('slug')).order_by('-created')
         return context
 
 
 class SaveTaskView(BaseContextView, LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
-        name = request.POST.get('name')
+        name = request.POST.get('title')
         description = request.POST.get('description')
         Task.objects.create(name=name, description=description, created_by=request.user)
         messages.success(request, 'Task Created successfully.')

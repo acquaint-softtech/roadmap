@@ -52,7 +52,9 @@ class Task(TimeStampModel):
     description = RichTextField(null=True)
     is_pinned = models.BooleanField(default=False)
     is_private = models.BooleanField(default=False)
+    is_subscribed = models.BooleanField(default=True)
     slug = models.SlugField(max_length=200, null=True, blank=True)
+
 
     def save(self, **kwargs):
         unique_slugify(self, self.name)

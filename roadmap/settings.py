@@ -51,10 +51,10 @@ INSTALLED_APPS = [
     "django_browser_reload",
 
     # Third party modules
-    "sort_order_field",
     "ckeditor",
     "widget_tweaks",
-    "mptt"
+    "mptt",
+    "crispy_forms"
 ]
 
 TAILWIND_APP_NAME = 'user_themes'
@@ -81,6 +81,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_browser_reload.middleware.BrowserReloadMiddleware"
 ]
+
+AUTHENTICATION_BACKENDS = [
+    "users.auth_backend.CustomAuthBackend",
+]
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url

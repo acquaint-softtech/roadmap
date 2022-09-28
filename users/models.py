@@ -3,6 +3,8 @@ from django.db import models
 
 
 class User(AbstractUser):
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['']
     email = models.EmailField("email address", unique=True)
     role = models.ForeignKey(Group, related_name='user_group', on_delete=models.SET_NULL, null=True)
 
