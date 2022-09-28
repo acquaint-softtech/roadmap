@@ -17,7 +17,9 @@ class AdminContextView(ContextMixin):
 
 
 class AdminHomeView(AdminContextView, TemplateView):
-    template_name = 'custom_admin/admin_home.html'
+    # template_name = 'custom_admin/admin_home.html'
+    template_name = 'custom_admin/new_admin_home.html'
+
 
 
 class ProjectList(AdminContextView, LoginRequiredMixin, ListView):

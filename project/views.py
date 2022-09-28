@@ -26,7 +26,7 @@ class ProjectList(BaseContextView, LoginRequiredMixin, ListView):
 
 class TaskList(BaseContextView, LoginRequiredMixin, ListView):
     model = Task
-    template_name = 'projects/project_detail.html'
+    template_name = 'projects/new_project_detail.html'
     context_object_name = 'tasks'
 
     def get_queryset(self, *args, **kwargs):

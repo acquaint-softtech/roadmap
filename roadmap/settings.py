@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     "django_browser_reload",
 
     # Third party modules
-    "sort_order_field",
+    # "sort_order_field",
     "ckeditor",
     "widget_tweaks",
     "mptt"
@@ -61,7 +61,7 @@ TAILWIND_APP_NAME = 'user_themes'
 
 # Ckeditor Configs
 CKEDITOR_UPLOAD_PATH = "uploads/"
-
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 
 CKEDITOR_CONFIGS = {
     'default':

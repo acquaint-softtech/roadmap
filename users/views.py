@@ -24,7 +24,7 @@ class LoginRequiredMixin(object):
 class RegisterView(CreateView):
     form_class = RegisterUserForm
     success_url = reverse_lazy("users:signin")
-    template_name = "users/register.html"
+    template_name = "users/new_register.html"
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -70,7 +70,7 @@ class EditProfileView(LoginRequiredMixin, FormView):
 
 
 class CustomLoginView(LoginView):
-    template_name = "users/login.html"
+    template_name = "users/new_login.html"
     form_class = LoginForm
     success_message = 'Login sucessfully'
 

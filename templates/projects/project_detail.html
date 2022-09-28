@@ -1,11 +1,10 @@
-{% extends 'home/base.html' %}
+{% extends 'home/new_base.html' %}
 {% load static %}
 {% block title %}Home page{% endblock title %}
 {% block content %}
 
 <div class="inline-flex h-full w-full min-w-full gap-4 flex-nowrap overflow-scroll justify-center">
-
-
+    {{ tasks }}++++
     {% for task in tasks %}
         {% for key,task_data in task.items %}
             <section class="h-full">
