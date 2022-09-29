@@ -23,7 +23,7 @@ class AdminContextView(ContextMixin):
         return context
 
 
-class AdminHomeView(LoginRequiredMixin,AdminContextView, TemplateView):
+class AdminHomeView(LoginRequiredMixin, AdminContextView, TemplateView):
     template_name = 'custom_admin/admin_home.html'
 
 
@@ -303,11 +303,11 @@ class ChangeTaskSubscription(LoginRequiredMixin, View):
         return JsonResponse({"message": "success"})
 
 
-class AdminThemeView(LoginRequiredMixin,AdminContextView, TemplateView):
+class AdminThemeView(LoginRequiredMixin, AdminContextView, TemplateView):
     template_name = 'custom_admin/theme.html'
 
 
-class AdminSettingsView(LoginRequiredMixin,AdminContextView, TemplateView):
+class AdminSettingsView(LoginRequiredMixin, AdminContextView, TemplateView):
     template_name = 'custom_admin/settings.html'
 
 

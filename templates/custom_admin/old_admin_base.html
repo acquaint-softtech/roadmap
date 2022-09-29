@@ -1,9 +1,11 @@
 <html>
 <head>
   {% load static tailwind_tags %}
+    {% load static %}
     {% tailwind_css %}
 </head>
     <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="{% static 'js/sorting.js'%}"></script>
 
 
 <body class="flex bg-gray-100 min-h-screen" x-data="{panel:false, menu:true}">
