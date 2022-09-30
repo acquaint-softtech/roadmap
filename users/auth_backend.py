@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import BaseBackend
-from django.db.models import Q
 
 UserModel = get_user_model()
 
@@ -12,8 +11,7 @@ class CustomAuthBackend(BaseBackend):
         if username is None or password is None:
             return
         try:
-            user = UserModel.objects.filter(
-                Q(username=username) | Q(email=username)).first()
+            user = UserModel.objects.filter(email=username).first()
 
             if user:
                 if user.check_password(password) and user.is_active:

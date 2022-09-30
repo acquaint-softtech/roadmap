@@ -1,11 +1,12 @@
 import json
 
 from django.contrib import messages
+from django.db.models import Count
 from django.forms import inlineformset_factory
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, UpdateView, DeleteView, CreateView
+from django.views.generic import TemplateView, UpdateView, DeleteView, CreateView
 from django.views.generic.base import ContextMixin, View
 
 from project.admin import BoardAdminFormSet
@@ -23,20 +24,20 @@ class AdminContextView(ContextMixin):
         return context
 
 
-class AdminHomeView(LoginRequiredMixin,AdminContextView, TemplateView):
+class AdminHomeView(LoginRequiredMixin, AdminContextView, TemplateView):
     template_name = 'custom_admin/admin_home.html'
 
 
-class ProjectList(AdminContextView, LoginRequiredMixin, ListView):
-    model = Project
+class ProjectList(TemplateView, AdminContextView, LoginRequiredMixin):
     template_name = 'custom_admin/projects.html'
-    context_object_name = 'projects'
-    paginate_by = 10
 
-    def get_queryset(self, *args, **kwargs):
-        projects = super(ProjectList, self).get_queryset(*args, **kwargs)
-        projects = projects.filter(created_by=self.request.user).order_by('-id')
-        return projects
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProjectList, self).get_context_data(*args, **kwargs)
+        project_data = Project.objects.annotate(
+            board_count=Count('category_project')).values('id', 'title', 'created',
+                                                          'is_private', 'slug', 'board_count')
+        context['projects'] = json.dumps(list(project_data), indent=4, sort_keys=True, default=str)
+        return context
 
 
 class ProjectCreateView(AdminContextView, LoginRequiredMixin, CreateView):
@@ -121,28 +122,28 @@ class ProjectDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
     success_message = 'Project deleted successfully'
 
 
-class InboxList(AdminContextView, LoginRequiredMixin, ListView):
-    model = Task
+class InboxList(TemplateView, AdminContextView, LoginRequiredMixin):
     template_name = 'custom_admin/inbox.html'
-    context_object_name = 'inboxes'
-    paginate_by = 10
 
-    def get_queryset(self, *args, **kwargs):
-        inboxes = super(InboxList, self).get_queryset(*args, **kwargs)
-        inboxes = inboxes.filter(project__isnull=True).order_by('-id')
-        return inboxes
+    def get_context_data(self, *args, **kwargs):
+        context = super(InboxList, self).get_context_data(*args, **kwargs)
+        inbox_data = Task.objects.filter(project__isnull=True).annotate(comment_count=Count('message_task')).values(
+            'id', 'name', 'created_by__email',
+            'created', 'slug', 'comment_count')
+        context['inbox'] = json.dumps(list(inbox_data), indent=4, sort_keys=True, default=str)
+        return context
 
 
-class AdminTaskList(AdminContextView, LoginRequiredMixin, ListView):
-    model = Task
+class AdminTaskList(TemplateView, AdminContextView, LoginRequiredMixin):
     template_name = 'custom_admin/tasks.html'
-    context_object_name = 'tasks'
-    paginate_by = 10
 
-    def get_queryset(self, *args, **kwargs):
-        tasks = super(AdminTaskList, self).get_queryset(*args, **kwargs)
-        tasks = tasks.filter(project__isnull=False).order_by('-id')
-        return tasks
+    def get_context_data(self, *args, **kwargs):
+        context = super(AdminTaskList, self).get_context_data(*args, **kwargs)
+        task_data = Task.objects.filter(project__isnull=False).values('id', 'name', 'project__title', 'type__name',
+                                                                      'created_by__email', 'created', 'is_pinned',
+                                                                      'slug')
+        context['tasks'] = json.dumps(list(task_data), indent=4, sort_keys=True, default=str)
+        return context
 
 
 class TaskCreateView(AdminContextView, LoginRequiredMixin, CreateView):
@@ -192,12 +193,15 @@ class TaskDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
     success_message = 'Task deleted successfully'
 
 
-class CommentsList(AdminContextView, LoginRequiredMixin, ListView):
-    model = Message
+class CommentsList(TemplateView, AdminContextView, LoginRequiredMixin):
     template_name = 'custom_admin/comments.html'
-    context_object_name = 'comments'
-    ordering = ['-id']
-    paginate_by = 10
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CommentsList, self).get_context_data(*args, **kwargs)
+        message_data = Message.objects.values('id', 'text', 'task__name', 'user__email',
+                                              'created')
+        context['messages'] = json.dumps(list(message_data), indent=4, sort_keys=True, default=str)
+        return context
 
 
 class CommentCreateView(AdminContextView, LoginRequiredMixin, CreateView):
@@ -243,12 +247,14 @@ class ChangeTaskStatus(LoginRequiredMixin, View):
         return redirect('project:task_detail', slug=task_slug)
 
 
-class AdminUserList(AdminContextView, LoginRequiredMixin, ListView):
-    model = User
+class AdminUserList(TemplateView, AdminContextView, LoginRequiredMixin):
     template_name = 'custom_admin/users.html'
-    context_object_name = 'users'
-    paginate_by = 10
-    ordering = ['-id']
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(AdminUserList, self).get_context_data(*args, **kwargs)
+        user_data = User.objects.values('id', 'first_name', 'role__name', 'email', 'date_joined')
+        context['users'] = json.dumps(list(user_data), indent=4, sort_keys=True, default=str)
+        return context
 
 
 class UserCreateView(AdminContextView, LoginRequiredMixin, CreateView):
@@ -275,12 +281,14 @@ class UserDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
     success_message = 'User deleted successfully'
 
 
-class AdminVoteList(AdminContextView, LoginRequiredMixin, ListView):
-    model = Votes
+class AdminVoteList(TemplateView, AdminContextView, LoginRequiredMixin):
     template_name = 'custom_admin/votes.html'
-    context_object_name = 'votes'
-    paginate_by = 10
-    ordering = ['-id']
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(AdminVoteList, self).get_context_data(*args, **kwargs)
+        vote_data = Votes.objects.values('id', 'user__email', 'task__name', 'task__is_subscribed', 'created')
+        context['votes'] = json.dumps(list(vote_data), indent=4, sort_keys=True, default=str)
+        return context
 
 
 class ChangeVote(LoginRequiredMixin, View):
@@ -303,11 +311,11 @@ class ChangeTaskSubscription(LoginRequiredMixin, View):
         return JsonResponse({"message": "success"})
 
 
-class AdminThemeView(LoginRequiredMixin,AdminContextView, TemplateView):
+class AdminThemeView(LoginRequiredMixin, AdminContextView, TemplateView):
     template_name = 'custom_admin/theme.html'
 
 
-class AdminSettingsView(LoginRequiredMixin,AdminContextView, TemplateView):
+class AdminSettingsView(LoginRequiredMixin, AdminContextView, TemplateView):
     template_name = 'custom_admin/settings.html'
 
 

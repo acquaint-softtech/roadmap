@@ -1,10 +1,19 @@
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
   {% load static tailwind_tags %}
+    {% load static %}
     {% tailwind_css %}
+    <link
+            href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+            rel="stylesheet"
+    />
+    <script
+            src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+            defer
+    ></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+    <script src="{% url 'js_urls' %}" type="text/javascript"></script>
 </head>
-    <script src="//unpkg.com/alpinejs" defer></script>
-
 
 <body class="flex bg-gray-100 min-h-screen" x-data="{panel:false, menu:true}">
   <aside class="flex flex-col" :class="{'hidden sm:flex sm:flex-col': window.outerWidth > 768}">
