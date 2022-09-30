@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-
+from js_urls.views import JsUrlsView
 from roadmap import settings
 
 urlpatterns = [
@@ -26,6 +26,7 @@ urlpatterns = [
                   path("", include('project.urls')),
                   path("admin/", include('custom_admin.urls')),
                   path('ckeditor/', include('ckeditor_uploader.urls')),
+                  path('js-urls/', JsUrlsView.as_view(), name='js_urls'),
                   path("__reload__/", include("django_browser_reload.urls"))
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + \
               static(settings.STATIC_URL,

@@ -1,8 +1,7 @@
 {% extends 'custom_admin/old_admin_base.html' %}
 {% load static %}
 {% block content %}
-<div class="antialiased sans-serif bg-gray-200 h-screen">
-	<a href="{% url 'custom_admin:new_user' %}">
+<a href="{% url 'custom_admin:new_user' %}">
 		<button class="inline-flex px-5 py-3 text-white bg-blue-600 hover:bg-purple-700 focus:bg-blue-700 rounded-md ml-6 mb-3 mt-3">
 		<svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="flex-shrink-0 h-6 w-6 text-white -ml-1 mr-2">
 		  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -10,70 +9,226 @@
 		Create new User
 	  </button>
 	</a>
-	<div class="container mx-auto py-6 px-4"  x-cloak>
-		<h1 class="text-3xl py-4 border-b mb-10">Users</h1>
-		<table class="table-fixed">
-<div class="overflow-x-auto relative">
-    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400" x-data="Sortingdata()">
+<body class="bg-grey-100 px-3 font-sans leading-normal tracking-normal">
+<div class="container pt-8 mx-auto" x-data="Users()">
+    <input
+            x-ref="searchField"
+            x-model="search"
+            x-on:click="viewPage(0)"
+            x-on:keydown.window.prevent.slash=" viewPage(0), $refs.searchField.focus()"
+            placeholder="Search for an employee..."
+            type="search"
+            class="block w-full bg-gray-200 focus:outline-none focus:bg-white focus:shadow text-gray-700 font-bold rounded-lg px-4 py-3"
+    />
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-				<th scope="col" class="py-3 px-6" @click="sortByColumn">
-                    Name
-                </th>
-                <th scope="col" class="py-3 px-6" @click="sortByColumn">
-                    Email
-                </th>
-                <th scope="col" class="py-3 px-6" @click="sortByColumn">
-                    Role
-                </th>
-                <th scope="col" class="py-3 px-6" @click="sortByColumn">
-                    Date
-                </th>
-				<th scope="col" class="py-3 px-6">
-                    Action
-                </th>
-            </tr>
+        <tr >
+            <th scope="col" class="py-3 px-6" @click="sort('first_name')">
+                Name
+            </th>
+            <th scope="col" class="py-3 px-6" @click="sort('email')">
+                Email
+            </th>
+            <th scope="col" class="py-3 px-6" @click="sort('role__name')">
+                Role
+            </th>
+            <th scope="col" class="py-3 px-6" @click="sort('date_joined')">
+                Date
+            </th>
+            <th scope="col" class="py-3 px-6">
+                Action
+            </th>
+        </tr>
         </thead>
-        <tbody x-ref="tbody">
-			{% for user in users %}
-				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-					<td class="py-4 px-6">
-						{{user.get_full_name}}
-					</td>
-					<th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-						{{user.email}}
-					</th>
-					<td class="py-4 px-6">
-						{{user.role.name}}
-					</td>
-					<td class="py-4 px-6">
-						{{user.date_joined}}
-					</td>
-					<td class="py-4 px-6">
-						<a href="{% url 'custom_admin:update_user' user.id %}"><button class="inline-block px-6 py-2.5 bg-yellow-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out">Edit</button></a>
-                		<a href="{% url 'custom_admin:delete_user' user.id %}"><button class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out">Delete</button></a>
-					</td>
-				</tr>
-			{% endfor %}
-        </tbody>
+        <template x-for="item in filteredEmployees" :key="item">
+            <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td class="py-4 px-6" x-text="item.first_name">
+                    <p x-text="item.first_name"></p>
+                </td>
+                <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <p x-text="item.email"></p>
+                </th>
+                <td class="py-4 px-6">
+                    <p x-text="item.role__name"></p>
+                </td>
+                <td class="py-4 px-6">
+                    <p x-text="date_format(item.date_joined)"></p>
+                </td>
+                <td class="py-4 px-6">
+                    <a @click="window.location.href=window.reverse('custom_admin:update_user', { pk: item.id })">
+                        <button class="inline-block px-6 py-2.5 bg-yellow-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out">
+                            Edit
+                        </button>
+                    </a>
+                    <a @click="window.location.href=window.reverse('custom_admin:delete_user', { pk: item.id })">
+                        <button class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out">
+                            Delete
+                        </button>
+                    </a>
+                </td>
+            </tr>
+
+            </tbody>
+
+        </template>
     </table>
 
-		{% if is_paginated %}
-			<div class="pagination">
-				<span class="page-links">
-					{% if page_obj.has_previous %}
-						<a href="{% url 'custom_admin:users' %}?page={{ page_obj.previous_page_number }}">previous</a>
-					{% endif %}
-					<span class="page-current">
-						Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-					</span>
-					{% if page_obj.has_next %}
-						<a href="{% url 'custom_admin:users' %}?page={{ page_obj.next_page_number }}">next</a>
-					{% endif %}
-				</span>
-			</div>
-	{% endif %}
+
+    <div
+            class="w-full md:w-1/2 mx-auto py-6 flex justify-between items-center"
+            x-show="pageCount() > 1"
+    >
+        <!--First Button-->
+        <button
+                x-on:click="viewPage(0)"
+                :disabled="pageNumber==0"
+                :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber==0 }"
+        >
+            <svg
+                    class="h-8 w-8 text-indigo-600"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+            >
+                <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                <line x1="5" y1="19" x2="5" y2="5"></line>
+            </svg>
+        </button>
+
+        <!--Previous Button-->
+        <button
+                x-on:click="prevPage"
+                :disabled="pageNumber==0"
+                :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber==0 }"
+        >
+            <svg
+                    class="h-8 w-8 text-indigo-600"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+            >
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+
+        <!-- Display page numbers -->
+        <template x-for="(page,index) in pages()" :key="index">
+            <button
+                    class="px-3 py-2 rounded"
+                    :class="{ 'bg-indigo-600 text-white font-bold' : index === pageNumber }"
+                    type="button"
+                    x-on:click="viewPage(index)"
+            >
+                <span x-text="index+1"></span>
+            </button>
+        </template>
+
+        <!--Next Button-->
+        <button
+                x-on:click="nextPage"
+                :disabled="pageNumber >= pageCount() -1"
+                :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber >= pageCount() -1 }"
+        >
+            <svg
+                    class="h-8 w-8 text-indigo-600"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+            >
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+
+        <!--Last Button-->
+        <button
+                x-on:click="viewPage(Math.ceil(total/size)-1)"
+                :disabled="pageNumber >= pageCount() -1"
+                :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber >= pageCount() -1 }"
+        >
+            <svg
+                    class="h-8 w-8 text-indigo-600"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+            >
+                <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                <line x1="19" y1="5" x2="19" y2="19"></line>
+            </svg>
+        </button>
+    </div>
+
+    <div>
+        <div
+                class="mt-6 flex flex-wrap justify-between items-center text-sm leading-5 text-gray-700"
+        >
+            <div
+                    class="w-full sm:w-auto text-center sm:text-left"
+                    x-show="pageCount() > 1"
+            >
+                Page <span x-text="pageNumber+1"> </span> of
+                <span x-text="pageCount()"></span> | Showing
+                <span x-text="startResults()"></span> to
+                <span x-text="endResults()"></span>
+            </div>
+
+            <div
+                    class="w-full sm:w-auto text-center sm:text-right"
+                    x-show="total > 0"
+            >
+                Total <span class="font-bold" x-text="total"></span> results
+            </div>
+
+            <!--Message to display when no results-->
+            <div
+                    class="mx-auto flex items-center font-bold text-red-500"
+                    x-show="total===0"
+            >
+                <svg
+                        class="h-8 w-8 text-red-500"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                >
+                    <path stroke="none" d="M0 0h24v24H0z"/>
+                    <circle cx="12" cy="12" r="9"/>
+                    <line x1="9" y1="10" x2="9.01" y2="10"/>
+                    <line x1="15" y1="10" x2="15.01" y2="10"/>
+                    <path d="M9.5 16a10 10 0 0 1 6 -1.5"/>
+                </svg>
+
+                <span class="ml-4"> No results!!</span>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
+<script>
+      var users = {{users|safe}}
+</script>
+<script src="{% static 'js/base.js' %}"></script>
+<script src="{% static 'js/user.js' %}"></script>
+</body>
 {% endblock %}
-	

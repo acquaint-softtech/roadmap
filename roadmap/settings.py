@@ -54,15 +54,27 @@ INSTALLED_APPS = [
     "ckeditor",
     "widget_tweaks",
     "mptt",
-    "crispy_forms"
+    "crispy_forms",
+    "js_urls"
 ]
 
+JS_URLS = (
+    'custom_admin:update_user',
+    'custom_admin:delete_user',
+    'custom_admin:update_project',
+    'custom_admin:delete_project',
+    'custom_admin:update_task',
+    'custom_admin:delete_task',
+    'custom_admin:update_comment',
+    'custom_admin:delete_comment',
+)
 TAILWIND_APP_NAME = 'user_themes'
 
 # Ckeditor Configs
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
 
 CKEDITOR_CONFIGS = {
     'default':
