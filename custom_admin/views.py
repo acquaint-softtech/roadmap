@@ -11,7 +11,7 @@ from django.views.generic.base import ContextMixin, View
 
 from project.admin import BoardAdminFormSet
 from project.forms import ProjectCreateForm, AdminTaskForm, AdminCommentForm, BoardForm, AdminUserForm
-from project.models import Project, Task, Message, TaskHistory, Board, Votes
+from project.models import Project, Task, Message, TaskHistory, Board, Votes, TaskNotification
 from users.models import User
 from users.views import LoginRequiredMixin
 
@@ -21,11 +21,24 @@ class AdminContextView(ContextMixin):
     def get_context_data(self, **kwargs):
         context = super(AdminContextView, self).get_context_data()
         context['inbox_count'] = Task.objects.filter(project__isnull=True).count()
+        task_notifications = TaskNotification.objects.select_related('task', 'created_by').filter(
+            is_read=False, is_deleted=False, assign_by=self.request.user).values('task__name', 'created', 'task__slug',
+                                                                                 'task__created_by__id',
+                                                                                 'task__created_by__email').order_by(
+            '-created')
+        context['task_notifications'] = json.dumps(list(task_notifications), indent=4, sort_keys=True, default=str)
         return context
 
 
 class AdminHomeView(LoginRequiredMixin, AdminContextView, TemplateView):
     template_name = 'custom_admin/admin_home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminHomeView, self).get_context_data()
+        task_data = Task.objects.select_related('project', 'type').annotate(num_task_histories=Count('task_history'))
+        context['latest_items'] = task_data.order_by('-created')[0:5]
+        context['popular_items'] = task_data.order_by('-num_task_histories')[0:5]
+        return context
 
 
 class ProjectList(TemplateView, AdminContextView, LoginRequiredMixin):
@@ -297,7 +310,13 @@ class ChangeVote(LoginRequiredMixin, View):
         data = json.loads(request.body)
         vote, created = Votes.objects.get_or_create(user=request.user, task_id=data.get('task_id'))
         if not created:
+            vote.task.is_subscribed = False
+            vote.task.save()
             vote.delete()
+        else:
+            vote.task.is_subscribed = True
+            vote.task.save()
+
         return JsonResponse({"message": "success", "created": created})
 
 
@@ -308,7 +327,8 @@ class ChangeTaskSubscription(LoginRequiredMixin, View):
         task_data = Task.objects.filter(id=int(data.get('task_id'))).first()
         task_data.is_subscribed = not (task_data.is_subscribed)
         task_data.save()
-        return JsonResponse({"message": "success"})
+        return JsonResponse(
+            {"message": "success", "btn_status": 'Unsubscribe' if task_data.is_subscribed else 'Subscribe'})
 
 
 class AdminThemeView(LoginRequiredMixin, AdminContextView, TemplateView):
@@ -321,3 +341,23 @@ class AdminSettingsView(LoginRequiredMixin, AdminContextView, TemplateView):
 
 class AdminSystemView(LoginRequiredMixin, AdminContextView, TemplateView):
     template_name = 'custom_admin/settings.html'
+
+
+class ProjectWiseBoard(LoginRequiredMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        boards = Board.objects.filter(project_id=int(data['project_id'])).values('id', 'name')
+        data = json.dumps(list(boards), sort_keys=True, default=str)
+        return JsonResponse(
+            {"message": "success", "boards": data})
+
+
+class NotificationView(LoginRequiredMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        TaskNotification.objects.filter(is_read=False,assign_by = request.user).update(is_read=True) if data[
+                                                                                   'type'] == 'read' else TaskNotification.objects.filter(
+            is_deleted=False,assign_by = request.user).update(is_deleted=True)
+        return JsonResponse({"message": "success"})

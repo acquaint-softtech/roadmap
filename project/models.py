@@ -55,6 +55,9 @@ class Task(TimeStampModel):
     is_subscribed = models.BooleanField(default=True)
     slug = models.SlugField(max_length=200, null=True, blank=True)
 
+    @property
+    def get_vote_count(self):
+        return Votes.objects.filter(task=self).count()
 
     def save(self, **kwargs):
         unique_slugify(self, self.name)
@@ -90,3 +93,11 @@ class Votes(TimeStampModel):
                              on_delete=models.CASCADE, null=True, blank=True)
     task = models.ForeignKey(Task, related_name='user_task',
                              on_delete=models.CASCADE, null=True, blank=True)
+
+
+class TaskNotification(TimeStampModel):
+    task = models.ForeignKey(Task, related_name='task_notification',
+                             on_delete=models.CASCADE, null=True, blank=True)
+    assign_by = models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True)
+    is_read = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)

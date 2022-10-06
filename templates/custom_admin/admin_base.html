@@ -3,8 +3,6 @@
     {% load static tailwind_tags %}
     {% tailwind_css %}
     <script src="//unpkg.com/alpinejs" defer></script>
-    <script src="{% static 'js/sorting.js'%}"></script>
-
 </head>
 
 <body class="flex bg-gray-100 min-h-screen" x-data="{panel:false, menu:true}">
@@ -36,7 +34,7 @@
                         class="text-sm space-y-1 -mx-3">
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:admin_home' %}"
-                           class="flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white">
+                           class="{% if request.path == '/admin/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
                             <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -51,7 +49,7 @@
                     </li>
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:theme' %}"
-                           class="flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700">
+                           class="{% if request.path == '/admin/colors/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
                             <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -66,7 +64,7 @@
                     </li>
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:settings' %}"
-                           class="flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700">
+                          class="{% if request.path == '/admin/settings/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
                             <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -83,7 +81,7 @@
                     </li>
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:users' %}"
-                           class="flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700">
+                           class="{% if request.path == '/admin/users/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
                             <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -98,7 +96,7 @@
                     </li>
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:system' %}"
-                           class="flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700">
+                           class="{% if request.path == '/admin/system/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
                             <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -138,7 +136,7 @@
                 <ul x-collapse.duration.200ms="" class="text-sm space-y-1 -mx-3 mt-2">
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:comments' %}"
-                           class="flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700">
+                           class="{% if request.path == '/admin/comments/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
                             <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -153,7 +151,7 @@
                     </li>
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:inbox' %}"
-                           class="flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700">
+                           class="{% if request.path == '/admin/inbox/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
                             <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -171,7 +169,7 @@
                     </li>
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:tasks' %}"
-                           class="flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700">
+                           class="{% if request.path == '/admin/items/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
                             <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -186,7 +184,7 @@
                     </li>
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:projects' %}"
-                           class="flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700">
+                           class="{% if request.path == '/admin/projects/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
                             <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -201,7 +199,7 @@
                     </li>
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:votes' %}"
-                           class="flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700">
+                           class="{% if request.path == '/admin/votes/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
                             <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"

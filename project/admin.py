@@ -3,7 +3,7 @@ from django.forms.models import BaseInlineFormSet, ModelForm
 from mptt.admin import MPTTModelAdmin
 
 # Register your models here.
-from project.models import Project, Task, Board, TaskHistory, Votes, Message
+from project.models import Project, Task, Board, TaskHistory, Votes, Message, TaskNotification
 
 admin.site.register(Votes)
 
@@ -68,3 +68,9 @@ class MessageAdmin(MPTTModelAdmin):
 class TaskHistoryAdmin(admin.ModelAdmin):
     list_display = ("id", "action_by", "task", "note", "created")
     search_fields = ("action_by", "task")
+
+
+@admin.register(TaskNotification)
+class TaskNotificationAdmin(admin.ModelAdmin):
+    list_display = ("id", "task", "assign_by", "is_read", "created")
+    search_fields = ("assign_by", "task")

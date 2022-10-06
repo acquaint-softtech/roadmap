@@ -1,7 +1,7 @@
-{% extends 'custom_admin/admin_base.html' %}
+{% extends 'custom_admin/old_admin_base.html' %}
 {% load widget_tweaks %}
 {% block content %}
-<div class="ml-4 mt-3">
+<div class="ml-4 mt-3" x-data="addTask()">
     <h1 class="ml-3 mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Add new Task</h1>
     <form enctype="multipart/form-data" method="post" class="mt-2 ml-3">{% csrf_token %}
     {{ form.media }}
@@ -16,7 +16,7 @@
             <span>{{form.errors.created_by}}</span>
         </div>
 
-        <div class="mb-6 mt-2">
+        <div class="mb-6 mt-2" x-on:change="GetBoards($event)">
             <label for="project" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Project:</label>
                 {{form.project}}
             <span>{{form.errors.project}}</span>
@@ -24,7 +24,13 @@
 
         <div class="mb-6 mt-2">
             <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Board:</label>
-                {{form.type}}
+                 <select name="type" class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white
+focus:border-blue-600 focus:outline-none">
+                     <option value="" selected="">---------</option>
+                    <template x-for="board in boards" :key="board">
+                      <option :value="board.id" x-text="board.name"></option>
+                    </template>
+                  </select>
             <span>{{form.errors.type}}</span>
         </div>
 
@@ -36,24 +42,28 @@
         <button class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out mt-3" type="submit">Save</button>
     </form>
 
+    <script>
 
-      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-      <script>
-        $("#id_project").change(function () {
-          var url = $("#personForm").attr("data-cities-url");  // get the url of the `load_cities` view
-          var countryId = $(this).val();  // get the selected country ID from the HTML input
-          console.log(countryId,"sfsdfsf")
-
-          $.ajax({                       // initialize an AJAX request
-            url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-            data: {
-              'project': countryId       // add the country id to the GET parameters
-            },
-            success: function (data) {   // `data` is the return of the `load_cities` view function
-              $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
+        function addTask(){
+            return {
+                boards : [],
+                GetBoards($event){
+                let project_id = $event.target.value
+                 fetch('/admin/get_project_wise_board/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json','X-CSRFToken':'{{csrf_token}}' },
+                    body: JSON.stringify({'project_id': $event.target.value})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message == 'success'){
+                        let boards = JSON.parse(data.boards)
+                        this.boards = boards
+                    }
+                 })
+                }
             }
-          });
+        }
 
-        });
-      </script>
+    </script>
 {% endblock content %}

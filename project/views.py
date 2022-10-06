@@ -1,6 +1,5 @@
 # Create your views here.
 from django.contrib import messages
-from django.db import connection
 from django.db.models import Count
 from django.shortcuts import redirect
 from django.views import View
@@ -10,8 +9,6 @@ from home.views import BaseContextView
 from project.forms import MessageForm
 from project.models import Project, Task, Message, TaskHistory, Board, Votes
 from users.views import LoginRequiredMixin
-
-print(connection.queries)
 
 
 class ProjectList(BaseContextView, LoginRequiredMixin, ListView):
@@ -66,6 +63,7 @@ class TaskDetailView(BaseContextView, LoginRequiredMixin, DetailView):
             task__slug=self.kwargs.get('slug'))
         context['history_data'] = TaskHistory.objects.select_related('task', 'action_by').filter(
             task__slug=self.kwargs.get('slug')).order_by('-created')
+        context['is_voted'] = Votes.objects.filter(user = self.request.user,task = self.object).exists()
         return context
 
 
