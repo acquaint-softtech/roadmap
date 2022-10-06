@@ -55,8 +55,9 @@ INSTALLED_APPS = [
     "widget_tweaks",
     "mptt",
     "crispy_forms",
-    "js_urls"
+    "js_urls",
 ]
+
 
 JS_URLS = (
     'custom_admin:update_user',

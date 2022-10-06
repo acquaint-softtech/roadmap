@@ -84,11 +84,6 @@ class AdminTaskForm(forms.ModelForm):
 
     def __init__(self, project, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["type"].queryset = Board.objects.none()
-
-        if project:
-            self.fields["type"].queryset = Board.objects.filter(project_id = int(project))
-
         self.fields['project'].widget.attrs['class'] = 'form-select appearance-none \
                            block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white \
                            bg-clip-padding bg-no-repeat \

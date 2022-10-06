@@ -30,5 +30,7 @@ urlpatterns = [
     path('colors/', views.AdminThemeView.as_view(), name='theme'),
     path('settings/', views.AdminSettingsView.as_view(), name='settings'),
     path('system/', views.AdminSystemView.as_view(), name='system'),
+    path('get_project_wise_board/', views.ProjectWiseBoard.as_view(), name='get_project_wise_board'),
+    path('notification/', views.NotificationView.as_view(), name='read_notification'),
 
 ]

@@ -68,7 +68,7 @@ class EditProfileView(LoginRequiredMixin, BaseContextView, FormView):
 class CustomLoginView(LoginView):
     template_name = "users/login.html"
     form_class = LoginForm
-    success_message = 'Login sucessfully'
+    success_message = 'Login successfully'
     success_url = reverse_lazy("home:home")
 
     def get_success_url(self):

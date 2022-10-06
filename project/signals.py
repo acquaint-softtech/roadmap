@@ -1,21 +1,18 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from project.models import TaskHistory, Task, Project, Board
+from project.models import TaskHistory, Task, TaskNotification
+from users.models import User
 
-task_status = ['In-discussion', 'In-progress', 'General', 'Review', 'Live', 'Closed']
+get_admin_users = list(User.objects.filter(is_superuser=True).values_list('id', flat=True).distinct())
 
 
 @receiver(post_save, sender=Task)
 def save_task_history(sender, created, instance, **kwargs):
     if created:
         TaskHistory.objects.create(task=instance, action_by=instance.created_by, note='created the item')
-
-
-# @receiver(post_save, sender=Project)
-# def save_task_history(sender, created, instance, **kwargs):
-#     if created:
-#         types = []
-#         for status in task_status:
-#             types.append(Board(name=status, project=instance))
-#         Board.objects.bulk_create(types)
+        history_data = []
+        for user in get_admin_users:
+            if instance.created_by.id != user:
+                history_data.append(TaskNotification(task=instance, assign_by_id=user))
+        TaskNotification.objects.bulk_create(history_data)
