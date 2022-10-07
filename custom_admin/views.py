@@ -142,7 +142,7 @@ class InboxList(TemplateView, AdminContextView, LoginRequiredMixin):
         context = super(InboxList, self).get_context_data(*args, **kwargs)
         inbox_data = Task.objects.filter(project__isnull=True).annotate(comment_count=Count('message_task')).values(
             'id', 'name', 'created_by__email',
-            'created', 'slug', 'comment_count')
+            'created', 'slug', 'comment_count','created_by__id')
         context['inbox'] = json.dumps(list(inbox_data), indent=4, sort_keys=True, default=str)
         return context
 
@@ -154,7 +154,7 @@ class AdminTaskList(TemplateView, AdminContextView, LoginRequiredMixin):
         context = super(AdminTaskList, self).get_context_data(*args, **kwargs)
         task_data = Task.objects.filter(project__isnull=False).values('id', 'name', 'project__title', 'type__name',
                                                                       'created_by__email', 'created', 'is_pinned',
-                                                                      'slug')
+                                                                      'slug','created_by__id','project__slug')
         context['tasks'] = json.dumps(list(task_data), indent=4, sort_keys=True, default=str)
         return context
 
@@ -212,7 +212,7 @@ class CommentsList(TemplateView, AdminContextView, LoginRequiredMixin):
     def get_context_data(self, *args, **kwargs):
         context = super(CommentsList, self).get_context_data(*args, **kwargs)
         message_data = Message.objects.values('id', 'text', 'task__name', 'user__email',
-                                              'created')
+                                              'created', 'task__slug', 'user__id')
         context['messages'] = json.dumps(list(message_data), indent=4, sort_keys=True, default=str)
         return context
 
@@ -299,7 +299,7 @@ class AdminVoteList(TemplateView, AdminContextView, LoginRequiredMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super(AdminVoteList, self).get_context_data(*args, **kwargs)
-        vote_data = Votes.objects.values('id', 'user__email', 'task__name', 'task__is_subscribed', 'created')
+        vote_data = Votes.objects.values('id', 'user__email', 'task__name', 'task__is_subscribed', 'created','user__id','task__slug')
         context['votes'] = json.dumps(list(vote_data), indent=4, sort_keys=True, default=str)
         return context
 

@@ -58,6 +58,12 @@ INSTALLED_APPS = [
     "js_urls",
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'roadmap_cache',
+    }
+}
 
 JS_URLS = (
     'custom_admin:update_user',
@@ -76,14 +82,13 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
-
 CKEDITOR_CONFIGS = {
     'default':
         {'toolbar': 'Custom',
          'toolbar_Custom': [
-            ['Bold', 'Link', 'Unlink', 'Image'],
-        ],
-}}
+             ['Bold', 'Link', 'Unlink', 'Image'],
+         ],
+         }}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -99,7 +104,6 @@ MIDDLEWARE = [
 AUTHENTICATION_BACKENDS = [
     "users.auth_backend.CustomAuthBackend",
 ]
-
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url

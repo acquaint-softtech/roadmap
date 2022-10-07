@@ -1,219 +1,709 @@
-{% extends 'custom_admin/old_admin_base.html' %}
+{% extends 'custom_admin/admin_base.html' %}
 {% load static %}
 {% block content %}
-<body class="bg-grey-100 px-3 font-sans leading-normal tracking-normal">
-
-<div class="container pt-8 mx-auto" x-data="Inbox()">
-    <input
-            x-ref="searchField"
-            x-model="search"
-            x-on:click="viewPage(0)"
-            x-on:keydown.window.prevent.slash=" viewPage(0), $refs.searchField.focus()"
-            placeholder="Search for inbox..."
-            type="search"
-            class="block w-full bg-gray-200 focus:outline-none focus:bg-white focus:shadow text-gray-700 font-bold rounded-lg px-4 py-3"
-    />
-    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="py-3 px-6" @click="sort('name')">
-                    Title
-                </th>
-                <th scope="col" class="py-3 px-6" @click="sort('comment_count')">
-                    Comments
-                </th>
-                <th scope="col" class="py-3 px-6" @click="sort('created_by__email')">
-                    User
-                </th>
-				<th scope="col" class="py-3 px-6" @click="sort('created')">
-                    Date
-                </th>
-				<th scope="col" class="py-3 px-6">
-                    Action
-                </th>
-            </tr>
-        </thead>
-        <template x-for="inbox in filteredEmployees" :key="inbox">
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="py-4 px-6">
-                    <p x-text="inbox.name"></p>
-                </td>
-                <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <p x-text="inbox.comment_count"></p>
-                </th>
-                <td class="py-4 px-6">
-                    <p x-text="inbox.created_by__email"></p>
-                </td>
-				<td class="py-4 px-6">
-                    <p x-text="date_format(inbox.created)"></p>
-                </td>
-				<td class="py-4 px-6">
-                    <a @click="window.location.href=window.reverse('custom_admin:update_task', { slug: inbox.slug })">
-                        <button class="inline-block px-6 py-2.5 bg-yellow-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out">
-                            Edit
-                        </button>
-                    </a>
-                    <a @click="window.location.href=window.reverse('custom_admin:delete_task', { slug: inbox.slug })">
-                        <button class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out">
-                            Delete
-                        </button>
-                    </a>
-                </td>
-            </tr>
-        </template>
-    </table>
-
-
-    <div
-            class="w-full md:w-1/2 mx-auto py-6 flex justify-between items-center"
-            x-show="pageCount() > 1"
-    >
-        <!--First Button-->
-        <button
-                x-on:click="viewPage(0)"
-                :disabled="pageNumber==0"
-                :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber==0 }"
-        >
-            <svg
-                    class="h-8 w-8 text-indigo-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-            >
-                <polygon points="19 20 9 12 19 4 19 20"></polygon>
-                <line x1="5" y1="19" x2="5" y2="5"></line>
-            </svg>
-        </button>
-
-        <!--Previous Button-->
-        <button
-                x-on:click="prevPage"
-                :disabled="pageNumber==0"
-                :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber==0 }"
-        >
-            <svg
-                    class="h-8 w-8 text-indigo-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-            >
-                <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-        </button>
-
-        <!-- Display page numbers -->
-        <template x-for="(page,index) in pages()" :key="index">
+<body>
+<div class="filament-main flex-col gap-y-6 w-screen flex-1 rtl:lg:pl-0 hidden h-full transition-all lg:pl-[20rem] rtl:lg:pr-[20rem]"
+    style="display: flex;">
+    <header
+        class="filament-main-topbar sticky top-0 z-10 flex h-16 w-full shrink-0 items-center border-b bg-white dark:bg-gray-800 dark:border-gray-700">
+        <div class="flex items-center w-full px-2 sm:px-4 md:px-6 lg:px-8">
             <button
-                    class="px-3 py-2 rounded"
-                    :class="{ 'bg-indigo-600 text-white font-bold' : index === pageNumber }"
-                    type="button"
-                    x-on:click="viewPage(index)"
-            >
-                <span x-text="index+1"></span>
+                class="filament-sidebar-open-button shrink-0 flex items-center justify-center w-10 h-10 transition text-primary-500 rounded-full hover:bg-gray-500/5 focus:bg-primary-500/10 focus:outline-none lg:z-10 lg:hover:bg-white lg:focus:bg-white lg:hover:text-gray-600 lg:focus:text-gray-600 lg:-ml-[44px] lg:w-6 lg:h-6 lg:text-gray-500 lg:bg-white lg:shadow lg:dark:bg-gray-900 lg:dark:hover:text-gray-400 lg:dark:focus:text-gray-400 lg:mr-4 rtl:lg:ml-4 rtl:lg:-mr-[44px]">
+                <div class="relative lg:absolute visible lg:invisible">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="#52525bb3" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="#52525bb3" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </div>
+
+                <div class="absolute ltr:lg:relative invisible ltr:lg:visible">
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                        aria-hidden="true" style="display: none;">
+                        <path fill-rule="evenodd"
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                        aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+
+                <div class="absolute rtl:lg:relative invisible rtl:lg:visible">
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                        aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                        aria-hidden="true" style="display: none;">
+                        <path fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </div>
             </button>
-        </template>
 
-        <!--Next Button-->
-        <button
-                x-on:click="nextPage"
-                :disabled="pageNumber >= pageCount() -1"
-                :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber >= pageCount() -1 }"
-        >
-            <svg
-                    class="h-8 w-8 text-indigo-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-            >
-                <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-        </button>
+            <div class="flex items-center justify-between flex-1">
+                <div class="filament-breadcrumbs flex-1">
+                    <ul class="hidden gap-4 items-center font-medium text-sm lg:flex dark:text-white">
+                        <li>
+                            <a href="{% url 'custom_admin:inbox' %}" class="dark:text-gray-300">
+                                Inbox
+                            </a>
+                        </li>
 
-        <!--Last Button-->
-        <button
-                x-on:click="viewPage(Math.ceil(total/size)-1)"
-                :disabled="pageNumber >= pageCount() -1"
-                :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber >= pageCount() -1 }"
-        >
-            <svg
-                    class="h-8 w-8 text-indigo-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-            >
-                <polygon points="5 4 15 12 5 20 5 4"></polygon>
-                <line x1="19" y1="5" x2="19" y2="19"></line>
-            </svg>
-        </button>
-    </div>
+                        <li class="h-6 border-r border-gray-300 -skew-x-12 dark:border-gray-500"></li>
+                        <li>
+                            <a href="#" class="text-gray-500 dark:text-gray-400">
+                                List
+                            </a>
+                        </li>
 
-    <div>
-        <div
-                class="mt-6 flex flex-wrap justify-between items-center text-sm leading-5 text-gray-700"
-        >
-            <div
-                    class="w-full sm:w-auto text-center sm:text-left"
-                    x-show="pageCount() > 1"
-            >
-                Page <span x-text="pageNumber+1"> </span> of
-                <span x-text="pageCount()"></span> | Showing
-                <span x-text="startResults()"></span> to
-                <span x-text="endResults()"></span>
+                    </ul>
+                </div>
+
+                <div class="filament-global-search flex items-center ml-4">
+
+
+                    <div class="relative">
+                        <div class="filament-global-search-input">
+                            <label for="globalSearchInput" class="sr-only">
+                                Global search
+                            </label>
+
+                            <div class="relative group max-w-md">
+                                <span
+                                    class="absolute inset-y-0 left-0 flex items-center justify-center w-10 h-10 text-gray-500 pointer-events-none group-focus-within:text-primary-500 dark:text-gray-400">
+                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </span>
+
+                                <input id="globalSearchInput" placeholder="Search" type="search" autocomplete="off"
+                                    class="block h-10 w-full rounded-lg border-transparent bg-gray-400/10 pl-10 placeholder-gray-500 transition duration-75 focus:border-primary-500 focus:bg-white focus:placeholder-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <!-- Lived5SBON -->
+                <div>
+                    <div class="filament-notifications pointer-events-none fixed inset-4 z-50 mx-auto flex justify-end gap-3 items-center flex-col-reverse"
+                        role="status">
+                    </div>
+
+                    <div class="flex items-center">
+                        <div class="inline-block">
+                            <button title="Open notifications" type="button"
+                                class="filament-icon-button flex items-center justify-center rounded-full relative hover:bg-gray-500/5 focus:outline-none text-primary-500 focus:bg-[#3b82f61a] dark:hover:bg-gray-300/5 w-10 h-10 ml-4 -mr-1">
+                                <span class="sr-only">
+                                    Open notifications
+                                </span>
+
+                                <svg class="filament-icon-button-icon w-5 h-5" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#2563ff"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                                    </path>
+                                </svg>
+                                <span x-text="notification_count"
+                                    class="filament-icon-button-indicator absolute rounded-full text-xs text-blue-700 inline-block w-4 h-4 -top-0.5 -right-0.5 bg-[#3b82f61a]"></span>
+                            </button>
+                        </div>
+
+                        <div class="filament-modal inline-block">
+
+
+                            <div class="fixed inset-0 z-40 flex items-center min-h-screen overflow-y-auto transition"
+                                style="display: none;">
+                                <div
+                                    class="filament-modal-close-overlay fixed inset-0 w-full h-full bg-black/50 cursor-pointer">
+                                </div>
+
+                                <div class="relative w-full cursor-pointer pointer-events-none" style="display: none;">
+                                    <div
+                                        class="filament-modal-window w-full p-2 bg-white cursor-default pointer-events-auto dark:bg-gray-800 relative h-screen overflow-y-auto ml-auto max-w-md">
+                                        <button tabindex="-1" type="button" class="absolute top-2 right-2">
+                                            <svg title="__('filament-support::components/modal.actions.close.label')"
+                                                x-on:click="isOpen = false" tabindex="-1"
+                                                class="filament-modal-close-button h-4 w-4 cursor-pointer text-gray-400"
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span class="sr-only">
+                                                Close
+                                            </span>
+                                        </button>
+
+
+
+                                        <div class="space-y-2" style="display: none;">
+                                            <div class="filament-modal-header px-4 py-2">
+                                                <h2
+                                                    class="filament-modal-heading text-xl font-bold tracking-tight relative">
+                                                    <span>
+                                                        Notifications
+                                                    </span>
+                                                    <span
+                                                        class="inline-flex absolute items-center justify-center top-0 ml-1 min-w-[1rem] h-4 rounded-full text-xs text-primary-700 bg-primary-500/10 dark:text-primary-500"
+                                                        x-text="notification_count"></span>
+                                                </h2>
+                                                <div>
+                                                    <div class="mt-2 text-sm">
+                                                        <button type="button"
+                                                            class="filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-gray-600 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-200"
+                                                            tabindex="-1" @click="notification('read')">
+                                                            Mark all as read
+                                                        </button>
+                                                        <span>
+                                                            •
+                                                        </span>
+
+                                                        <button type="button"
+                                                            class="filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-gray-600 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-200"
+                                                            tabindex="-1" @click="notification('clear')">
+                                                            Clear
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div aria-hidden="true" class="filament-hr border-t dark:border-gray-700">
+                                            </div>
+
+                                            <div class="filament-modal-content space-y-2">
+
+                                                <div class="px-4 py-2 space-y-4">
+                                                    <div class="mt-[calc(-1rem-1px)]">
+                                                        <template x-for="notification in notifications"
+                                                            :key="notification">
+                                                            <div class="-mx-6 border-b border-t dark:border-gray-800">
+                                                                <div
+                                                                    class="py-2 pl-4 pr-2 bg-gray-50 -mb-px dark:bg-gray-700">
+                                                                    <div class="filament-notifications-notification pointer-events-auto invisible flex gap-3 w-full transition duration-300"
+                                                                        style="display: flex; visibility: visible;">
+                                                                        <div class="grid flex-1">
+                                                                            <div
+                                                                                class="filament-notifications-title flex h-6 items-center text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                                                <p>Item created</p>
+                                                                            </div>
+
+                                                                            <p class="filament-notifications-date text-xs text-gray-500 dark:text-gray-300"
+                                                                                x-text="notification.created">
+                                                                            </p>
+                                                                            <div
+                                                                                class="filament-notifications-body mt-1 text-sm text-gray-500 dark:text-gray-300">
+                                                                                <p>A new roadmap item has been created
+                                                                                    by
+                                                                                    <span
+                                                                                        x-text="notification.task__created_by__email"></span>
+                                                                                    with the title <span
+                                                                                        x-text="notification.task__name"></span>
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filament-dropdown">
+                    <div class="filament-dropdown-trigger cursor-pointer ml-4"
+                        x-on:click="open_test_data = !open_test_data">
+                        <div class="w-10 h-10 rounded-full bg-gray-200 bg-cover bg-center dark:bg-gray-900"
+                            style="background-image: url('https://www.gravatar.com/avatar/4544c6cd4cd4fd104b407fc176491507?s=150')">
+                        </div>
+                    </div>
+
+                    <div class="filament-dropdown-panel absolute z-10 w-full rounded-lg bg-white shadow-lg ring-1 ring-black/5 transition dark:bg-gray-800 dark:ring-white/10 max-w-[14rem] absolute top-12 right-9"
+                        style="display: none;">
+                        <ul class="py-1 space-y-1">
+                            <div>
+                                <a
+                                    class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap">
+                                    <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 text-gray-500"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        aria-hidden="true">
+                                        <path fill-rule="evenodd"
+                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="truncate">
+                                        admin@admin.com
+                                    </span>
+                                </a>
+                            </div>
+                            <div>
+                                <div>
+                                    <button type="button"
+                                        class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-[#3b82f6] focus:bg-primary-700">
+                                        <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-primary-500"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                                            </path>
+                                        </svg>
+                                        <span class="truncate">
+                                            Toggle light mode
+                                        </span>
+                                    </button>
+                                </div>
+                                <div>
+                                    <button type="button"
+                                        class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-[#3b82f6] focus:bg-primary-700">
+                                        <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-primary-500"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path fill-rule="evenodd"
+                                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span class="truncate">
+                                            Toggle dark mode
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <a href="/logout/">
+                                    <button type="submit"
+                                        class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-[#3b82f6] focus:bg-primary-700">
+                                        <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-gray-500"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path fill-rule="evenodd"
+                                                d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span class="truncate">
+                                            Sign out
+                                        </span>
+                                    </button>
+                                </a>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
             </div>
+        </div>
+    </header>
+    <div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
 
-            <div
-                    class="w-full sm:w-auto text-center sm:text-right"
-                    x-show="total > 0"
-            >
-                Total <span class="font-bold" x-text="total"></span> results
+
+        <div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
+
+
+            <div class="filament-page filament-resources-list-records-page filament-resources-users">
+                <div class="space-y-6">
+                    <header
+                        class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
+                        <h1 class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
+                            Inbox
+                        </h1>
+                    </header>
+
+                    <div
+                        class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700" x-data="Inbox()" x-effect="">
+                        <div>
+                            <div class="flex items-center justify-between p-2 h-14">
+                                <div class="flex items-center gap-2">
+
+                                    <div class="filament-dropdown filament-tables-bulk-actions"
+                                       >
+                                        <div x-on:click="toggle" class="filament-dropdown-trigger cursor-pointer">
+                                            <button title="Open actions" type="button"
+                                                class="filament-icon-button flex items-center justify-center rounded-full relative hover:bg-gray-500/5 focus:outline-none text-primary-500 focus:bg-primary-500/10 dark:hover:bg-gray-300/5 w-10 h-10 filament-tables-bulk-actions-trigger">
+                                                <span class="sr-only">
+                                                    Open actions
+                                                </span>
+
+                                                <svg class="filament-icon-button-icon w-5 h-5"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                        <div x-ref="panel" x-float.placement.bottom-start.flip.offset="{ offset: 8 }"
+                                            x-transition:enter-start="opacity-0 scale-95"
+                                            x-transition:leave-end="opacity-0 scale-95"
+                                            class="filament-dropdown-panel absolute z-10 w-full rounded-lg bg-white shadow-lg ring-1 ring-black/5 transition dark:bg-gray-800 dark:ring-white/10 max-w-[14rem]"
+                                            style="display: none;">
+                                            <div class="filament-tables-bulk-action">
+                                                <button type="button"
+                                                    class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-danger-600 focus:bg-danger-700"
+                                                    x-on:click="mountBulkAction('delete')">
+                                                    <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-danger-500"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                        fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd"
+                                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    <span class="truncate">
+                                                        Delete selected
+                                                    </span>
+
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="w-full flex items-center justify-end gap-2 md:max-w-md">
+                                    <div class="flex-1 flex items-center justify-end">
+                                        <div class="filament-tables-search-input">
+                                            <label for="tableSearchInput" class="sr-only">
+                                                Search
+                                            </label>
+
+                                            <div class="relative group">
+                                                <span
+                                                    class="absolute inset-y-0 left-0 flex items-center justify-center w-9 h-9 text-gray-400 pointer-events-none group-focus-within:text-primary-500">
+                                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                        aria-hidden="true">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                    </svg> </span>
+
+                                                <input wire:model.debounce.500ms="tableSearchQuery"
+                                                    id="tableSearchInput" placeholder="Search" type="search"
+                                                    autocomplete="off"
+                                                       x-ref="searchField"
+                                                        x-model="search"
+                                                        x-on:click="viewPage(0)"
+                                                        x-on:keydown.window.prevent.slash=" viewPage(0), $refs.searchField.focus()"
+                                                    class="block h-9 w-full max-w-xs rounded-lg border-gray-300 pl-9 placeholder-gray-400 shadow-sm transition duration-75 focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div wire:key="ySOoly1CvoPY5k7s1w4y.table.selection.indicator"
+                            class="filament-tables-selection-indicator bg-primary-500/10 px-4 py-2 whitespace-nowrap text-sm border-t dark:border-gray-700"
+                            x-show="selectedRecords.length" style="display: none;">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                class="animate-spin inline-block animate-spin w-4 h-4 mr-3 text-primary-500"
+                                x-show="isLoading" style="display: none;">
+                                <path opacity="0.2" fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                    fill="currentColor"></path>
+                                <path d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z"
+                                    fill="currentColor"></path>
+                            </svg>
+                        </div>
+
+
+                        <div class="overflow-y-auto relative dark:border-gray-700 border-t">
+                            <table
+                                class="filament-tables-table w-full text-left rtl:text-right divide-y table-auto dark:divide-gray-700">
+                                <thead>
+                                    <tr class="bg-gray-500/5">
+                                        <td class="filament-tables-checkbox-cell w-4 px-4 whitespace-nowrap">
+                                            <input
+                                                class="block border-gray-300 rounded shadow-sm text-primary-600 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:checked:bg-primary-600 dark:checked:border-primary-600"
+                                                type="checkbox">
+                                        </td>
+
+
+                                        <th class="filament-tables-header-cell p-0" @click="sort('name')">
+                                            <button type="button"
+                                                class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
+                                                <span>
+                                                    Title
+                                                </span>
+
+                                            </button>
+                                        </th>
+                                        <th class="filament-tables-header-cell p-0" @click="sort('comment_count')">
+                                            <button type="button"
+                                                class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
+                                                <span>
+                                                    Comments
+                                                </span>
+
+                                            </button>
+                                        </th>
+                                        <th class="filament-tables-header-cell p-0" @click="sort('created_by__email')">
+                                            <button type="button"
+                                                class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
+                                                <span>
+                                                    User
+                                                </span>
+
+                                            </button>
+                                        </th>
+                                        <th class="filament-tables-header-cell p-0" @click="sort('created')">
+                                            <button wire:click="sortTable('created_at')" type="button"
+                                                class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 ">
+                                                <span>
+                                                    Date
+                                                </span>
+
+                                                <svg class="filament-tables-header-cell-sort-icon h-3 w-3 dark:text-gray-300"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                    fill="currentColor" aria-hidden="true">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg> </button>
+                                        </th>
+                                        <th class="w-5"></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody
+                                    class="divide-y whitespace-nowrap dark:divide-gray-700">
+                                <template x-for="inbox in filteredEmployees" :key="inbox">
+                                    <tr class="filament-tables-row hover:bg-gray-50 dark:hover:bg-gray-500/10">
+                                        <td
+                                            class="filament-tables-reorder-cell w-4 px-4 whitespace-nowrap text-gray-500 transition group-hover:text-primary-500 dark:text-gray-400 dark:group-hover:text-primary-400 hidden">
+                                            <svg class="block h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M4 6h16M4 12h16M4 18h16"></path>
+                                            </svg>
+                                        </td>
+
+                                        <td class="filament-tables-checkbox-cell w-4 px-4 whitespace-nowrap">
+                                            <input
+                                                class="block border-gray-300 rounded shadow-sm text-primary-600 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:checked:bg-primary-600 dark:checked:border-primary-600 table-row-checkbox"
+                                                type="checkbox">
+                                        </td>
+
+                                        <td class="filament-tables-cell dark:text-white"
+                                            wire:loading.remove.delay="wire:loading.remove.delay"
+                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                            <div class="filament-tables-text-column px-4 py-3 whitespace-normal">
+                                                 <p x-text="inbox.name"></p>
+                                            </div>
+                                        </td>
+
+                                        <td class="filament-tables-cell dark:text-white"
+                                            wire:loading.remove.delay="wire:loading.remove.delay"
+                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                                <div class="filament-tables-text-column px-4 py-3 whitespace-normal">
+                                                    <p x-text="inbox.comment_count"></p>
+                                                </div>
+                                        </td>
+
+                                        <td class="filament-tables-cell dark:text-white"
+                                            wire:loading.remove.delay="wire:loading.remove.delay"
+                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                            <a @click="window.location.href=window.reverse('custom_admin:update_user', { pk: inbox.created_by__id })">
+                                                <div class="filament-tables-text-column px-4 py-3">
+                                                    <p x-text="inbox.created_by__email"></p>
+                                                </div>
+                                            </a>
+
+                                        </td>
+
+                                        <td class="filament-tables-cell dark:text-white"
+                                            wire:loading.remove.delay="wire:loading.remove.delay"
+                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                                <div class="filament-tables-text-column px-4 py-3">
+                                                    <p x-text="date_format(inbox.created)"></p>
+                                                </div>
+                                        </td>
+
+                                        <td wire:loading.remove.delay=""
+                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set"
+                                            class="filament-tables-actions-cell px-4 py-3 whitespace-nowrap">
+                                            <div class="flex items-center gap-4 justify-end">
+                                                <a class="filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-sm text-primary-600 hover:text-primary-500 dark:text-primary-500 dark:hover:text-primary-400 filament-tables-link-action"
+                                                  @click="window.location.href=window.reverse('custom_admin:update_task', { slug: inbox.slug })"
+                                                    dusk="filament.tables.action.edit">
+                                                    <svg class="filament-link-icon w-4 h-4 mr-1 rtl:ml-1"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                        fill="currentColor" aria-hidden="true">
+                                                        <path
+                                                            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                                                        </path>
+                                                    </svg>
+                                                    Edit
+                                                </a>
+
+                                            </div>
+                                        </td>
+
+                                        <td class="w-full px-4 py-4 animate-pulse hidden" colspan="6"
+                                            wire:loading.class.remove.delay="hidden"
+                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                            <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600"></div>
+                                        </td>
+                                    </tr>
+                                </template>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="p-2 border-t dark:border-gray-700">
+                            <nav role="navigation" aria-label="Pagination Navigation"
+                                class="filament-tables-pagination flex items-center justify-between">
+                                <div class="flex justify-between items-center flex-1 lg:hidden">
+                                    <div class="w-10">
+                                    </div>
+                                    <div
+                                        class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
+                                        <select wire:model="tableRecordsPerPage" id="tableRecordsPerPageSelect"
+                                            class="h-8 text-sm pr-8 leading-none transition duration-75 border-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
+                                            <option value="5"  x-on:click="changeSize('5')">5</option>
+                                            <option value="10"  x-on:click="changeSize('10')">10</option>
+                                            <option value="25"  x-on:click="changeSize('25')">25</option>
+                                            <option value="50"  x-on:click="changeSize('50')">50</option>
+                                            <option value="-1"  x-on:click="changeSize('-1')">All</option>
+                                        </select>
+                                        <label for="tableRecordsPerPageSelect"
+                                            class="text-sm font-medium dark:text-white">
+                                            per page
+                                        </label>
+                                    </div>
+
+                                    <div class="w-10">
+                                        <button title="Next" type="button"
+                                            class="filament-icon-button flex items-center justify-center rounded-full relative hover:bg-gray-500/5 focus:outline-none text-primary-500 focus:bg-primary-500/10 dark:hover:bg-gray-300/5 w-10 h-10"
+                                            wire:click="nextPage('page')" rel="next">
+                                            <span class="sr-only">
+                                                Next
+                                            </span>
+                                            <svg class="filament-icon-button-icon w-5 h-5"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+
+                                <div class="hidden flex-1 items-center lg:grid grid-cols-3">
+                                    <div class="flex items-center">
+                                        <div class="pl-2 text-sm font-medium dark:text-white">
+                                            Showing <span x-text="startResults()"></span> to <span x-text="endResults()"></span> of <span x-text="total"></span> results
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-center">
+                                        <div
+                                            class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
+                                            <select class="h-8 text-sm pr-8 leading-none transition duration-75 border-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
+                                                <option value="5"  @click="changeSize('5')">5</option>
+                                                <option value="10"  @click="changeSize('10')">10</option>
+                                                <option value="25"  @click="changeSize('25')">25</option>
+                                                <option value="50"  @click="changeSize('5')">50</option>
+                                                <option value="-1"  @click="changeSize('-1')">All</option>
+                                            </select>
+
+                                            <label for="tableRecordsPerPageSelect"
+                                                class="text-sm font-medium dark:text-white">
+                                                per page
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-end">
+                                        <div class="py-3 border rounded-lg dark:border-gray-600">
+                                            <ol class="flex items-center text-sm text-gray-500 divide-x rtl:divide-x-reverse divide-gray-300 dark:text-gray-400 dark:divide-gray-600">
+                                                <li>
+                                                    <button type="button"
+                                                        class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
+                                                         x-on:click="prevPage" :disabled="pageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber==0 }" aria-label="Next" rel="next">
+                                                        <svg class="w-5 h-5 rtl:scale-x-[-1]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                        <span></span>
+                                                    </button>
+                                                </li>
+                                                <template x-for="(page,index) in pages()" :key="index">
+                                                    <li>
+                                                        <button type="button"
+                                                            class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 focus:text-primary-600 transition"
+                                                             x-on:click="viewPage(index)">
+                                                            <span x-text="index+1"></span>
+                                                        </button>
+                                                    </li>
+                                                </template>
+                                                <li>
+                                                    <button type="button"
+                                                        class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
+                                                          x-on:click="viewPage(Math.ceil(total/size)-1)" :disabled="pageNumber >= pageCount() -1" :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber >= pageCount() -1 }">
+                                                        <svg class="w-5 h-5 rtl:scale-x-[-1]"
+                                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                            fill="currentColor" aria-hidden="true">
+                                                            <path fill-rule="evenodd"
+                                                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                                clip-rule="evenodd"></path>
+                                                        </svg>
+                                                        <span></span>
+                                                    </button>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <!--Message to display when no results-->
-            <div
-                    class="mx-auto flex items-center font-bold text-red-500"
-                    x-show="total===0"
-            >
-                <svg
-                        class="h-8 w-8 text-red-500"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                >
-                    <path stroke="none" d="M0 0h24v24H0z"/>
-                    <circle cx="12" cy="12" r="9"/>
-                    <line x1="9" y1="10" x2="9.01" y2="10"/>
-                    <line x1="15" y1="10" x2="15.01" y2="10"/>
-                    <path d="M9.5 16a10 10 0 0 1 6 -1.5"/>
-                </svg>
-
-                <span class="ml-4"> No results!!</span>
+        <!-- footer div -->
+        <div class="filament-main-footer py-4 shrink-0">
+            <div class="filament-footer flex items-center justify-center">
+                <a href="https://filamentphp.com" target="_blank" rel="noopener noreferrer"
+                    class="text-gray-300 hover:text-primary-500 transition">
+                    <svg role="img" aria-label="Filament" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 303 61"
+                        class="fill-current w-24">
+                        <path
+                            d="M11.739,58.266 C12.337,55.484 12.909,52.793 13.455,50.193 C13.91,48.0263333 14.4191667,45.6249444 14.9825,42.9888333 L15.327,41.379 L18.1126496,28.119 L28.782,28.119 L30.654,19.344 L19.5,19.344 C19.578,18.954 19.695,18.3755 19.851,17.6085 C20.007,16.8415 20.137,16.198 20.241,15.678 C20.657,13.676 21.411,12.1745 22.503,11.1735 C23.595,10.1725 25.103,9.672 27.027,9.672 C28.119,9.672 29.198,9.802 30.264,10.062 C31.33,10.322 32.344,10.686 33.306,11.154 L36.114,1.794 C35.282,1.43 34.3135,1.1115 33.2085,0.8385 C32.1035,0.5655 30.94,0.3575 29.718,0.2145 C28.496,0.0715 27.274,-1.42108547e-14 26.052,-1.42108547e-14 C24.128,-1.42108547e-14 22.282,0.2275 20.514,0.6825 C18.746,1.1375 17.134,1.9045 15.678,2.9835 C14.222,4.0625 12.9545,5.525 11.8755,7.371 C10.7965,9.217 9.971,11.518 9.399,14.274 C9.035,16.016 8.6385,17.9075 8.2095,19.9485 L8.33664956,19.344 L1.872,19.344 L1.77635684e-14,28.119 L6.47364956,28.119 L6.37884,28.56594 C6.2062,29.3761 6.03564,30.17794 5.86716,30.97146 L5.616,32.1555 C5.2,34.1185 4.823,35.906 4.485,37.518 L3.666,41.418 C2.99,44.642 2.3725,47.5605 1.8135,50.1735 C1.2545,52.7865 0.689,55.484 0.117,58.266 L11.739,58.266 Z">
+                        </path>
+                        <path
+                            d="M11.739 58.266C12.337 55.484 12.909 52.793 13.455 50.193 13.91 48.0263333 14.4191667 45.6249444 14.9825 42.9888333L15.327 41.379 18.1126496 28.119 28.782 28.119 30.654 19.344 19.5 19.344C19.578 18.954 19.695 18.3755 19.851 17.6085 20.007 16.8415 20.137 16.198 20.241 15.678 20.657 13.676 21.411 12.1745 22.503 11.1735 23.595 10.1725 25.103 9.672 27.027 9.672 28.119 9.672 29.198 9.802 30.264 10.062 31.33 10.322 32.344 10.686 33.306 11.154L36.114 1.794C35.282 1.43 34.3135 1.1115 33.2085.8385 32.1035.5655 30.94.3575 29.718.2145 28.496.0715 27.274-1.42108547e-14 26.052-1.42108547e-14 24.128-1.42108547e-14 22.282.2275 20.514.6825 18.746 1.1375 17.134 1.9045 15.678 2.9835 14.222 4.0625 12.9545 5.525 11.8755 7.371 10.7965 9.217 9.971 11.518 9.399 14.274 9.035 16.016 8.6385 17.9075 8.2095 19.9485L8.33664956 19.344 1.872 19.344 1.77635684e-14 28.119 6.47364956 28.119 6.37884 28.56594C6.2062 29.3761 6.03564 30.17794 5.86716 30.97146L5.616 32.1555C5.2 34.1185 4.823 35.906 4.485 37.518L3.666 41.418C2.99 44.642 2.3725 47.5605 1.8135 50.1735 1.2545 52.7865.689 55.484.117 58.266L11.739 58.266zM62.3193768 58.266C62.8913768 55.484 63.4503768 52.793 63.9963768 50.193 64.5423768 47.593 65.1663768 44.655 65.8683768 41.379L70.4313768 19.773C71.1853768 16.185 71.9068768 12.7725 72.5958768 9.5355 73.2848768 6.2985 73.9543768 3.146 74.6043768.078L62.7483768 1.092C62.0983768 4.212 61.4483768 7.319 60.7983768 10.413 60.1483768 13.507 59.4723768 16.64 58.7703768 19.812L54.2463768 41.418C53.5443768 44.642 52.9203768 47.5605 52.3743768 50.1735 51.8283768 52.7865 51.2563768 55.484 50.6583768 58.266L62.3193768 58.266z">
+                        </path>
+                        <path
+                            d="M38.7656433,19.4978519 L38.0777659,22.021842 L38.0610693,22.131033 C38.0251643,22.4950191 38.1846143,22.8536527 38.4749965,23.0415561 L42.5405456,25.6727365 L37.8469335,26.0597897 C37.4781717,26.0902123 37.1701788,26.3833635 37.0869964,26.7831066 L36.7567399,28.3701948 L36.7400433,28.4793858 C36.7041382,28.8433719 36.8635882,29.2020055 37.1539704,29.3899089 L41.2194156,32.0208772 L36.5259074,32.4081426 C36.1571456,32.4385651 35.8491527,32.7317163 35.7659703,33.1314594 L35.4357138,34.7185476 L35.4190172,34.8277387 C35.3831121,35.1917248 35.5425621,35.5503584 35.8329443,35.7382617 L39.8982856,38.3690178 L35.2048813,38.7564954 C34.8361195,38.7869179 34.5281266,39.0800691 34.4449442,39.4798122 L34.1146877,41.0669004 L34.0979911,41.1760915 C34.062086,41.5400776 34.221536,41.8987112 34.5119182,42.0866145 L38.5771556,44.7171584 L33.8838552,45.1048482 C33.5150934,45.1352707 33.2071005,45.4284219 33.1239181,45.8281651 L32.7936616,47.4152533 L32.776965,47.5244443 C32.7410599,47.8884304 32.90051,48.247064 33.1908921,48.4349674 L37.2568698,51.0652991 L32.5628291,51.453201 C32.1940673,51.4836235 31.8860744,51.7767748 31.802892,52.1765179 L30.2847167,58.4347902 L35.5467639,58.3429377 L36.3076904,54.9378526 L42.8887216,54.2623324 C43.2574834,54.2319099 43.5654763,53.9387586 43.6486587,53.5390155 L43.9789152,51.9519273 L43.9956118,51.8427363 C44.0315169,51.4787502 43.8720669,51.1201166 43.5816847,50.9322132 L39.5158755,48.3005143 L44.2097477,47.9139796 C44.5785095,47.883557 44.8865024,47.5904058 44.9696848,47.1906627 L45.2999413,45.6035745 L45.3166379,45.4943835 C45.352543,45.1303974 45.193093,44.7717638 44.9027108,44.5838604 L40.8370055,41.9523737 L45.5307738,41.5656268 C45.8995356,41.5352042 46.2075285,41.242053 46.2907109,40.8423099 L46.6209674,39.2552217 L46.637664,39.1460307 C46.6735691,38.7820446 46.5141191,38.423411 46.2237369,38.2355076 L42.1572913,35.604233 L46.8517999,35.217274 C47.2205617,35.1868514 47.5285546,34.8937002 47.611737,34.4939571 L47.9419935,32.9068689 L47.9586901,32.7976779 C47.9945952,32.4336918 47.8351451,32.0750582 47.544763,31.8871548 L43.4784213,29.2551558 L48.172826,28.8689211 C48.5415878,28.8384986 48.8495807,28.5453474 48.9327631,28.1456043 L49.2630196,26.5585161 L49.2797162,26.449325 C49.3156213,26.0853389 49.1561712,25.7267053 48.8657891,25.538802 L43.4784213,22.021842 L44.5654245,19.1812071 L38.7656433,19.4978519 Z"
+                            transform="rotate(1 39.785 38.808)"></path>
+                        <path
+                            d="M46.3029925 13.338C48.4869925 13.338 50.3134925 12.9415 51.7824925 12.1485 53.2514925 11.3555 54.2199925 9.828 54.6879925 7.566 55.1039925 5.59 54.7919925 3.8935 53.7519925 2.4765 52.7119925 1.0595 51.1129925.351 48.9549925.351 46.7969925.351 44.9704925.806 43.4754925 1.716 41.9804925 2.626 41.0119925 4.121 40.5699925 6.201 40.1019925 8.489 40.4074925 10.2505 41.4864925 11.4855 42.5654925 12.7205 44.1709925 13.338 46.3029925 13.338zM94.7512855 18.291C98.4952855 18.291 101.576286 18.915 103.994286 20.163 106.412286 21.411 108.089286 23.1855 109.025286 25.4865 109.961286 27.7875 110.078286 30.524 109.376286 33.696 109.116286 34.996 108.843286 36.3155 108.557286 37.6545 108.271286 38.9935 107.972286 40.391 107.660286 41.847L107.660286 41.847 106.958286 45.123C106.542286 47.073 106.106786 49.127 105.651786 51.285 105.196786 53.443 104.696286 55.77 104.150286 58.266L104.150286 58.266 94.0882855 58.266 94.5952855 53.079 93.6982855 53.079C92.7362855 54.457 91.6767855 55.5945 90.5197855 56.4915 89.3627855 57.3885 88.1082855 58.0645 86.7562855 58.5195 85.4042855 58.9745 83.9482855 59.202 82.3882855 59.202 79.9182855 59.202 77.8512855 58.5975 76.1872855 57.3885 74.5232855 56.1795 73.3662855 54.574 72.7162855 52.572 72.0662855 50.57 72.0012855 48.386 72.5212855 46.02 72.9112855 44.2 73.5417855 42.679 74.4127855 41.457 75.2837855 40.235 76.3367855 39.234 77.5717855 38.454 78.8067855 37.674 80.1717855 37.0565 81.6667855 36.6015 83.1617855 36.1465 84.7152855 35.802 86.3272855 35.568L86.3272855 35.568 98.5342855 33.657C98.7942855 32.487 98.6967855 31.4665 98.2417855 30.5955 97.7867855 29.7245 96.9742855 29.0485 95.8042855 28.5675 94.6342855 28.0865 93.1392855 27.846 91.3192855 27.846 90.3832855 27.846 89.3887855 27.9175 88.3357855 28.0605 87.2827855 28.2035 86.1842855 28.4115 85.0402855 28.6845 83.8962855 28.9575 82.7197855 29.2955 81.5107855 29.6985 80.3017855 30.1015 79.0602855 30.576 77.7862855 31.122L77.7862855 31.122 79.6192855 20.904C80.5552855 20.592 81.6212855 20.2865 82.8172855 19.9875 84.0132855 19.6885 85.2742855 19.409 86.6002855 19.149 87.9262855 18.889 89.2847855 18.681 90.6757855 18.525 92.0667855 18.369 93.4252855 18.291 94.7512855 18.291zM97.0912855 38.922C96.7272855 39.182 96.2852855 39.4355 95.7652855 39.6825 95.2452855 39.9295 94.5302855 40.1765 93.6202855 40.4235 92.7102855 40.6705 91.4752855 40.963 89.9152855 41.301 88.9012855 41.535 87.9782855 41.808 87.1462855 42.12 86.3142855 42.432 85.6252855 42.874 85.0792855 43.446 84.5332855 44.018 84.1692855 44.759 83.9872855 45.669 83.7272855 47.099 83.9742855 48.2105 84.7282855 49.0035 85.4822855 49.7965 86.5092855 50.193 87.8092855 50.193 88.7452855 50.193 89.6877855 49.9915 90.6367855 49.5885 91.5857855 49.1855 92.4957855 48.607 93.3667855 47.853 94.2377855 47.099 95.0372855 46.202 95.7652855 45.162L95.7652855 45.162zM153.787258 25.2364649C153.377677 23.2794277 152.545046 21.7182727 151.289364 20.553 149.664364 19.045 147.395864 18.291 144.483864 18.291 142.689864 18.291 140.967364 18.603 139.316364 19.227 137.665364 19.851 136.144364 20.7025 134.753364 21.7815 133.362364 22.8605 132.185864 24.063 131.223864 25.389L130.248864 25.389 131.067864 18.759 121.239864 19.344C120.563864 22.594 119.900864 25.7335 119.250864 28.7625 118.600864 31.7915 117.989864 34.71 117.417864 37.518L116.598864 41.418C115.896864 44.642 115.272864 47.5605 114.726864 50.1735 114.180864 52.7865 113.608864 55.484 113.010864 58.266L124.671864 58.266C125.243864 55.484 125.802864 52.806 126.348864 50.232 126.894864 47.658 127.479864 44.915 128.103864 42.003L129.780864 33.93C130.612864 32.968 131.451364 32.11 132.296364 31.356 133.141364 30.602 134.025364 30.004 134.948364 29.562 135.871364 29.12 136.852864 28.899 137.892864 28.899 139.712864 28.899 140.876364 29.6075 141.383364 31.0245 141.890364 32.4415 141.896864 34.32 141.402864 36.66L140.271864 42.042C139.647864 44.954 139.075864 47.684 138.555864 50.232 138.035864 52.78 137.476864 55.458 136.878864 58.266L148.500864 58.266C149.098864 55.484 149.677364 52.7865 150.236364 50.1735 150.795364 47.5605 151.412864 44.642 152.088864 41.418 152.400864 39.91 152.706364 38.454 153.005364 37.05 153.304364 35.646 153.570864 34.398 153.804864 33.306L153.74965 33.56 153.831948 33.4695833C154.389503 32.8658056 154.952836 32.3024722 155.521948 31.7795833L155.949864 31.395C156.807864 30.641 157.698364 30.0365 158.621364 29.5815 159.544364 29.1265 160.525864 28.899 161.565864 28.899 163.385864 28.899 164.549364 29.6075 165.056364 31.0245 165.563364 32.4415 165.569864 34.32 165.075864 36.66L163.944864 42.042C163.346864 44.98 162.781364 47.7165 162.248364 50.2515 161.715364 52.7865 161.149864 55.458 160.551864 58.266L172.212864 58.266C172.784864 55.484 173.343864 52.793 173.889864 50.193 174.435864 47.593 175.059864 44.668 175.761864 41.418 176.073864 39.91 176.379364 38.454 176.678364 37.05 176.977364 35.646 177.243864 34.398 177.477864 33.306 178.465864 28.756 178.153864 25.116 176.541864 22.386 174.929864 19.656 172.134864 18.291 168.156864 18.291 166.362864 18.291 164.633864 18.6095 162.969864 19.2465 161.305864 19.8835 159.765364 20.748 158.348364 21.84 156.931364 22.932 155.715864 24.167 154.701864 25.545L153.84665 25.545 153.787258 25.2364649zM204.202305 18.291C208.284305 18.291 211.612305 19.032 214.186305 20.514 216.760305 21.996 218.502305 24.076 219.412305 26.754 220.322305 29.432 220.335305 32.552 219.451305 36.114 219.243305 36.972 219.028805 37.778 218.807805 38.532 218.642055 39.0975 218.465336 39.648375 218.277648 40.184625L218.277648 40.184625 218.086305 40.716 194.21065 40.716 194.203138 40.8698333C194.148249 42.3576111 194.367805 43.6518333 194.861805 44.7525 195.602805 46.4035 196.831305 47.6385 198.547305 48.4575 200.263305 49.2765 202.369305 49.686 204.865305 49.686 205.957305 49.686 207.172805 49.5885 208.511805 49.3935 209.850805 49.1985 211.183305 48.8995 212.509305 48.4965 213.835305 48.0935 215.057305 47.58 216.175305 46.956L216.175305 46.956 214.615305 56.862C213.913305 57.278 212.951305 57.668 211.729305 58.032 210.507305 58.396 209.096805 58.695 207.497805 58.929 205.898805 59.163 204.176305 59.28 202.330305 59.28 197.650305 59.28 193.743805 58.3765 190.610805 56.5695 187.477805 54.7625 185.267805 52.195 183.980805 48.867 182.693805 45.539 182.518305 41.587 183.454305 37.011 184.234305 33.241 185.560305 29.952 187.432305 27.144 189.304305 24.336 191.657305 22.1585 194.491305 20.6115 197.325305 19.0645 200.562305 18.291 204.202305 18.291zM204.436305 26.52C203.110305 26.52 201.816805 26.871 200.555805 27.573 199.294805 28.275 198.170305 29.367 197.182305 30.849 196.589505 31.7382 196.080945 32.78184 195.656625 33.97992L195.656625 33.97992 195.53965 34.322 209.63365 34.028 209.678078 33.6929751C209.871457 31.9817285 209.619199 30.4487368 208.921305 29.094 208.037305 27.378 206.542305 26.52 204.436305 26.52zM233.818831 58.266C234.390831 55.484 234.949831 52.8125 235.495831 50.2515 236.041831 47.6905 236.626831 44.941 237.250831 42.003L238.927831 33.93C239.759831 32.968 240.611331 32.11 241.482331 31.356 242.353331 30.602 243.263331 30.004 244.212331 29.562 245.161331 29.12 246.194831 28.899 247.312831 28.899 249.366831 28.899 250.666831 29.6075 251.212831 31.0245 251.758831 32.4415 251.771831 34.32 251.251831 36.66L250.120831 42.042C249.522831 44.954 248.957331 47.684 248.424331 50.232 247.891331 52.78 247.325831 55.458 246.727831 58.266L258.388831 58.266C258.986831 55.484 259.565331 52.7865 260.124331 50.1735 260.683331 47.5605 261.287831 44.642 261.937831 41.418 262.275831 39.91 262.594331 38.454 262.893331 37.05 263.192331 35.646 263.458831 34.398 263.692831 33.306 264.654831 28.756 264.316831 25.116 262.678831 22.386 261.040831 19.656 258.115831 18.291 253.903831 18.291 252.057831 18.291 250.283331 18.603 248.580331 19.227 246.877331 19.851 245.323831 20.7025 243.919831 21.7815 242.515831 22.8605 241.332831 24.063 240.370831 25.389L239.395831 25.389 240.214831 18.759 230.386831 19.344C229.710831 22.594 229.047831 25.74 228.397831 28.782 227.747831 31.824 227.136831 34.736 226.564831 37.518L225.745831 41.418C225.069831 44.616 224.452331 47.528 223.893331 50.154 223.334331 52.78 222.755831 55.484 222.157831 58.266L233.818831 58.266zM285.401439 59.319C286.337439 59.319 287.351439 59.2345 288.443439 59.0655 289.535439 58.8965 290.555939 58.6755 291.504939 58.4025 292.453939 58.1295 293.201439 57.811 293.747439 57.447L294.995439 47.892C293.981439 48.594 292.973939 49.088 291.972939 49.374 290.971939 49.66 290.055439 49.803 289.223439 49.803 287.325439 49.803 286.031939 49.153 285.342939 47.853 284.653939 46.553 284.582439 44.655 285.128439 42.159L288.07365 28.119 299.675439 28.119 301.547439 19.344 289.92965 19.344 290.008314 18.978375C290.176502 18.1910625 290.338291 17.4302578 290.493681 16.6959609L290.646939 15.9705C291.049939 14.0595 291.446439 12.2005 291.836439 10.3935 292.226439 8.5865 292.629439 6.669 293.045439 4.641L281.111439 6.708C280.565439 9.282 280.038939 11.778 279.531939 14.196 279.227739 15.6468 278.897799 17.19588 278.542119 18.84324L278.43365 19.344 272.141439 19.344 270.269439 28.119 276.58165 28.119 276.533032 28.3549259 276.392439 29.0355C275.976439 31.0505 275.579939 32.9355 275.202939 34.6905 274.825939 36.4455 274.468439 38.1355 274.130439 39.7605 273.792439 41.3855 273.441439 43.043 273.077439 44.733 272.375439 48.035 272.453439 50.765 273.311439 52.923 274.169439 55.081 275.644939 56.6865 277.737939 57.7395 279.830939 58.7925 282.385439 59.319 285.401439 59.319z">
+                        </path>
+                    </svg>
+                </a>
             </div>
         </div>
     </div>
 </div>
+
 
 <script>
       var inbox = {{inbox|safe}}
