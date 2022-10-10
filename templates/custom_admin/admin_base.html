@@ -2,31 +2,21 @@
 <head>
     {% load static tailwind_tags %}
     {% tailwind_css %}
-
     <script src="{% url 'js_urls' %}" type="text/javascript"></script>
-    <script src="//unpkg.com/alpinejs" defer></script>
+    <script
+            src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+            defer
+    ></script>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
 </head>
-
-<body class="flex bg-gray-100 min-h-screen" x-data="{panel:false, menu:true}">
-<div x-data="{}"
-     class="filament-sidebar-close-overlay fixed inset-0 z-20 w-full h-full bg-gray-900/50 lg:hidden"></div>
-<aside x-data="{}"
-       x-bind:class="$store.sidebar.isOpen ? 'filament-sidebar-open translate-x-0 max-w-[20em] lg:max-w-[var(--sidebar-width)]' : '-translate-x-full lg:translate-x-0 lg:max-w-[5.4em] rtl:lg:-translate-x-0 rtl:translate-x-full'"
-       class="filament-sidebar fixed inset-y-0 left-0 rtl:left-auto rtl:right-0 z-20 flex flex-col h-screen overflow-hidden shadow-2xl transition-all bg-white lg:border-r rtl:lg:border-r-0 rtl:lg:border-l w-80 lg:z-0 dark:bg-gray-800 dark:border-gray-700 filament-sidebar-open translate-x-0 max-w-[20em] lg:max-w-[var(--sidebar-width)]">
+<body class="flex bg-gray-100 min-h-screen"  x-data="adminHome()">
+<div class="filament-sidebar-close-overlay fixed inset-0 z-20 w-full h-full bg-gray-900/50 lg:hidden"></div>
+<aside class="filament-sidebar fixed inset-y-0 left-0 rtl:left-auto rtl:right-0 z-20 flex flex-col h-screen overflow-hidden shadow-2xl transition-all bg-white lg:border-r rtl:lg:border-r-0 rtl:lg:border-l w-80 lg:z-0 dark:bg-gray-800 dark:border-gray-700 filament-sidebar-open translate-x-0 max-w-[20em] lg:max-w-[var(--sidebar-width)]">
     <header class="filament-sidebar-header border-b h-[4rem] shrink-0 px-6 flex items-center dark:border-gray-700">
-        <a href="/" class="block w-full" x-transition:enter="lg:transition delay-100"
-           x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" data-turbo="false" style="">
+        <a href="/" class="block w-full"
+           data-turbo="false" style="">
             <div class="filament-brand text-xl font-bold tracking-tight dark:text-white">
                 Roadmap
-            </div>
-        </a>
-
-        <a class="block w-full text-center" href="/" x-show="! $store.sidebar.isOpen"
-           x-transition:enter="lg:transition delay-100" x-transition:enter-start="opacity-0"
-           x-transition:enter-end="opacity-100" data-turbo="false" style="display: none;">
-            <div class="filament-brand text-xl font-bold tracking-tight dark:text-white">
-                L
             </div>
         </a>
     </header>
@@ -121,14 +111,14 @@
             <li>
                 <div class="border-t -mr-6 rtl:-mr-auto rtl:-ml-6 dark:border-gray-700"></div>
             </li>
-            <li x-data="{ label: 'Manage' }" class="filament-sidebar-group">
+            <li  class="filament-sidebar-group">
                 <button class="flex items-center justify-between w-full">
                     <div class="flex items-center gap-4 text-gray-600 dark:text-gray-300">
                         <p class="flex-1 font-bold uppercase text-xs tracking-wider">
                             Manage
                         </p>
                     </div>
-                    <svg x-bind:class="$store.sidebar.groupIsCollapsed(label) || '-rotate-180'"
+                    <svg
                          class="w-3 h-3 text-gray-600 transition-all dark:text-gray-300 -rotate-180"
                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                          stroke="currentColor" aria-hidden="true">
@@ -228,7 +218,7 @@
                             External
                         </p>
                     </div>
-                    <svg x-bind:class="$store.sidebar.groupIsCollapsed(label) || '-rotate-180'"
+                    <svg
                          class="w-3 h-3 text-gray-600 transition-all dark:text-gray-300 -rotate-180"
                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                          stroke="currentColor" aria-hidden="true">
@@ -303,24 +293,24 @@
             </button>
 
             <div class="flex items-center justify-between flex-1">
-                <div class="filament-breadcrumbs flex-1">
-                    <ul class="hidden gap-4 items-center font-medium text-sm lg:flex dark:text-white">
-                        <li>
-                            <a href="{% url 'custom_admin:users' %}" class="dark:text-gray-300">
-                                Users
-                            </a>
-                        </li>
+                    <div class="filament-breadcrumbs flex-1">
+                        {% if data %}
+                            <ul class="hidden gap-4 items-center font-medium text-sm lg:flex dark:text-white">
+                                <li>
+                                    <a href="{{data.listing_url}}" class="dark:text-gray-300">
+                                        {{data.app_name}}
+                                    </a>
+                                </li>
+                                <li class="h-6 border-r border-gray-300 -skew-x-12 dark:border-gray-500"></li>
+                                <li>
+                                    <a href="#" class="text-gray-500 dark:text-gray-400">
+                                        {{data.type}}
+                                    </a>
+                                </li>
+                            </ul>
+                        {% endif %}
 
-                        <li class="h-6 border-r border-gray-300 -skew-x-12 dark:border-gray-500"></li>
-                        <li>
-                            <a href="#" class="text-gray-500 dark:text-gray-400">
-                                List
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-
+                    </div>
                 <div class="filament-global-search flex items-center ml-4">
 
 
@@ -402,9 +392,6 @@
                                                 Close
                                             </span>
                                         </button>
-
-
-
                                         <div class="space-y-2" style="display: none;">
                                             <div class="filament-modal-header px-4 py-2">
                                                 <h2
@@ -567,6 +554,34 @@
     </header>
 </body>
 
+    <script>
+        function adminHome() {
+            return {
+                notifications:{{task_notifications|safe}},
+                notification_count:0,
+                open_test_data:false,
+                light:true,
+                init() {
+                    this.notification_count = this.notifications.length
+                },
+                notification(type){
+                    this.formData = {'type':type}
+                    fetch('/admin/notification/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json','X-CSRFToken':'{{csrf_token}}' },
+                        body: JSON.stringify(this.formData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        this.notification_count = 0
+                        this.isOpen = false
+                        this.notifications = []
+                    })
+                }
+            }
+        }
+
+    </script>
 </html>
 {% block content %}
 

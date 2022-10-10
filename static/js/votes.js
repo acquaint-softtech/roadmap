@@ -3,7 +3,7 @@ function Votes() {
     return {
       search: "",
       pageNumber: 0,
-      size: 10,
+      size: 5,
       total: "",
       myForData: votes,
       get filteredEmployees() {

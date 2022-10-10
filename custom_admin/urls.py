@@ -25,6 +25,7 @@ urlpatterns = [
     path('new_user/', views.UserCreateView.as_view(), name='new_user'),
     path('delete_user/<int:pk>', views.UserDeleteView.as_view(), name='delete_user'),
     path('votes/', views.AdminVoteList.as_view(), name='votes'),
+    path('delete_vote/<int:pk>', views.VoteDeleteView.as_view(), name='delete_vote'),
     path('change_task_vote/', views.ChangeVote.as_view(), name='change_task_vote'),
     path('change_task_subscription_status/', views.ChangeTaskSubscription.as_view(), name='change_task_subscription'),
     path('colors/', views.AdminThemeView.as_view(), name='theme'),

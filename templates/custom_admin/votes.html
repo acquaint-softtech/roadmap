@@ -1,13 +1,8 @@
 {% extends 'custom_admin/admin_base.html' %}
 {% load static %}
 {% block content %}
-
     <div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
-
-
         <div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
-
-
             <div class="filament-page filament-resources-list-records-page filament-resources-users">
                 <div class="space-y-6">
                     <header
@@ -102,10 +97,10 @@
 
                         <div wire:key="ySOoly1CvoPY5k7s1w4y.table.selection.indicator"
                             class="filament-tables-selection-indicator bg-primary-500/10 px-4 py-2 whitespace-nowrap text-sm border-t dark:border-gray-700"
-                            x-show="selectedRecords.length" style="display: none;">
+                             style="display: none;">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                                 class="animate-spin inline-block animate-spin w-4 h-4 mr-3 text-primary-500"
-                                x-show="isLoading" style="display: none;">
+                                 style="display: none;">
                                 <path opacity="0.2" fill-rule="evenodd" clip-rule="evenodd"
                                     d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
                                     fill="currentColor"></path>
@@ -223,7 +218,7 @@
                                                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                     </svg>
                                                 </div>
-                                                <div x-show="!task__is_subscribed">
+                                                <div x-show="!vote.task__is_subscribed">
                                                     <svg class="w-6 h-6 text-danger-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                                       <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                     </svg>
