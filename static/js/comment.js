@@ -11,8 +11,6 @@ function Comments() {
          end = start + this.size;
         if (this.search === "") {
           this.total = this.myForData.length;
-          console.log(start,end)
-          console.log(this.myForData.slice(start, end),"filterd data")
           return this.myForData.slice(start, end);
         }
 
@@ -30,7 +28,6 @@ function Comments() {
       },
 
       sort(col) {
-          console.log(col,"col")
           if(this.sortCol === col) this.sortAsc = !this.sortAsc;
           this.sortCol = col;
           this.myForData.sort((a, b) => {
@@ -68,9 +65,7 @@ function Comments() {
       },
 
       changeSize(size){
-        console.log("callled")
         this.size = parseInt(size)
-        console.log(this.size,"chaged the size")
       },
 
       //Return the end range of the paginated results
@@ -84,7 +79,6 @@ function Comments() {
 
       //Link to navigate to page
       viewPage(index) {
-        console.log(index,"index")
         this.pageNumber = index;
       },
     };

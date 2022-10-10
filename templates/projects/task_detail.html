@@ -141,10 +141,7 @@ Task histories :
 
 
 <script>
-
     let users = {{users|safe}}
-    console.log(users,"users")
-
     function task_details() {
         return {
           sub_btn_text: {% if object.is_subscribed %}'Unsubscribe'{% else %}'Subscribe'{% endif %},
