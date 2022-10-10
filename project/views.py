@@ -1,4 +1,6 @@
 # Create your views here.
+import json
+
 from django.contrib import messages
 from django.db.models import Count
 from django.shortcuts import redirect
@@ -8,6 +10,7 @@ from django.views.generic import ListView, DetailView
 from home.views import BaseContextView
 from project.forms import MessageForm
 from project.models import Project, Task, Message, TaskHistory, Board, Votes
+from users.models import User
 from users.views import LoginRequiredMixin
 
 
@@ -63,7 +66,14 @@ class TaskDetailView(BaseContextView, LoginRequiredMixin, DetailView):
             task__slug=self.kwargs.get('slug'))
         context['history_data'] = TaskHistory.objects.select_related('task', 'action_by').filter(
             task__slug=self.kwargs.get('slug')).order_by('-created')
-        context['is_voted'] = Votes.objects.filter(user = self.request.user,task = self.object).exists()
+        context['is_voted'] = Votes.objects.filter(user=self.request.user, task=self.object).exists()
+        users = User.objects.values('id', 'email')
+
+        users_data = []
+        for user in users:
+            users_data.append({'key':user['email'],'value':user['email']})
+
+        context['users'] = json.dumps(list(users_data), indent=4, sort_keys=True, default=str)
         return context
 
 

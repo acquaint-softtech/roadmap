@@ -50,6 +50,7 @@ class ProjectList(TemplateView, AdminContextView, LoginRequiredMixin):
             board_count=Count('category_project')).values('id', 'title', 'created',
                                                           'is_private', 'slug', 'board_count')
         context['projects'] = json.dumps(list(project_data), indent=4, sort_keys=True, default=str)
+        context['data'] = {'app_name': 'Project', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:projects")}
         return context
 
 
@@ -131,8 +132,10 @@ class ProjectUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
 class ProjectDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
     model = Project
     success_url = reverse_lazy("custom_admin:projects")
-    template_name = "custom_admin/project_confirm_delete.html"
     success_message = 'Project deleted successfully'
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
 
 class InboxList(TemplateView, AdminContextView, LoginRequiredMixin):
@@ -142,8 +145,9 @@ class InboxList(TemplateView, AdminContextView, LoginRequiredMixin):
         context = super(InboxList, self).get_context_data(*args, **kwargs)
         inbox_data = Task.objects.filter(project__isnull=True).annotate(comment_count=Count('message_task')).values(
             'id', 'name', 'created_by__email',
-            'created', 'slug', 'comment_count')
+            'created', 'slug', 'comment_count', 'created_by__id')
         context['inbox'] = json.dumps(list(inbox_data), indent=4, sort_keys=True, default=str)
+        context['data'] = {'app_name': 'Inbox', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:inbox")}
         return context
 
 
@@ -154,8 +158,9 @@ class AdminTaskList(TemplateView, AdminContextView, LoginRequiredMixin):
         context = super(AdminTaskList, self).get_context_data(*args, **kwargs)
         task_data = Task.objects.filter(project__isnull=False).values('id', 'name', 'project__title', 'type__name',
                                                                       'created_by__email', 'created', 'is_pinned',
-                                                                      'slug')
+                                                                      'slug', 'created_by__id', 'project__slug')
         context['tasks'] = json.dumps(list(task_data), indent=4, sort_keys=True, default=str)
+        context['data'] = {'app_name': 'Item', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:tasks")}
         return context
 
 
@@ -202,8 +207,10 @@ class TaskUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
 class TaskDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
     model = Task
     success_url = reverse_lazy("custom_admin:tasks")
-    template_name = "custom_admin/task_confirm_delete.html"
     success_message = 'Task deleted successfully'
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
 
 class CommentsList(TemplateView, AdminContextView, LoginRequiredMixin):
@@ -212,8 +219,9 @@ class CommentsList(TemplateView, AdminContextView, LoginRequiredMixin):
     def get_context_data(self, *args, **kwargs):
         context = super(CommentsList, self).get_context_data(*args, **kwargs)
         message_data = Message.objects.values('id', 'text', 'task__name', 'user__email',
-                                              'created')
+                                              'created', 'task__slug', 'user__id')
         context['messages'] = json.dumps(list(message_data), indent=4, sort_keys=True, default=str)
+        context['data'] = {'app_name': 'Comments', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:comments")}
         return context
 
 
@@ -244,8 +252,10 @@ class CommentUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
 class CommentDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
     model = Message
     success_url = reverse_lazy("custom_admin:comments")
-    template_name = "custom_admin/comment_confirm_delete.html"
     success_message = 'Comment deleted successfully'
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
 
 class ChangeTaskStatus(LoginRequiredMixin, View):
@@ -267,6 +277,7 @@ class AdminUserList(TemplateView, AdminContextView, LoginRequiredMixin):
         context = super(AdminUserList, self).get_context_data(*args, **kwargs)
         user_data = User.objects.values('id', 'first_name', 'role__name', 'email', 'date_joined')
         context['users'] = json.dumps(list(user_data), indent=4, sort_keys=True, default=str)
+        context['data'] = {'app_name': 'Users', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:users")}
         return context
 
 
@@ -286,12 +297,29 @@ class UserUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
     template_name = "custom_admin/edit_user.html"
     success_message = 'User updated successfully'
 
+    def get_context_data(self, **kwargs):
+        context = super(UserUpdateView, self).get_context_data()
+        context['items'] = json.dumps(
+            list(Task.objects.filter(created_by=self.object).annotate(num_votes=Count('user_task')).values(
+                'num_votes', 'id', 'name', 'project__title', 'type__name', 'project__slug','created','slug')), indent=4, sort_keys=True,
+            default=str)
+        context['comments'] = json.dumps(
+            list(Message.objects.filter(user=self.object).values('text', 'task__name', 'created', 'task__slug', 'id')),
+            indent=4, sort_keys=True, default=str)
+        context['votes'] = json.dumps(list(
+            Votes.objects.filter(user=self.object).values('task__name', 'task__project__title', 'task__is_subscribed',
+                                                          'task__slug', 'task__project__slug')), indent=4,
+                                      sort_keys=True, default=str)
+        return context
+
 
 class UserDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
     model = User
     success_url = reverse_lazy("custom_admin:users")
-    template_name = "custom_admin/user_confirm_delete.html"
     success_message = 'User deleted successfully'
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
 
 class AdminVoteList(TemplateView, AdminContextView, LoginRequiredMixin):
@@ -299,8 +327,10 @@ class AdminVoteList(TemplateView, AdminContextView, LoginRequiredMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super(AdminVoteList, self).get_context_data(*args, **kwargs)
-        vote_data = Votes.objects.values('id', 'user__email', 'task__name', 'task__is_subscribed', 'created')
+        vote_data = Votes.objects.values('id', 'user__email', 'task__name', 'task__is_subscribed', 'created',
+                                         'user__id', 'task__slug')
         context['votes'] = json.dumps(list(vote_data), indent=4, sort_keys=True, default=str)
+        context['data'] = {'app_name': 'Votes', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:votes")}
         return context
 
 
@@ -357,7 +387,16 @@ class NotificationView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
-        TaskNotification.objects.filter(is_read=False,assign_by = request.user).update(is_read=True) if data[
-                                                                                   'type'] == 'read' else TaskNotification.objects.filter(
-            is_deleted=False,assign_by = request.user).update(is_deleted=True)
+        TaskNotification.objects.filter(is_read=False, assign_by=request.user).update(is_read=True) if data[
+                                                                                                           'type'] == 'read' else TaskNotification.objects.filter(
+            is_deleted=False, assign_by=request.user).update(is_deleted=True)
         return JsonResponse({"message": "success"})
+
+
+class VoteDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
+    model = Votes
+    success_url = reverse_lazy("custom_admin:votes")
+    success_message = 'Vote deleted successfully'
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)

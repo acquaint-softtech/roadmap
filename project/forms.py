@@ -156,17 +156,16 @@ class AdminUserForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(AdminUserForm, self).__init__(*args, **kwargs)
-        self.fields['role'].widget.attrs['class'] = 'form-select appearance-none \
-                           block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white \
-                           bg-clip-padding bg-no-repeat \
-                            border border-solid border-gray-300 rounded transition ease-in-out m-0 \
-                            focus:text-gray-700 focus:bg-white \
-                            focus:border-blue-600 focus:outline-none'
-
+        self.fields['role'].widget.attrs[
+            'class'] = 'block w-full rounded-lg border-none px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 ring-gray-300 dark:ring-gray-600'
         self.fields['role'].required = True
+        self.fields['first_name'].required = True
+        self.fields['role'].empty_label = 'Select an option'
+
         self.fields["first_name"].error_messages[
             "required"
-        ] = "Please enter username."
+        ] = "Please enter name."
+
         self.fields["email"].error_messages[
             "required"
         ] = "Please enter email."

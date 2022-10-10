@@ -1,234 +1,356 @@
-{% extends 'custom_admin/old_admin_base.html' %}
+{% extends 'custom_admin/admin_base.html' %}
 {% load static %}
 {% block content %}
-<a href="{% url 'custom_admin:new_user' %}">
-		<button class="inline-flex px-5 py-3 text-white bg-blue-600 hover:bg-purple-700 focus:bg-blue-700 rounded-md ml-6 mb-3 mt-3">
-		<svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="flex-shrink-0 h-6 w-6 text-white -ml-1 mr-2">
-		  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-		</svg>
-		Create new User
-	  </button>
-	</a>
-<body class="bg-grey-100 px-3 font-sans leading-normal tracking-normal">
-<div class="container pt-8 mx-auto" x-data="Users()">
-    <input
-            x-ref="searchField"
-            x-model="search"
-            x-on:click="viewPage(0)"
-            x-on:keydown.window.prevent.slash=" viewPage(0), $refs.searchField.focus()"
-            placeholder="Search for an employee..."
-            type="search"
-            class="block w-full bg-gray-200 focus:outline-none focus:bg-white focus:shadow text-gray-700 font-bold rounded-lg px-4 py-3"
-    />
-    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        <tr >
-            <th scope="col" class="py-3 px-6" @click="sort('first_name')">
-                Name
-            </th>
-            <th scope="col" class="py-3 px-6" @click="sort('email')">
-                Email
-            </th>
-            <th scope="col" class="py-3 px-6" @click="sort('role__name')">
-                Role
-            </th>
-            <th scope="col" class="py-3 px-6" @click="sort('date_joined')">
-                Date
-            </th>
-            <th scope="col" class="py-3 px-6">
-                Action
-            </th>
-        </tr>
-        </thead>
-        <template x-for="item in filteredEmployees" :key="item">
-            <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="py-4 px-6" x-text="item.first_name">
-                    <p x-text="item.first_name"></p>
-                </td>
-                <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <p x-text="item.email"></p>
-                </th>
-                <td class="py-4 px-6">
-                    <p x-text="item.role__name"></p>
-                </td>
-                <td class="py-4 px-6">
-                    <p x-text="date_format(item.date_joined)"></p>
-                </td>
-                <td class="py-4 px-6">
-                    <a @click="window.location.href=window.reverse('custom_admin:update_user', { pk: item.id })">
-                        <button class="inline-block px-6 py-2.5 bg-yellow-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out">
-                            Edit
-                        </button>
-                    </a>
-                    <a @click="window.location.href=window.reverse('custom_admin:delete_user', { pk: item.id })">
-                        <button class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out">
-                            Delete
-                        </button>
-                    </a>
-                </td>
-            </tr>
+    <div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
+        <div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
+            <div class="filament-page filament-resources-list-records-page filament-resources-users">
+                <div class="space-y-6">
+                    <header
+                        class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
+                        <h1 class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
+                            User
+                        </h1>
+                        <div class="filament-page-actions flex flex-wrap items-center gap-4 justify-start shrink-0">
+                            <a class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action"
+                                href="{% url 'custom_admin:new_user' %}" dusk="filament.admin.action.create">
+                                <span class="">
+                                    New User
+                                </span>
+                            </a>
+                        </div>
+                    </header>
 
-            </tbody>
+                    <div
+                        class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700" x-data="Users()" x-effect="">
+                        <div>
+                            <div class="flex items-center justify-between p-2 h-14">
+                                <div class="flex items-center gap-2">
 
-        </template>
-    </table>
+                                    <div class="filament-dropdown filament-tables-bulk-actions"
+                                       >
+                                        <div x-on:click="toggle" class="filament-dropdown-trigger cursor-pointer">
+                                            <button title="Open actions" type="button"
+                                                class="filament-icon-button flex items-center justify-center rounded-full relative hover:bg-gray-500/5 focus:outline-none text-primary-500 focus:bg-primary-500/10 dark:hover:bg-gray-300/5 w-10 h-10 filament-tables-bulk-actions-trigger">
+                                                <span class="sr-only">
+                                                    Open actions
+                                                </span>
+
+                                                <svg class="filament-icon-button-icon w-5 h-5"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                        <div class="filament-dropdown-panel absolute z-10 w-full rounded-lg bg-white shadow-lg ring-1 ring-black/5 transition dark:bg-gray-800 dark:ring-white/10 max-w-[14rem]"
+                                            style="display: none;">
+                                            <div class="filament-tables-bulk-action">
+                                                <button type="button"
+                                                    class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-danger-600 focus:bg-danger-700"
+                                                    x-on:click="mountBulkAction('delete')">
+                                                    <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-danger-500"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                        fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd"
+                                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    <span class="truncate">
+                                                        Delete selected
+                                                    </span>
+
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="w-full flex items-center justify-end gap-2 md:max-w-md">
+                                    <div class="flex-1 flex items-center justify-end">
+                                        <div class="filament-tables-search-input">
+                                            <label for="tableSearchInput" class="sr-only">
+                                                Search
+                                            </label>
+
+                                            <div class="relative group">
+                                                <span
+                                                    class="absolute inset-y-0 left-0 flex items-center justify-center w-9 h-9 text-gray-400 pointer-events-none group-focus-within:text-primary-500">
+                                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                        aria-hidden="true">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                    </svg> </span>
+
+                                                <input x-ref="searchField"
+                                                    x-model="search"
+                                                    x-on:click="viewPage(0)"
+                                                    x-on:keydown.window.prevent.slash=" viewPage(0), $refs.searchField.focus()"
+                                                    placeholder="Search for inbox..."
+                                                    type="search"
+                                                    class="block h-9 w-full max-w-xs rounded-lg border-gray-300 pl-9 placeholder-gray-400 shadow-sm transition duration-75 focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
-    <div
-            class="w-full md:w-1/2 mx-auto py-6 flex justify-between items-center"
-            x-show="pageCount() > 1"
-    >
-        <!--First Button-->
-        <button
-                x-on:click="viewPage(0)"
-                :disabled="pageNumber==0"
-                :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber==0 }"
-        >
-            <svg
-                    class="h-8 w-8 text-indigo-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-            >
-                <polygon points="19 20 9 12 19 4 19 20"></polygon>
-                <line x1="5" y1="19" x2="5" y2="5"></line>
-            </svg>
-        </button>
 
-        <!--Previous Button-->
-        <button
-                x-on:click="prevPage"
-                :disabled="pageNumber==0"
-                :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber==0 }"
-        >
-            <svg
-                    class="h-8 w-8 text-indigo-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-            >
-                <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-        </button>
 
-        <!-- Display page numbers -->
-        <template x-for="(page,index) in pages()" :key="index">
-            <button
-                    class="px-3 py-2 rounded"
-                    :class="{ 'bg-indigo-600 text-white font-bold' : index === pageNumber }"
-                    type="button"
-                    x-on:click="viewPage(index)"
-            >
-                <span x-text="index+1"></span>
-            </button>
-        </template>
+                        <div class="overflow-y-auto relative dark:border-gray-700 border-t">
+                            <table
+                                class="filament-tables-table w-full text-left rtl:text-right divide-y table-auto dark:divide-gray-700">
+                                <thead>
+                                    <tr class="bg-gray-500/5">
+                                        <td class="filament-tables-checkbox-cell w-4 px-4 whitespace-nowrap">
+                                            <input
+                                                class="block border-gray-300 rounded shadow-sm text-primary-600 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:checked:bg-primary-600 dark:checked:border-primary-600"
+                                                type="checkbox">
+                                        </td>
+                                        <th class="filament-tables-header-cell p-0" @click="sort('first_name')">
+                                            <button type="button"
+                                                class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
+                                                <span>
+                                                    Name
+                                                </span>
+                                            </button>
+                                        </th>
+                                        <th class="filament-tables-header-cell p-0" @click="sort('email')">
+                                            <button type="button"
+                                                class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
+                                                <span>
+                                                    Email
+                                                </span>
+                                            </button>
+                                        </th>
+                                        <th class="filament-tables-header-cell p-0" @click="sort('role__name')">
+                                            <button type="button"
+                                                class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
+                                                <span>
+                                                    Role
+                                                </span>
+                                            </button>
+                                        </th>
+                                        <th class="filament-tables-header-cell p-0" @click="sort('date_joined')">
+                                            <button wire:click="sortTable('created_at')" type="button"
+                                                class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 ">
+                                                <span>
+                                                    Date
+                                                </span>
+                                                <svg class="filament-tables-header-cell-sort-icon h-3 w-3 dark:text-gray-300"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                    fill="currentColor" aria-hidden="true">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg> </button>
+                                        </th>
+                                        <th class="w-5"></th>
+                                    </tr>
+                                </thead>
 
-        <!--Next Button-->
-        <button
-                x-on:click="nextPage"
-                :disabled="pageNumber >= pageCount() -1"
-                :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber >= pageCount() -1 }"
-        >
-            <svg
-                    class="h-8 w-8 text-indigo-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-            >
-                <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-        </button>
+                                <tbody
+                                    class="divide-y whitespace-nowrap dark:divide-gray-700">
+                                <template x-for="user in filteredEmployees" :key="user">
+                                    <tr class="filament-tables-row hover:bg-gray-50 dark:hover:bg-gray-500/10">
+                                        <td
+                                            class="filament-tables-reorder-cell w-4 px-4 whitespace-nowrap text-gray-500 transition group-hover:text-primary-500 dark:text-gray-400 dark:group-hover:text-primary-400 hidden">
+                                            <svg class="block h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M4 6h16M4 12h16M4 18h16"></path>
+                                            </svg>
+                                        </td>
 
-        <!--Last Button-->
-        <button
-                x-on:click="viewPage(Math.ceil(total/size)-1)"
-                :disabled="pageNumber >= pageCount() -1"
-                :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber >= pageCount() -1 }"
-        >
-            <svg
-                    class="h-8 w-8 text-indigo-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-            >
-                <polygon points="5 4 15 12 5 20 5 4"></polygon>
-                <line x1="19" y1="5" x2="19" y2="19"></line>
-            </svg>
-        </button>
-    </div>
+                                        <td class="filament-tables-checkbox-cell w-4 px-4 whitespace-nowrap">
+                                            <input
+                                                class="block border-gray-300 rounded shadow-sm text-primary-600 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:checked:bg-primary-600 dark:checked:border-primary-600 table-row-checkbox"
+                                                type="checkbox">
+                                        </td>
 
-    <div>
-        <div
-                class="mt-6 flex flex-wrap justify-between items-center text-sm leading-5 text-gray-700"
-        >
-            <div
-                    class="w-full sm:w-auto text-center sm:text-left"
-                    x-show="pageCount() > 1"
-            >
-                Page <span x-text="pageNumber+1"> </span> of
-                <span x-text="pageCount()"></span> | Showing
-                <span x-text="startResults()"></span> to
-                <span x-text="endResults()"></span>
-            </div>
+                                        <td class="filament-tables-cell dark:text-white"
+                                            wire:loading.remove.delay="wire:loading.remove.delay"
+                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                            <div class="filament-tables-text-column px-4 py-3 whitespace-normal" @click="window.location.href=window.reverse('custom_admin:update_user', { pk: user.id })">
+                                                <p x-text="user.first_name"></p>
+                                            </div>
+                                        </td>
 
-            <div
-                    class="w-full sm:w-auto text-center sm:text-right"
-                    x-show="total > 0"
-            >
-                Total <span class="font-bold" x-text="total"></span> results
-            </div>
+                                        <td class="filament-tables-cell dark:text-white"
+                                            wire:loading.remove.delay="wire:loading.remove.delay"
+                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                                <div class="filament-tables-text-column px-4 py-3 whitespace-normal">
+                                                    <p x-text="user.email"></p>
+                                                </div>
+                                        </td>
 
-            <!--Message to display when no results-->
-            <div
-                    class="mx-auto flex items-center font-bold text-red-500"
-                    x-show="total===0"
-            >
-                <svg
-                        class="h-8 w-8 text-red-500"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                >
-                    <path stroke="none" d="M0 0h24v24H0z"/>
-                    <circle cx="12" cy="12" r="9"/>
-                    <line x1="9" y1="10" x2="9.01" y2="10"/>
-                    <line x1="15" y1="10" x2="15.01" y2="10"/>
-                    <path d="M9.5 16a10 10 0 0 1 6 -1.5"/>
-                </svg>
+                                        <td class="filament-tables-cell dark:text-white"
+                                            wire:loading.remove.delay="wire:loading.remove.delay"
+                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                            <div class="filament-tables-text-column px-4 py-3">
+                                                <p x-text="user.role__name"></p>
+                                            </div>
+                                        </td>
 
-                <span class="ml-4"> No results!!</span>
+                                        <td class="filament-tables-cell dark:text-white"
+                                            wire:loading.remove.delay="wire:loading.remove.delay"
+                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                                <div class="filament-tables-text-column px-4 py-3">
+                                                    <p x-text="date_format(user.date_joined)"></p>
+                                                </div>
+                                        </td>
+
+                                        <td wire:loading.remove.delay=""
+                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set"
+                                            class="filament-tables-actions-cell px-4 py-3 whitespace-nowrap">
+                                            <div class="flex items-center gap-4 justify-end">
+                                                <a class="filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-sm text-primary-600 hover:text-primary-500 dark:text-primary-500 dark:hover:text-primary-400 filament-tables-link-action"
+                                                   @click="window.location.href=window.reverse('custom_admin:update_user', { pk: user.id })"
+                                                    dusk="filament.tables.action.edit">
+                                                    <svg class="filament-link-icon w-4 h-4 mr-1 rtl:ml-1"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                        fill="currentColor" aria-hidden="true">
+                                                        <path
+                                                            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                                                        </path>
+                                                    </svg>
+                                                    Edit
+                                                </a>
+
+                                            </div>
+                                        </td>
+
+                                        <td class="w-full px-4 py-4 animate-pulse hidden" colspan="6"
+                                            wire:loading.class.remove.delay="hidden"
+                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                            <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600"></div>
+                                        </td>
+                                    </tr>
+                                </template>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="p-2 border-t dark:border-gray-700">
+                            <nav role="navigation" aria-label="Pagination Navigation"
+                                class="filament-tables-pagination flex items-center justify-between">
+                                <div class="flex justify-between items-center flex-1 lg:hidden">
+                                    <div class="w-10">
+                                    </div>
+                                    <div
+                                        class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
+                                        <select  x-model="selectedOption"
+                                            class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
+                                           <template x-for="option in options" :key="option">
+                                                <option :value="option" x-text="option"></option>
+                                            </template>
+                                        </select>
+                                        <label for="tableRecordsPerPageSelect"
+                                            class="text-sm font-medium dark:text-white">
+                                            per page
+                                        </label>
+                                    </div>
+
+                                    <div class="w-10">
+                                        <button title="Next" type="button"
+                                            class="filament-icon-button flex items-center justify-center rounded-full relative hover:bg-gray-500/5 focus:outline-none text-primary-500 focus:bg-primary-500/10 dark:hover:bg-gray-300/5 w-10 h-10"
+                                            wire:click="nextPage('page')" rel="next">
+                                            <span class="sr-only">
+                                                Next
+                                            </span>
+                                            <svg class="filament-icon-button-icon w-5 h-5"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+
+                                <div class="hidden flex-1 items-center lg:grid grid-cols-3">
+                                    <div class="flex items-center">
+                                        <div class="pl-2 text-sm font-medium dark:text-white">
+                                            Showing <span x-text="startResults()"></span> to <span x-text="endResults()"></span> of <span x-text="total"></span> results
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-center">
+                                        <div
+                                            class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
+                                            <select  x-model="selectedOption" x-on-change="changePageSize()" class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
+                                               <template x-for="option in options" :key="option">
+                                                    <option :value="option" x-text="option"></option>
+                                                </template>
+                                            </select>
+                                            <label for="tableRecordsPerPageSelect"
+                                                class="text-sm font-medium dark:text-white">
+                                                per page
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-end">
+                                        <div class="py-3 border rounded-lg dark:border-gray-600">
+                                            <ol class="flex items-center text-sm text-gray-500 divide-x rtl:divide-x-reverse divide-gray-300 dark:text-gray-400 dark:divide-gray-600">
+                                                <li>
+                                                    <button type="button"
+                                                        class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
+                                                         x-on:click="prevPage" :disabled="pageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber==0 }" aria-label="Next" rel="next">
+                                                        <svg class="w-5 h-5 rtl:scale-x-[-1]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                        <span></span>
+                                                    </button>
+                                                </li>
+                                                <template x-for="(page,index) in pages()" :key="index">
+                                                    <li>
+                                                        <button type="button"
+                                                            class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 focus:text-primary-600 transition"
+                                                             x-on:click="viewPage(index)">
+                                                            <span x-text="index+1"></span>
+                                                        </button>
+                                                    </li>
+                                                </template>
+                                                <li>
+                                                    <button type="button"
+                                                        class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
+                                                          x-on:click="viewPage(Math.ceil(total/size)-1)" :disabled="pageNumber >= pageCount() -1" :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber >= pageCount() -1 }">
+                                                        <svg class="w-5 h-5 rtl:scale-x-[-1]"
+                                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                            fill="currentColor" aria-hidden="true">
+                                                            <path fill-rule="evenodd"
+                                                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                                clip-rule="evenodd"></path>
+                                                        </svg>
+                                                        <span></span>
+                                                    </button>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
 <script>
       var users = {{users|safe}}
 </script>
 <script src="{% static 'js/base.js' %}"></script>
 <script src="{% static 'js/user.js' %}"></script>
-</body>
+
+
+
 {% endblock %}

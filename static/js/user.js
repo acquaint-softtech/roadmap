@@ -4,9 +4,11 @@ function Users() {
       search: "",
       pageNumber: 0,
       sortCol:null,
-      size: 10,
+      size: 5,
       total: "",
       myForData: users,
+      options:['5','10','25','50','All'],
+      selectedOption:'5',
       get filteredEmployees() {
         const start = this.pageNumber * this.size,
           end = start + this.size;
@@ -27,6 +29,11 @@ function Users() {
                  return item.first_name.toLowerCase().includes(this.search.toLowerCase()) || item.email.toLowerCase().includes(this.search.toLowerCase()) || item.role__name.toLowerCase().includes(this.search.toLowerCase())
           })
           .slice(start, end);
+      },
+
+      changePageSize(index){
+          this.size = 10
+          this.filteredEmployees()
       },
 
       sort(col) {

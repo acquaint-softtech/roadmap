@@ -3,13 +3,12 @@ function Comments() {
     return {
       search: "",
       pageNumber: 0,
-      size: 10,
+      size: 5,
       total: "",
       myForData: messages,
       get filteredEmployees() {
         const start = this.pageNumber * this.size,
-          end = start + this.size;
-
+         end = start + this.size;
         if (this.search === "") {
           this.total = this.myForData.length;
           return this.myForData.slice(start, end);
@@ -52,6 +51,7 @@ function Comments() {
 
       //Previous Page
       prevPage() {
+
         this.pageNumber--;
       },
 
@@ -62,6 +62,10 @@ function Comments() {
       //Return the start range of the paginated results
       startResults() {
         return this.pageNumber * this.size + 1;
+      },
+
+      changeSize(size){
+        this.size = parseInt(size)
       },
 
       //Return the end range of the paginated results

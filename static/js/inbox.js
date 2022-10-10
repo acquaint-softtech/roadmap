@@ -3,7 +3,7 @@ function Inbox() {
     return {
       search: "",
       pageNumber: 0,
-      size: 10,
+      size: 5,
       total: "",
       myForData: inbox,
       get filteredEmployees() {

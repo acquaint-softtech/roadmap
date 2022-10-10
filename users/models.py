@@ -25,7 +25,7 @@ class UserSetting(models.Model):
     user = models.OneToOneField(User,
                                 related_name='settings',
                                 on_delete=models.CASCADE)
-    theme_color = models.CharField(max_length=100, null=True, blank=True)
+    theme_color = models.CharField(max_length=100, null=True, blank=True,default='#d11515')
     favicon_url = models.URLField(null=True, blank=True)
     page_par_sizes = models.CharField(choices=(('5', '5'), ('10', '10'), ('15', '15'), ('25', '25'), ('50', '50')),
                                       max_length=50)
