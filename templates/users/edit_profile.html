@@ -1,22 +1,248 @@
 {% extends 'home/base.html' %}
-{% load static %}
-{% block title %}Edit Profile{% endblock title %}
 {% block content %}
-    <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Edit Profile</h1>
-    <form enctype="multipart/form-data" method="post">{% csrf_token %}
-        <div class="mb-6 mt-2">
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">First name:</label>
-            <input type="text" name="first_name" maxlength="150" autofocus="" required class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ request.user.first_name|default_if_none:'' }}"  id="id_first_name">
-            <span>{{form.errors.first_name}}</span>
+
+<div class="pb-4">
+    <ul class="flex items-center space-x-0.5 text-sm font-medium text-gray-600">
+
+        <li>
+            <a class="transition hover:underline focus:outline-none focus:text-gray-800 focus:underline"
+               href="{% url 'users:profile' %}">
+                Profile
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="space-y-6">
+    <form class="space-y-4" method="post">{% csrf_token %}
+        <div class="grid grid-cols-1 filament-forms-component-container gap-6">
+            <div class=" col-span-full">
+                <div id="profile" class="filament-forms-section-component bg-white rounded-xl border border-gray-300">
+                    <div class="filament-forms-section-header-wrapper flex items-center px-4 py-2 bg-gray-100 rtl:space-x-reverse overflow-hidden rounded-t-xl min-h-[40px] min-h-[56px]"
+                        data-ol-has-click-handler="">
+                        <div class="filament-forms-section-header flex-1 cursor-pointer">
+                            <h3 class="font-bold tracking-tight pointer-events-none text-xl font-bold">
+                                Profile
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                    <div class="filament-forms-section-content-wrapper" aria-expanded="true">
+                        <div class="filament-forms-section-content p-6">
+                            <div class="grid grid-cols-1      filament-forms-component-container gap-6">
+                                <div wire:key="QQTSjJBbs6mgQW7eSFuY.name.Filament\Forms\Components\TextInput"
+                                     class=" col-span-1     ">
+                                    <div class="filament-forms-field-wrapper">
+
+                                        <div class="space-y-2">
+                                            <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
+                                                       for="name">
+
+                                                <span class="text-sm font-medium leading-4 text-gray-700">
+                                                    Name
+                                                    <sup class="font-medium text-danger-700">*</sup>
+                                                </span>
+                                                </label>
+                                            </div>
+
+                                            <div class="filament-forms-text-input-component flex items-center space-x-2 rtl:space-x-reverse group">
+                                                <div class="flex-1">
+                                                    <input value="{{ request.user.first_name|default_if_none:'' }}" x-data="{}" wire:model.defer="name" type="text"
+                                                           dusk="filament.forms.name" id="name" name="first_name"
+                                                           class="block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm ring-gray-300">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class=" col-span-1">
+                                    <div class="filament-forms-field-wrapper">
+                                        <div class="space-y-2">
+                                            <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
+                                                       for="email">
+                                                <span class="text-sm font-medium leading-4 text-gray-700">
+                                                    Email address
+                                                    <sup class="font-medium text-danger-700">*</sup>
+                                                        </span>
+                                                </label>
+                                            </div>
+                                            <div class="filament-forms-text-input-component flex items-center space-x-2 rtl:space-x-reverse group">
+                                                <div class="flex-1">
+                                                    <input value="{{ request.user.email|default_if_none:'' }}" wire:model.defer="email" type="email"
+                                                           dusk="filament.forms.email" id="email" name="email"
+                                                           class="block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm ring-gray-300"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" col-span-full">
+                <div id="notifications" class="filament-forms-section-component bg-white rounded-xl border border-gray-300">
+                    <div class="filament-forms-section-header-wrapper flex items-center px-4 py-2 bg-gray-100 rtl:space-x-reverse overflow-hidden rounded-t-xl min-h-[40px] min-h-[56px]"
+                         data-ol-has-click-handler="">
+                        <div class="filament-forms-section-header flex-1 cursor-pointer">
+                            <h3 class="font-bold tracking-tight pointer-events-none text-xl font-bold">
+                                Notifications
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div class="filament-forms-section-content-wrapper" aria-expanded="true">
+                        <div class="filament-forms-section-content p-6">
+                            <div class="grid grid-cols-1 filament-forms-component-container gap-6">
+                                <div wire:key="QQTSjJBbs6mgQW7eSFuY.notification_settings.Filament\Forms\Components\CheckboxList"
+                                     class=" col-span-1     ">
+                                    <div class="filament-forms-field-wrapper">
+
+                                        <div class="space-y-2">
+                                            <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
+                                                       for="notification_settings">
+                                                <span class="text-sm font-medium leading-4 text-gray-700">
+                                                    Notification settings
+                                                </span>
+                                                </label>
+                                            </div>
+
+                                            <div class="columns-1 filament-forms-checkbox-list-component gap-1">
+                                                <label class="flex items-center space-x-3 rtl:space-x-reverse">
+                                                    <input type="checkbox" name="mention_notifications"
+                                                            {% if notification.mention_notifications %}checked{% endif %}
+                                                           class="text-primary-600 transition duration-75 rounded shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500 disabled:opacity-70 border-gray-300">
+
+                                                    <span class="text-sm font-medium text-gray-700">
+                                                        Receive mention notifications
+                                                    </span>
+                                                </label>
+                                                <label class="flex items-center space-x-3 rtl:space-x-reverse">
+                                                    <input type="checkbox" name="reply_notifications" {% if notification.reply_notifications %}checked{% endif %}
+                                                           class="text-primary-600 transition duration-75 rounded shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500 disabled:opacity-70 border-gray-300">
+                                                    <span class="text-sm font-medium text-gray-700">
+                                                        Receive comment reply notifications
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class=" col-span-full">
+                <div x-data="{ isCollapsed: false }"
+                      id="settings" class="filament-forms-section-component bg-white rounded-xl border border-gray-300">
+                    <div class="filament-forms-section-header-wrapper flex items-center px-4 py-2 bg-gray-100 rtl:space-x-reverse overflow-hidden rounded-t-xl min-h-[40px] min-h-[56px]"
+                          data-ol-has-click-handler="">
+                        <div class="filament-forms-section-header flex-1 cursor-pointer">
+                            <h3 class="font-bold tracking-tight pointer-events-none text-xl font-bold">
+                                Settings
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div x-bind:class="{ 'invisible h-0 !m-0 overflow-y-hidden': isCollapsed }"
+                         x-bind:aria-expanded="(! isCollapsed).toString()"
+                         class="filament-forms-section-content-wrapper" aria-expanded="true">
+                        <div class="filament-forms-section-content p-6">
+                            <div class="grid grid-cols-1      filament-forms-component-container gap-6">
+                                <div wire:key="QQTSjJBbs6mgQW7eSFuY.per_page_setting.Filament\Forms\Components\MultiSelect"
+                                     class=" col-span-1     ">
+                                    <div class="filament-forms-field-wrapper">
+
+                                        <div class="space-y-2">
+                                            <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
+                                                       for="per_page_setting">
+                                                <span class="text-sm font-medium leading-4 text-gray-700">
+                                                    Per page setting
+                                                    <sup class="font-medium text-danger-700">*</sup>
+                                                </span>
+
+                                                </label>
+                                            </div>
+
+                                            <div class="filament-forms-select-component flex items-center space-x-1 rtl:space-x-reverse group">
+                                            </div>
+
+                                            <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600">
+                                                <p>Determine how many pages should be available for the items in the
+                                                    "My" page for example.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="mb-6 mt-2">
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Last name:</label>
-            <input type="text" name="last_name" maxlength="150" autofocus="" required value="{{request.user.last_name|default_if_none:'' }}"class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="id_last_name">
-            <span>{{form.errors.last_name}}</span>
+
+        <div class="flex justify-between">
+            <div>
+
+                <button type="submit"
+                        class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+                        wire:click="logoutConfirm" data-ol-has-click-handler="">
+                    <span class="flex items-center gap-1">
+                            <span class="">
+                    Save
+                    </span>
+                        </span>
+                </button>
+
+                <a href="{% url  'users:logout' %}">
+
+                    <button type="button" wire:loading.attr="disabled" wire:loading.class.delay="opacity-70 cursor-wait"
+
+                            class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+                            wire:click="logoutConfirm" data-ol-has-click-handler="">
+                    <span class="flex items-center gap-1">
+                            <span class="">
+                    Logout
+                    </span>
+                        </span>
+                    </button>
+                </a>
+            </div>
+
+            <div>
+                <a href="{% url 'users:remove_account' %}">
+                    <button type="button"
+
+                            class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+                            wire:click="logoutConfirm" data-ol-has-click-handler="">
+                        <span class="flex items-center gap-1">
+                                <span class="">
+                        Remove account
+                        </span>
+                            </span>
+                    </button>
+                </a>
+            </div>
         </div>
-        <button class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out mt-3" type="submit">Save</button>
     </form>
-{% endblock content %}
+</div>
 
-
-
+{% endblock %}

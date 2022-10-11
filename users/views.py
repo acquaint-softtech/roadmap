@@ -1,11 +1,12 @@
 import json
 
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth import logout,login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetConfirmView
 from django.db.models import Count
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -16,6 +17,7 @@ from common.custom_messages import message_dict
 from home.views import BaseContextView
 from project.models import Task, Message, Votes
 from users.forms import RegisterUserForm, UpdateUserForm, LoginForm
+from users.models import UserSetting
 
 
 class LoginRequiredMixin(object):
@@ -52,16 +54,25 @@ class RegisterView(CreateView):
 class EditProfileView(LoginRequiredMixin, BaseContextView, FormView):
     form_class = UpdateUserForm
     template_name = "users/edit_profile.html"
-    success_url = reverse_lazy("home:home")
+    success_url = reverse_lazy("users:profile")
+
+    def get_context_data(self, **kwargs):
+        context = super(EditProfileView, self).get_context_data()
+        context['notification'] = UserSetting.objects.filter(user=self.request.user).first()
+        return context
 
     def get_instace(self):
         return self.request.user
 
     def form_valid(self, form):
+        notification = self.get_context_data()['notification']
         instance = self.get_instace()
-        instance.first_name = form.cleaned_data.get('first_name')
-        instance.last_name = form.cleaned_data.get('last_name')
+        instance.first_name = form.data.get('first_name')
+        instance.email = form.data.get('email')
+        notification.mention_notifications = True if form.data.get('mention_notifications') == 'on' else False
+        notification.reply_notifications = True if form.data.get('reply_notifications') == 'on' else False
         instance.save()
+        notification.save()
         messages.success(self.request, "Saved Profile")
         return super(EditProfileView, self).form_valid(form)
 
@@ -76,9 +87,18 @@ class CustomLoginView(LoginView):
     success_url = reverse_lazy("home:home")
 
     def get_success_url(self):
-        if self.get_redirect_url():
+        if self.get_redirect_url() != '':
             self.success_url = self.get_redirect_url()
             return self.success_url
+        else:
+            return self.success_url
+
+    def form_valid(self, form):
+        remember_me = self.request.POST.get('remember')
+        login(self.request, form.get_user())
+        if remember_me != 'on':
+            self.request.session.set_expiry(0)
+        return HttpResponseRedirect(self.get_success_url())
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -128,3 +148,14 @@ class MyItemView(LoginRequiredMixin, BaseContextView, TemplateView):
             sort_keys=True, default=str)
 
         return context
+
+
+class MyPasswordResetView(BaseContextView, PasswordResetView):
+    template_name = 'users/reset_password.html'
+    email_template_name = 'users/password_reset_email.html'
+    success_url = reverse_lazy('users:reset_password')
+
+
+class MyPasswordResetConfirmView(BaseContextView, PasswordResetConfirmView):
+    template_name = 'users/password_reset_confirm.html'
+    success_url = reverse_lazy('home:home')
