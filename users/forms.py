@@ -26,22 +26,16 @@ class RegisterUserForm(UserCreationForm):
         ] = "Please enter your password."
 
 
-class UpdateUserForm(forms.ModelForm):
+class UpdateUserForm(forms.Form):
+
     class Meta:
-        model = User
         fields = (
             "first_name",
-            "last_name",
+            "email",
+            'mention_notifications',
+            'reply_notifications',
+            'page_par_sizes',
         )
-
-    def __init__(self, *args, **kwargs):
-        super(UpdateUserForm, self).__init__(*args, **kwargs)
-        self.fields["first_name"].error_messages[
-            "required"
-        ] = "Please enter your username."
-        self.fields["last_name"].error_messages[
-            "required"
-        ] = "Please enter your email address."
 
 
 class LoginForm(AuthenticationForm):

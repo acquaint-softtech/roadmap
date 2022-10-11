@@ -1,7 +1,6 @@
 {% extends 'home/base.html' %}
 {% load static %}
 {% block content %}
-<main class="flex-1 h-full col-span-6 lg:col-span-5 lg:border-l lg:pl-5">
     <div class="pb-4">
         <ul class="flex items-center space-x-0.5 text-sm font-medium text-gray-600">
 
@@ -23,8 +22,6 @@
                     <div class="filament-tables-component">
                         <div class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container">
                             <div>
-
-
                                 <div
                                      class="flex items-center justify-between p-2 h-14">
                                     <div class="flex items-center gap-2">
@@ -993,7 +990,6 @@
             </div>
         </div>
     </div>
-</main>
 <script>
       var items = {{items|safe}}
       var comments = {{comments|safe}}
