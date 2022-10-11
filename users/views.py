@@ -1,8 +1,11 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView
+from django.db.models import Count
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -11,6 +14,7 @@ from django.views.generic import View
 
 from common.custom_messages import message_dict
 from home.views import BaseContextView
+from project.models import Task, Message, Votes
 from users.forms import RegisterUserForm, UpdateUserForm, LoginForm
 
 
@@ -104,3 +108,23 @@ class LogoutView(LoginRequiredMixin, View):
 
 class MyItemView(LoginRequiredMixin, BaseContextView, TemplateView):
     template_name = 'users/my_items.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MyItemView, self).get_context_data()
+        context['commented_tasks'] = []
+        context['items'] = json.dumps(
+            list(Task.objects.filter(created_by=self.request.user).annotate(num_votes=Count('user_task')).values(
+                'num_votes', 'id', 'name', 'project__title', 'type__name', 'project__slug', 'created', 'slug')),
+            indent=4, sort_keys=True,
+            default=str)
+        context['comments'] = json.dumps(
+            list(Message.objects.filter(user=self.request.user).annotate(num_votes=Count('task__user_task')).values('text','num_votes','task__name', 'created', 'task__slug','task__project__title','task__type__name'
+                                                                       ,'id')),
+            indent=4, sort_keys=True, default=str)
+        context['votes'] = json.dumps(list(
+            Votes.objects.filter(user=self.request.user).annotate(num_votes=Count('task')).values('task__name', 'task__project__title',
+                                                                'task__is_subscribed','created','num_votes',
+                                                                'task__slug', 'task__project__slug','task__type__name')), indent=4,
+            sort_keys=True, default=str)
+
+        return context

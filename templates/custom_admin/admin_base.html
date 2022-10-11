@@ -9,7 +9,7 @@
     ></script>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
 </head>
-<body class="flex bg-gray-100 min-h-screen"  x-data="adminHome()">
+<body class="flex bg-gray-100 min-h-screen"  x-data="adminHome()" x-init="init()">
 <div class="filament-sidebar-close-overlay fixed inset-0 z-20 w-full h-full bg-gray-900/50 lg:hidden"></div>
 <aside class="filament-sidebar fixed inset-y-0 left-0 rtl:left-auto rtl:right-0 z-20 flex flex-col h-screen overflow-hidden shadow-2xl transition-all bg-white lg:border-r rtl:lg:border-r-0 rtl:lg:border-l w-80 lg:z-0 dark:bg-gray-800 dark:border-gray-700 filament-sidebar-open translate-x-0 max-w-[20em] lg:max-w-[var(--sidebar-width)]">
     <header class="filament-sidebar-header border-b h-[4rem] shrink-0 px-6 flex items-center dark:border-gray-700">
@@ -347,7 +347,7 @@
                     </div>
 
                     <div class="flex items-center">
-                        <div class="inline-block">
+                        <div class="inline-block" x-on:click="open_notification = !open_notification">
                             <button title="Open notifications" type="button"
                                 class="filament-icon-button flex items-center justify-center rounded-full relative hover:bg-gray-500/5 focus:outline-none text-primary-500 focus:bg-[#3b82f61a] dark:hover:bg-gray-300/5 w-10 h-10 ml-4 -mr-1">
                                 <span class="sr-only">
@@ -366,21 +366,17 @@
                             </button>
                         </div>
 
-                        <div class="filament-modal inline-block">
-
-
-                            <div class="fixed inset-0 z-40 flex items-center min-h-screen overflow-y-auto transition"
-                                style="display: none;">
+                        <div class="filament-modal inline-block" x-show="open_notification">
+                            <div class="fixed inset-0 z-40 flex items-center min-h-screen overflow-y-auto transition">
                                 <div
                                     class="filament-modal-close-overlay fixed inset-0 w-full h-full bg-black/50 cursor-pointer">
                                 </div>
 
-                                <div class="relative w-full cursor-pointer pointer-events-none" style="display: none;">
-                                    <div
+                                <div class="relative w-full cursor-pointer pointer-events-none">
+                                    <div x-on:click="open_notification = !open_notification"
                                         class="filament-modal-window w-full p-2 bg-white cursor-default pointer-events-auto dark:bg-gray-800 relative h-screen overflow-y-auto ml-auto max-w-md">
                                         <button tabindex="-1" type="button" class="absolute top-2 right-2">
                                             <svg title="__('filament-support::components/modal.actions.close.label')"
-                                                x-on:click="isOpen = false" tabindex="-1"
                                                 class="filament-modal-close-button h-4 w-4 cursor-pointer text-gray-400"
                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                 fill="currentColor" aria-hidden="true">
@@ -392,7 +388,7 @@
                                                 Close
                                             </span>
                                         </button>
-                                        <div class="space-y-2" style="display: none;">
+                                        <div class="space-y-2">
                                             <div class="filament-modal-header px-4 py-2">
                                                 <h2
                                                     class="filament-modal-heading text-xl font-bold tracking-tight relative">
@@ -422,8 +418,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                             <div aria-hidden="true" class="filament-hr border-t dark:border-gray-700">
                                             </div>
 
@@ -431,8 +425,8 @@
 
                                                 <div class="px-4 py-2 space-y-4">
                                                     <div class="mt-[calc(-1rem-1px)]">
-                                                        <template x-for="notification in notifications"
-                                                            :key="notification">
+                                                        <template x-for="user_notification in user_notifications"
+                                                            :key="user_notification">
                                                             <div class="-mx-6 border-b border-t dark:border-gray-800">
                                                                 <div
                                                                     class="py-2 pl-4 pr-2 bg-gray-50 -mb-px dark:bg-gray-700">
@@ -452,10 +446,20 @@
                                                                                 <p>A new roadmap item has been created
                                                                                     by
                                                                                     <span
-                                                                                        x-text="notification.task__created_by__email"></span>
+                                                                                        x-text="user_notification.task__created_by__email"></span>
                                                                                     with the title <span
-                                                                                        x-text="notification.task__name"></span>
+                                                                                        x-text="user_notification.task__name"></span>
                                                                                 </p>
+                                                                            </div>
+                                                                            <div class="filament-notifications-actions mt-2 flex gap-3">
+                                                                                <a  @click="window.location.href=window.reverse('custom_admin:update_task', { slug: user_notification.task__slug })" class="filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-sm text-primary-600 hover:text-primary-500 dark:text-primary-500 dark:hover:text-primary-400 filament-notifications-link-action">
+                                                                                    View item
+                                                                                </a>
+
+                                                                                <a @click="window.location.href=window.reverse('custom_admin:update_user', { pk: user_notification.task__created_by__id  })" class="filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-sm text-primary-600 hover:text-primary-500 dark:text-primary-500 dark:hover:text-primary-400 filament-notifications-link-action">
+                                                                                    View user
+                                                                                </a>
+
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -472,16 +476,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="filament-dropdown">
+                <div class="filament-dropdown" >
                     <div class="filament-dropdown-trigger cursor-pointer ml-4"
-                        x-on:click="open_test_data = !open_test_data">
+                       x-on:click="open_toggle = !open_toggle">
                         <div class="w-10 h-10 rounded-full bg-gray-200 bg-cover bg-center dark:bg-gray-900"
                             style="background-image: url('https://www.gravatar.com/avatar/4544c6cd4cd4fd104b407fc176491507?s=150')">
                         </div>
                     </div>
 
                     <div class="filament-dropdown-panel absolute z-10 w-full rounded-lg bg-white shadow-lg ring-1 ring-black/5 transition dark:bg-gray-800 dark:ring-white/10 max-w-[14rem] absolute top-12 right-9"
-                        style="display: none;">
+                         x-show="open_toggle">
                         <ul class="py-1 space-y-1">
                             <div>
                                 <a
@@ -494,11 +498,11 @@
                                             clip-rule="evenodd"></path>
                                     </svg>
                                     <span class="truncate">
-                                        admin@admin.com
+                                        {{request.user.email}}
                                     </span>
                                 </a>
                             </div>
-                            <div>
+                            <div x-show="light">
                                 <div>
                                     <button type="button"
                                         class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-[#3b82f6] focus:bg-primary-700">
@@ -513,7 +517,7 @@
                                         </span>
                                     </button>
                                 </div>
-                                <div>
+                                <div x-show="!light">
                                     <button type="button"
                                         class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-[#3b82f6] focus:bg-primary-700">
                                         <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-primary-500"
@@ -530,8 +534,8 @@
                                 </div>
                             </div>
                             <div>
-                                <a href="/logout/">
-                                    <button type="submit"
+                                <a href="{% url 'users:logout' %}">
+                                    <button type="button"
                                         class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-[#3b82f6] focus:bg-primary-700">
                                         <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-gray-500"
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -553,16 +557,17 @@
         </div>
     </header>
 </body>
-
     <script>
         function adminHome() {
             return {
-                notifications:{{task_notifications|safe}},
+                user_notifications:{{task_notifications|safe}},
                 notification_count:0,
-                open_test_data:false,
+                open_toggle:false,
+                open_notification:false,
+                toggle:false,
                 light:true,
                 init() {
-                    this.notification_count = this.notifications.length
+                    this.notification_count = this.user_notifications.length
                 },
                 notification(type){
                     this.formData = {'type':type}
@@ -575,12 +580,11 @@
                     .then(data => {
                         this.notification_count = 0
                         this.isOpen = false
-                        this.notifications = []
+                        this.user_notifications = []
                     })
                 }
             }
         }
-
     </script>
 </html>
 {% block content %}
