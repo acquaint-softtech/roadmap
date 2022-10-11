@@ -89,7 +89,7 @@
                                                     x-model="search"
                                                     x-on:click="viewPage(0)"
                                                     x-on:keydown.window.prevent.slash=" viewPage(0), $refs.searchField.focus()"
-                                                    placeholder="Search for inbox..."
+                                                    placeholder="Search for users..."
                                                     type="search"
                                                     class="block h-9 w-full max-w-xs rounded-lg border-gray-300 pl-9 placeholder-gray-400 shadow-sm transition duration-75 focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400">
                                             </div>
@@ -244,7 +244,7 @@
                                     </div>
                                     <div
                                         class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
-                                        <select  x-model="selectedOption"
+                                        <select
                                             class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
                                            <template x-for="option in options" :key="option">
                                                 <option :value="option" x-text="option"></option>
@@ -284,7 +284,7 @@
                                     <div class="flex items-center justify-center">
                                         <div
                                             class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
-                                            <select  x-model="selectedOption" x-on-change="changePageSize()" class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
+                                            <select x-on-change="changePageSize()" class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
                                                <template x-for="option in options" :key="option">
                                                     <option :value="option" x-text="option"></option>
                                                 </template>
