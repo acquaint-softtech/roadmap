@@ -114,6 +114,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 ROOT_URLCONF = "roadmap.urls"
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 
 TEMPLATES = [
     {
