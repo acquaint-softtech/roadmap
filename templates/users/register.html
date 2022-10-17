@@ -15,22 +15,22 @@
                     <div class="space-y-2">
                         <label class="inline-block text-sm  text-gray-700" for="first_name">Name</label>
                         <input class="block w-full h-10 transition duration-75 border-gray-300 rounded-lg shadow-sm focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600" id="first_name" name="first_name" value="{{ form.first_name.value|default_if_none:'' }}" type="text" >
-                        <span>{{form.errors.first_name}}</span>
+                        <span class="text-red-500">{{form.errors.first_name}}</span>
                     </div>
                     <div class="space-y-2">
                         <label class="inline-block text-sm  text-gray-700" for="email">{{form.email.label}}</label>
                         <input class="block w-full h-10 transition duration-75 border-gray-300 rounded-lg shadow-sm focus:ring-1 focus:ring-inset focus:ring-blue-600 focus:border-blue-600" id="email" placeholder="name@yourcompany.com" name="email" value="{{ form.email.value|default_if_none:'' }}" type="email">
-                        <span>{{form.errors.email}}</span>
+                        <span class="text-red-500">{{form.errors.email}}</span>
                     </div>
                     <div class="space-y-2">
                         <label class="inline-block text-sm  text-gray-700" for="password">Password</label>
                         <input class="block w-full h-10 transition duration-75 border-gray-300 rounded-lg shadow-sm focus:ring-1 focus:ring-inset focus:ring-blue-600 focus:border-blue-600" id="password" name="password1" type="password">
-                        <span>{{form.errors.password1}}</span>
+                        <span class="text-red-500">{{form.errors.password1}}</span>
                     </div>
                     <div class="space-y-2">
                         <label class="inline-block text-sm  text-gray-700" for="password_confirmation">Confirm password</label>
                         <input class="block w-full h-10 transition duration-75 border-gray-300 rounded-lg shadow-sm focus:ring-1 focus:ring-inset focus:ring-blue-600 focus:border-blue-600" id="password_confirmation" name="password2" type="password">
-                        <span>{{form.errors.password2}}</span>
+                        <span class="text-red-500">{{form.errors.password2}}</span>
                     </div>
                     <button class="flex items-center justify-center w-full h-8 px-3 text-sm font-semibold tracking-tight text-white transition bg-[#d11515] rounded-lg shadow hover:bg-[#9d1010] focus:bg-[#9d1010] focus:outline-none focus:ring-offset-2 focus:ring-offset-[#9d1010] focus:ring-2 focus:ring-white focus:ring-inset" type="submit">Register
                     </button>

@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<header class="sticky top-0 z-10 w-full bg-[#d11515] shadow text-white" x-data="{ open: false }">
+<header class="sticky top-0 z-10 w-full bg-[#d11515] shadow text-white" x-data="Base()" x-init="init()">
     <div class="w-full px-4 mx-auto sm:px-6 md:px-8 max-w-[1500px]">
         <nav class="flex items-center justify-between h-20">
             <a class="text-2xl font-semibold tracking-tight" href="/">
@@ -73,7 +73,7 @@
                 {% endif %}
                     <li>
                         <div
-                               x-cloak x-data="{ 'showModal': false }"
+                               x-cloak
                                 @keydown.escape="showModal = false"
                         >
                             <button class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
@@ -126,7 +126,7 @@
                                     <div class="border-t"></div>
                                     {% if request.user.is_authenticated %}
 
-                                    <form enctype="multipart/form-data" method="post" action="{% url 'project:save_task' %}">
+                                    <form enctype="multipart/form-data" method="post">
                                         {% csrf_token %}
                                         {{ task_form.media }}
                                         <div class="grid grid-cols-1 filament-forms-component-container gap-6">
@@ -146,10 +146,10 @@
                                                     </div>
                                                     <div class="filament-forms-text-input-component flex items-center space-x-2 rtl:space-x-reverse group">
                                                         <div class="flex-1">
-                                                            <input  name="title"
+                                                            <input  name="title" x-model="task_title"
                                                                    class="block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm ring-gray-300"
                                                             >
-                                                             <span>{{task_form.errors.title}}</span>
+                                                             <span x-show="title_error">Please enter title</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -159,8 +159,8 @@
                                                 Content
                                             </span>
                                             </label>
-                                        {{ task_form.description|add_class:"ckeditor"}}
-                                            <span>{{task_form.errors.description}}</span>
+                                            <textarea class="ckeditor" name="description" x-model="task_description"></textarea>
+                                            <span x-show="description_error">Please enter Description</span>
                                     {% else %}
                                     <div class="py-2 mt-3 mb-3">
                                         <p>Login to be able to submit an item.</p>
@@ -169,7 +169,7 @@
 
                                     <footer class="flex items-center py-2 space-x-4 mt-2">
                                         {% if request.user.is_authenticated %}
-                                        <button type="submit"
+                                        <button type="button" @click="SubmitItems()"
                                                 class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
                                                 <span class="flex items-center gap-1">
                                             <span class="">
@@ -198,7 +198,7 @@
             <!-- Hamburger -->
             <div class="lg:hidden">
                 <button class="text-white flex items-center justify-center w-10 h-10 -mr-2 transition rounded-full focus:outline-none"
-                        x-on:click="open = !open" type="button">
+                        type="button">
                     <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                               d="M4.75 5.75H19.25"></path>
@@ -212,7 +212,7 @@
         </nav>
 
         <!-- Mobile menu -->
-        <nav class="-mx-2 lg:hidden" x-show="open">
+        <nav class="-mx-2 lg:hidden">
             <div class="border-t border-brand-400"></div>
 
             <ul class="flex flex-col py-2 space-y-1 text-sm font-medium text-white">
@@ -238,7 +238,7 @@
                 </li>
                 <li>
                     <div
-                            x-data="{ 'showModal': false }"
+
                             @keydown.escape="showModal = false"
                     >
                         <!-- Trigger for     Modal -->
@@ -405,3 +405,44 @@
 </body>
 
 </html>
+
+<script>
+    function Base(){
+          return {
+            showModal: false,
+            task_title : '',
+            task_description : '',
+            title_error : false,
+            description_error : false,
+            init(){
+                this.title_error = false
+                this.description_error = false
+            },
+            SubmitItems(){
+                this.task_description = '45454'
+                if (this.task_title == '' || this.task_description == ''){
+                    this.task_title == '' ? this.title_error = true : this.title_error = false
+                    this.description_error == '' ? this.description_error = true : this.description_error = false
+                    return false
+                }
+                fetch('/save_task/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json','X-CSRFToken':'{{csrf_token}}' },
+                    body: JSON.stringify({'task_title': this.task_title,'task_description':this.task_description})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message == 'success'){
+                        window.location.reload()
+                    }
+                 })
+            }
+          }
+    }
+
+
+
+
+
+
+</script>

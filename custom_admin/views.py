@@ -48,7 +48,7 @@ class ProjectList(TemplateView, AdminContextView, LoginRequiredMixin):
         context = super(ProjectList, self).get_context_data(*args, **kwargs)
         project_data = Project.objects.annotate(
             board_count=Count('category_project')).values('id', 'title', 'created',
-                                                          'is_private', 'slug', 'board_count')
+                                                          'is_private', 'slug', 'board_count').order_by('-created')
         context['projects'] = json.dumps(list(project_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Project', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:projects")}
         return context
@@ -59,23 +59,20 @@ class ProjectCreateView(AdminContextView, LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("custom_admin:projects")
     template_name = "custom_admin/new_project.html"
 
+    BoardFormSet = inlineformset_factory(
+        Project, Board, form=BoardForm, formset=BoardAdminFormSet,
+        fields=['name', 'detail', 'is_visible', 'is_block_votes', 'is_user_delete', 'is_block_comments'], extra=5,
+        can_delete=True
+    )
+
+    formset = BoardFormSet(initial=[
+        {'name': 'Under review'}, {'name': 'Planned'}, {'name': 'In progress'}, {'name': 'Live'}, {'name': 'Closed'}
+    ])
+
     def get_context_data(self, **kwargs):
-
-        BoardFormSet = inlineformset_factory(
-            Project, Board, form=BoardForm, formset=BoardAdminFormSet,
-            fields=['name', 'detail', 'is_visible', 'is_block_votes', 'is_user_delete', 'is_block_comments'], extra=5,
-            can_delete=True
-        )
-
-        formset = BoardFormSet(initial=[
-            {'name': 'Under review'}, {'name': 'Planned'}, {'name': 'In progress'}, {'name': 'Live'}, {'name': 'Closed'}
-        ])
-
-        data = super(ProjectCreateView, self).get_context_data(**kwargs)
-        if self.request.POST:
-            data['boards'] = BoardFormSet(self.request.POST)
-        else:
-            data['boards'] = formset
+        data = AdminContextView.get_context_data(self)
+        data['data'] = {'app_name': 'Project', 'type': 'Create', 'listing_url': reverse_lazy("custom_admin:projects")}
+        data['boards'] = self.formset
         return data
 
     def get_form_kwargs(self, *args, **kwargs):
@@ -83,20 +80,24 @@ class ProjectCreateView(AdminContextView, LoginRequiredMixin, CreateView):
         kwargs['user'] = self.request.user
         return kwargs
 
-    def form_valid(self, form):
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        board_formset = self.BoardFormSet(self.request.POST)
+        project_form = self.form_class(data=request.POST, user=request.user)
+        if project_form.is_valid() and board_formset.is_valid():
+            return self.form_valid(board_formset, project_form)
+        return self.form_invalid(self.form_class)
+
+    def form_valid(self, formset, form):
         obj = form.save(commit=False)
         obj.created_by = self.request.user
         obj.save()
-        context = self.get_context_data()
-        boards = context['boards']
-        if boards.is_valid():
-            boards.instance = obj
-            boards.save()
-
-        messages.success(
-            self.request,
-            "Project created successfully."
-        )
+        formset_obj = formset.save(commit=False)
+        for data in formset_obj:
+            data.project = obj
+            data.save()
+        self.success_url = reverse_lazy("custom_admin:projects") if 'submit' in form.data else reverse_lazy(
+            "custom_admin:new_project")
         return super(ProjectCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -105,9 +106,9 @@ class ProjectCreateView(AdminContextView, LoginRequiredMixin, CreateView):
 
 class ProjectUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
     model = Project
+    form_class = ProjectCreateForm
     success_url = reverse_lazy("custom_admin:projects")
     template_name = "custom_admin/edit_project.html"
-    fields = ["title", "description", "url", "is_private"]
     success_message = 'Project updated successfully'
 
     BoardFormSet = inlineformset_factory(
@@ -116,17 +117,32 @@ class ProjectUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
         can_delete=True
     )
 
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def get_context_data(self, **kwargs):
         data = super(ProjectUpdateView, self).get_context_data(**kwargs)
+        data['data'] = {'app_name': 'Project', 'type': 'Edit', 'listing_url': reverse_lazy("custom_admin:projects")}
         data['boards'] = self.BoardFormSet(instance=self.object)
         return data
 
     def post(self, request, *args, **kwargs):
-        formset = self.BoardFormSet(request.POST, instance=self.get_object())
-        if self.get_form().is_valid() and formset.is_valid():
-            self.get_form().save()
-            formset.save()
-        return super().post(request, *args, **kwargs)
+        self.object = self.get_object()
+        board_formset = self.BoardFormSet(self.request.POST, instance=self.get_object())
+        project_form = self.form_class(data=request.POST, user=request.user, instance=self.get_object())
+        if project_form.is_valid() and board_formset.is_valid():
+            return self.form_valid(board_formset, project_form)
+        return self.form_invalid(self.form_class)
+
+    def form_valid(self, formset, form):
+        form.save()
+        formset.save()
+        return super(ProjectUpdateView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(ProjectUpdateView, self).form_invalid(form)
 
 
 class ProjectDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
@@ -145,7 +161,7 @@ class InboxList(TemplateView, AdminContextView, LoginRequiredMixin):
         context = super(InboxList, self).get_context_data(*args, **kwargs)
         inbox_data = Task.objects.filter(project__isnull=True).annotate(comment_count=Count('message_task')).values(
             'id', 'name', 'created_by__email',
-            'created', 'slug', 'comment_count', 'created_by__id')
+            'created', 'slug', 'comment_count', 'created_by__id').order_by('-created')
         context['inbox'] = json.dumps(list(inbox_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Inbox', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:inbox")}
         return context
@@ -158,7 +174,8 @@ class AdminTaskList(TemplateView, AdminContextView, LoginRequiredMixin):
         context = super(AdminTaskList, self).get_context_data(*args, **kwargs)
         task_data = Task.objects.filter(project__isnull=False).values('id', 'name', 'project__title', 'type__name',
                                                                       'created_by__email', 'created', 'is_pinned',
-                                                                      'slug', 'created_by__id', 'project__slug')
+                                                                      'slug', 'created_by__id',
+                                                                      'project__slug').order_by('-created')
         context['tasks'] = json.dumps(list(task_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Item', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:tasks")}
         return context
@@ -166,7 +183,7 @@ class AdminTaskList(TemplateView, AdminContextView, LoginRequiredMixin):
 
 class TaskCreateView(AdminContextView, LoginRequiredMixin, CreateView):
     form_class = AdminTaskForm
-    success_url = reverse_lazy("custom_admin:projects")
+    success_url = reverse_lazy("custom_admin:items")
     template_name = "custom_admin/add_task.html"
 
     def get_form_kwargs(self):
@@ -174,7 +191,14 @@ class TaskCreateView(AdminContextView, LoginRequiredMixin, CreateView):
         kwargs['project'] = self.request.GET.get('project')
         return kwargs
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(TaskCreateView, self).get_context_data(*args, **kwargs)
+        context['data'] = {'app_name': 'Item', 'type': 'Create', 'listing_url': reverse_lazy("custom_admin:tasks")}
+        return context
+
     def form_valid(self, form):
+        self.success_url = reverse_lazy("custom_admin:tasks") if 'submit' in form.data else reverse_lazy(
+            "custom_admin:new_task")
         messages.success(
             self.request,
             "Task created successfully."
@@ -199,9 +223,34 @@ class TaskUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(TaskUpdateView, self).get_context_data(*args, **kwargs)
-        context['comments'] = Message.objects.select_related('task').filter(
-            task__slug=self.kwargs.get('slug')).order_by('id')
+        context['data'] = {'app_name': 'Item', 'type': 'Edit', 'listing_url': reverse_lazy("custom_admin:tasks")}
+
+        context['comments'] = json.dumps(
+            list(Message.objects.filter(task=self.object).values('text', 'task__name', 'created', 'task__slug', 'id',
+                                                                 'user__email').order_by('-created')),
+            indent=4, sort_keys=True, default=str)
+        context['votes'] = json.dumps(list(
+            Votes.objects.filter(task=self.object).values('task__is_subscribed','id',
+                                                          'task__slug', 'task__project__slug', 'user__email',
+                                                          'created').order_by('-created')),
+            indent=4,
+            sort_keys=True, default=str)
+
+
+
+        context['task_histories'] = json.dumps(list(
+            TaskHistory.objects.filter(task=self.object).values('note', 'created', 'action_by__email').order_by(
+                '-created')), indent=4, sort_keys=True, default=str)
         return context
+
+    def form_valid(self, form):
+        obj = form.save()
+        if obj.project_id and obj.type_id:
+            Votes.objects.get_or_create(task=obj, user=obj.created_by)
+        return super(TaskUpdateView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(TaskUpdateView, self).form_invalid(form)
 
 
 class TaskDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
@@ -219,7 +268,7 @@ class CommentsList(TemplateView, AdminContextView, LoginRequiredMixin):
     def get_context_data(self, *args, **kwargs):
         context = super(CommentsList, self).get_context_data(*args, **kwargs)
         message_data = Message.objects.values('id', 'text', 'task__name', 'user__email',
-                                              'created', 'task__slug', 'user__id')
+                                              'created', 'task__slug', 'user__id').order_by('-created')
         context['messages'] = json.dumps(list(message_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Comments', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:comments")}
         return context
@@ -230,7 +279,15 @@ class CommentCreateView(AdminContextView, LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("custom_admin:comments")
     template_name = "custom_admin/new_comment.html"
 
+    def get_context_data(self, **kwargs):
+        context = AdminContextView.get_context_data(self)
+        context['data'] = {'app_name': 'Comment', 'type': 'Create',
+                           'listing_url': reverse_lazy("custom_admin:comments")}
+        return context
+
     def form_valid(self, form):
+        self.success_url = reverse_lazy("custom_admin:comments") if 'submit' in form.data else reverse_lazy(
+            "custom_admin:new_comment")
         messages.success(
             self.request,
             "Comment created successfully."
@@ -247,6 +304,11 @@ class CommentUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("custom_admin:comments")
     template_name = "custom_admin/edit_comment.html"
     success_message = 'Comment updated successfully'
+
+    def get_context_data(self, **kwargs):
+        context = AdminContextView.get_context_data(self)
+        context['data'] = {'app_name': 'Comment', 'type': 'Edit', 'listing_url': reverse_lazy("custom_admin:comments")}
+        return  context
 
 
 class CommentDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
@@ -275,7 +337,8 @@ class AdminUserList(TemplateView, AdminContextView, LoginRequiredMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super(AdminUserList, self).get_context_data(*args, **kwargs)
-        user_data = User.objects.values('id', 'first_name', 'role__name', 'email', 'date_joined')
+        user_data = User.objects.values('id', 'first_name', 'role__name', 'email', 'date_joined').order_by(
+            '-date_joined')
         context['users'] = json.dumps(list(user_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Users', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:users")}
         return context
@@ -285,6 +348,16 @@ class UserCreateView(AdminContextView, LoginRequiredMixin, CreateView):
     form_class = AdminUserForm
     success_url = reverse_lazy("custom_admin:users")
     template_name = "custom_admin/add_user.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(UserCreateView, self).get_context_data()
+        context['data'] = {'app_name': 'User', 'type': 'Create', 'listing_url': reverse_lazy("custom_admin:users")}
+        return context
+
+    def form_valid(self, form):
+        self.success_url = reverse_lazy("custom_admin:users") if 'submit' in form.data else reverse_lazy(
+            "custom_admin:new_user")
+        return super(UserCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
         return super(UserCreateView, self).form_invalid(form)
@@ -301,7 +374,8 @@ class UserUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
         context = super(UserUpdateView, self).get_context_data()
         context['items'] = json.dumps(
             list(Task.objects.filter(created_by=self.object).annotate(num_votes=Count('user_task')).values(
-                'num_votes', 'id', 'name', 'project__title', 'type__name', 'project__slug','created','slug')), indent=4, sort_keys=True,
+                'num_votes', 'id', 'name', 'project__title', 'type__name', 'project__slug', 'created', 'slug')),
+            indent=4, sort_keys=True,
             default=str)
         context['comments'] = json.dumps(
             list(Message.objects.filter(user=self.object).values('text', 'task__name', 'created', 'task__slug', 'id')),
@@ -309,7 +383,8 @@ class UserUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
         context['votes'] = json.dumps(list(
             Votes.objects.filter(user=self.object).values('task__name', 'task__project__title', 'task__is_subscribed',
                                                           'task__slug', 'task__project__slug')), indent=4,
-                                      sort_keys=True, default=str)
+            sort_keys=True, default=str)
+        context['data'] = {'app_name': 'User', 'type': 'Edit', 'listing_url': reverse_lazy("custom_admin:users")}
         return context
 
 
@@ -328,7 +403,7 @@ class AdminVoteList(TemplateView, AdminContextView, LoginRequiredMixin):
     def get_context_data(self, *args, **kwargs):
         context = super(AdminVoteList, self).get_context_data(*args, **kwargs)
         vote_data = Votes.objects.values('id', 'user__email', 'task__name', 'task__is_subscribed', 'created',
-                                         'user__id', 'task__slug')
+                                         'user__id', 'task__slug').order_by('-created')
         context['votes'] = json.dumps(list(vote_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Votes', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:votes")}
         return context

@@ -1,8 +1,8 @@
 # Create your views here.
 import json
 
-from django.contrib import messages
 from django.db.models import Count
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -65,13 +65,13 @@ class TaskDetailView(BaseContextView, LoginRequiredMixin, DetailView):
         context['message_data'] = Message.objects.select_related('task', 'user').filter(
             task__slug=self.kwargs.get('slug'))
         context['history_data'] = TaskHistory.objects.select_related('task', 'action_by').filter(
-            task__slug=self.kwargs.get('slug')).order_by('-created')
+            task__slug=self.kwargs.get('slug')).order_by('-created')[0:10]
         context['is_voted'] = Votes.objects.filter(user=self.request.user, task=self.object).exists()
         users = User.objects.values('id', 'email')
 
         users_data = []
         for user in users:
-            users_data.append({'key':user['email'],'value':user['email']})
+            users_data.append({'key': user['email'], 'value': user['email']})
 
         context['users'] = json.dumps(list(users_data), indent=4, sort_keys=True, default=str)
         return context
@@ -80,11 +80,11 @@ class TaskDetailView(BaseContextView, LoginRequiredMixin, DetailView):
 class SaveTaskView(BaseContextView, LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
-        name = request.POST.get('title')
-        description = request.POST.get('description')
+        data = json.loads(request.body)
+        name = data.get('task_title')
+        description = data.get('task_description')
         Task.objects.create(name=name, description=description, created_by=request.user)
-        messages.success(request, 'Task Created successfully.')
-        return redirect('home:home')
+        return JsonResponse({"message": "success"})
 
 
 class SaveCommentView(BaseContextView, LoginRequiredMixin, View):

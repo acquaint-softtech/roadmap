@@ -6,11 +6,13 @@ function Comments() {
       size: 5,
       total: "",
       myForData: messages,
-      get filteredEmployees() {
+      options:['5','15','25','50','All'],
+      get comments() {
         const start = this.pageNumber * this.size,
          end = start + this.size;
         if (this.search === "") {
           this.total = this.myForData.length;
+          console.log(start,end)
           return this.myForData.slice(start, end);
         }
 
@@ -63,9 +65,9 @@ function Comments() {
       startResults() {
         return this.pageNumber * this.size + 1;
       },
-
-      changeSize(size){
-        this.size = parseInt(size)
+      changeSize(page_size){
+       page_size != 'All' ? this.size = parseInt(page_size) : this.size = this.myForData.length
+       this.comments
       },
 
       //Return the end range of the paginated results

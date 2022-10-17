@@ -4,9 +4,10 @@ function Tasks() {
       search: "",
       pageNumber: 0,
       size: 5,
+      options:['5','15','25','50','All'],
       total: "",
       myForData: tasks,
-      get filteredEmployees() {
+      get tasks() {
         const start = this.pageNumber * this.size,
           end = start + this.size;
 
@@ -26,6 +27,11 @@ function Tasks() {
                  return item.name.toLowerCase().includes(this.search.toLowerCase()) || item.project__title.toLowerCase().includes(this.search.toLowerCase()) || item.type__name.toLowerCase().includes(this.search.toLowerCase()) || item.created_by__email.toLowerCase().includes(this.search.toLowerCase())
           })
           .slice(start, end);
+      },
+
+      changeSize(page_size){
+       page_size != 'All' ? this.size = parseInt(page_size) : this.size = this.myForData.length
+       this.tasks
       },
 
       sort(col) {

@@ -34,6 +34,7 @@ class Board(TimeStampModel):
     is_user_delete = models.BooleanField(default=False)
     is_block_comments = models.BooleanField(default=False)
     detail = models.TextField(null=True,blank=True)
+    sort_item =models.CharField(choices=(('Popular', 'Popular'), ('Latest', 'Latest')),blank=True, null=True,max_length=100)
     project = models.ForeignKey(Project, related_name='category_project',
                                 on_delete=models.CASCADE, null=True, blank=True)
 
@@ -75,6 +76,7 @@ class Message(TimeStampModel, MPTTModel):
     task = models.ForeignKey(Task, related_name='message_task',
                              on_delete=models.CASCADE, null=True, blank=True)
     text = RichTextField(null=True)
+
 
     class MPTTMeta:
         level_attr = 'mptt_level'

@@ -74,6 +74,7 @@ JS_URLS = (
     'custom_admin:delete_task',
     'custom_admin:update_comment',
     'custom_admin:delete_comment',
+    'custom_admin:delete_vote'
 )
 TAILWIND_APP_NAME = 'user_themes'
 
