@@ -170,7 +170,7 @@
 
                                 <tbody
                                     class="divide-y whitespace-nowrap dark:divide-gray-700">
-                                <template x-for="vote in filteredEmployees" :key="vote">
+                                <template x-for="vote in votes" :key="vote">
                                     <tr class="filament-tables-row hover:bg-gray-50 dark:hover:bg-gray-500/10">
                                         <td
                                             class="filament-tables-reorder-cell w-4 px-4 whitespace-nowrap text-gray-500 transition group-hover:text-primary-500 dark:text-gray-400 dark:group-hover:text-primary-400 hidden">
@@ -188,7 +188,7 @@
                                                 type="checkbox">
                                         </td>
 
-                                        <td class="filament-tables-cell dark:text-white"
+                                        <td class="cursor-pointer filament-tables-cell dark:text-white"
                                             wire:loading.remove.delay="wire:loading.remove.delay"
                                             wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
                                             <a @click="window.location.href=window.reverse('custom_admin:update_user', { pk: vote.user__id })">
@@ -199,7 +199,7 @@
 
                                         </td>
 
-                                        <td class="filament-tables-cell dark:text-white"
+                                        <td class="cursor-pointer filament-tables-cell dark:text-white"
                                             wire:loading.remove.delay="wire:loading.remove.delay"
                                             wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
                                             <a @click="window.location.href=window.reverse('custom_admin:update_task', { slug: vote.task__slug })">
@@ -214,12 +214,12 @@
                                             wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
                                             <div class="filament-tables-text-column px-4 py-3">
                                                 <div x-show="vote.task__is_subscribed">
-                                                    <svg class="w-6 h-6 text-success-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                                    <svg class="w-6 h-6 text-success-500" xmlns="http://www.w3.org/2000/svg" fill="none" color="green" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                     </svg>
                                                 </div>
                                                 <div x-show="!vote.task__is_subscribed">
-                                                    <svg class="w-6 h-6 text-danger-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                                    <svg class="w-6 h-6 text-danger-500" xmlns="http://www.w3.org/2000/svg" fill="none" color="red" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                                       <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                     </svg>
                                                 </div>
@@ -253,13 +253,11 @@
                                     </div>
                                     <div
                                         class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
-                                        <select wire:model="tableRecordsPerPage" id="tableRecordsPerPageSelect"
+                                        <select x-on:change="changeSize($event.target.value)" wire:model="tableRecordsPerPage" id="tableRecordsPerPageSelect"
                                             class="h-8 text-sm pr-8 leading-none transition duration-75 border-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
-                                            <option value="5"  x-on:click="changeSize('5')">5</option>
-                                            <option value="10"  x-on:click="changeSize('10')">10</option>
-                                            <option value="25"  x-on:click="changeSize('25')">25</option>
-                                            <option value="50"  x-on:click="changeSize('50')">50</option>
-                                            <option value="-1"  x-on:click="changeSize('-1')">All</option>
+                                            <template x-for="option in options" :key="option">
+                                              <option :value="option" x-text="option"></option>
+                                            </template>
                                         </select>
                                         <label for="tableRecordsPerPageSelect"
                                             class="text-sm font-medium dark:text-white">
@@ -295,12 +293,10 @@
                                     <div class="flex items-center justify-center">
                                         <div
                                             class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
-                                            <select class="h-8 text-sm pr-8 leading-none transition duration-75 border-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
-                                                <option value="5"  @click="changeSize('5')">5</option>
-                                                <option value="10"  @click="changeSize('10')">10</option>
-                                                <option value="25"  @click="changeSize('25')">25</option>
-                                                <option value="50"  @click="changeSize('5')">50</option>
-                                                <option value="-1"  @click="changeSize('-1')">All</option>
+                                            <select x-on:change="changeSize($event.target.value)" class="h-8 text-sm pr-8 leading-none transition duration-75 border-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
+                                                <template x-for="option in options" :key="option">
+                                                  <option :value="option" x-text="option"></option>
+                                                </template>
                                             </select>
 
                                             <label for="tableRecordsPerPageSelect"

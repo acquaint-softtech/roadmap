@@ -155,7 +155,13 @@ class MyPasswordResetView(BaseContextView, PasswordResetView):
     email_template_name = 'users/password_reset_email.html'
     success_url = reverse_lazy('users:reset_password')
 
+    def form_invalid(self, form):
+        return super(MyPasswordResetView, self).form_invalid(form)
+
 
 class MyPasswordResetConfirmView(BaseContextView, PasswordResetConfirmView):
     template_name = 'users/password_reset_confirm.html'
     success_url = reverse_lazy('home:home')
+
+    def form_invalid(self, form):
+        return super(MyPasswordResetConfirmView, self).form_invalid(form)

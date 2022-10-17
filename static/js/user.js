@@ -8,8 +8,7 @@ function Users() {
       total: "",
       myForData: users,
       options:['5','10','25','50','All'],
-      selectedOption:'5',
-      get filteredEmployees() {
+      get users() {
         const start = this.pageNumber * this.size,
           end = start + this.size;
 
@@ -31,11 +30,6 @@ function Users() {
           .slice(start, end);
       },
 
-      changePageSize(index){
-          this.size = 10
-          this.filteredEmployees()
-      },
-
       sort(col) {
           if(this.sortCol === col) this.sortAsc = !this.sortAsc;
           this.sortCol = col;
@@ -45,6 +39,11 @@ function Users() {
             return 0;
           });
        },
+
+      changeSize(page_size){
+       page_size != 'All' ? this.size = parseInt(page_size) : this.size = this.myForData.length
+       this.users
+      },
 
       //Create array of all pages (for loop to display page numbers)
       pages() {

@@ -4,9 +4,10 @@ function Votes() {
       search: "",
       pageNumber: 0,
       size: 5,
+      options:['5','15','25','50','All'],
       total: "",
       myForData: votes,
-      get filteredEmployees() {
+      get votes() {
         const start = this.pageNumber * this.size,
           end = start + this.size;
 
@@ -37,6 +38,11 @@ function Votes() {
             return 0;
           });
        },
+
+        changeSize(page_size){
+           page_size != 'All' ? this.size = parseInt(page_size) : this.size = this.myForData.length
+           this.votes
+        },
 
       //Create array of all pages (for loop to display page numbers)
       pages() {

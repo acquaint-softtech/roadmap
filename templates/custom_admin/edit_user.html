@@ -10,15 +10,15 @@
                     Edit User
                 </h1>
 
-                <div class="filament-page-actions flex flex-wrap items-center gap-4 justify-start shrink-0">
-                    <button @click="window.location.href=window.reverse('custom_admin:delete_user', { pk: {{object.id}} })" class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-danger-600 hover:bg-danger-500 focus:bg-danger-700 focus:ring-offset-danger-700 filament-page-button-action" dusk="filament.admin.action.delete">
+                    <button type="button" @click="window.location.href=window.reverse('custom_admin:delete_user', { pk: {{object.id}} })"
+                         class="bg-red-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action"
+                        >
                         <span class="flex items-center gap-1">
-                         <span class="">
-                            Delete
+                            <span class="text-white">
+                                Delete
+                            </span>
                         </span>
-                    </span>
                     </button>
-                </div>
             </header>
             <form
                     class="filament-form space-y-6" method="post">{% csrf_token %}
@@ -109,11 +109,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="filament-page-actions flex flex-wrap items-center gap-4 justify-start filament-form-actions">
+                <div class=" filament-page-actions flex flex-wrap items-center gap-4 justify-start filament-form-actions ">
                     <button x-mousetrap.global.mod-s="" type="submit"
-                            class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action"
+                            class="bg-blue-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action"
                             dusk="filament.admin.action.save">
-                <span class="">
+                <span class="text-white">
                     Save changes
                 </span>
                     </span>
@@ -133,19 +133,19 @@
             <div class="filament-resources-relation-managers-container space-y-2">
                 <div class="flex justify-center">
                     <nav class="filament-tabs flex overflow-x-auto items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600 bg-gray-500/5 rounded-xl dark:bg-gray-500/20">
-                        <button @click="activeTab = 0"  :class="{ 'active': activeTab === 0 }" tabindex="0" role="tab" type="button"
-                                class="flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-inset text-primary-600 shadow bg-white dark:text-white dark:bg-primary-600"
+                        <button @click="activeTab = 0"  :class="{ 'active': activeTab === 0,'bg-white': activeTab === 0 }" tabindex="0" role="tab" type="button"
+                                class="flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-inset text-primary-600 shadow dark:text-white dark:bg-primary-600"
                                 aria-selected="">
                             Items
                         </button>
 
-                        <button @click="activeTab = 1"  :class="{ 'active': activeTab === 1 }" tabindex="-1" role="tab" type="button"
-                                class="flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-inset hover:text-gray-800 focus:text-primary-600 dark:text-gray-400 dark:hover:text-gray-300 dark:focus:text-gray-400">
+                        <button @click="activeTab = 1"  :class="{ 'active': activeTab === 1,'bg-white': activeTab === 1 }" tabindex="-1" role="tab" type="button"
+                                class="flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-inset hover:text-gray-800 focus:text-primary-600 bg-white dark:text-gray-400 dark:hover:text-gray-300 dark:focus:text-gray-400">
                             Comments
                         </button>
 
-                        <button @click="activeTab = 2"  :class="{ 'active': activeTab === 2 }" tabindex="-1" role="tab" type="button"
-                                class="flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-inset hover:text-gray-800 focus:text-primary-600 dark:text-gray-400 dark:hover:text-gray-300 dark:focus:text-gray-400">
+                        <button @click="activeTab = 2"  :class="{ 'active': activeTab === 2,'bg-white': activeTab === 2 }" tabindex="-1" role="tab" type="button"
+                                class="flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-inset hover:text-gray-800 focus:text-primary-600 bg-white dark:text-gray-400 dark:hover:text-gray-300 dark:focus:text-gray-400">
                             Votes
                         </button>
                     </nav>
@@ -456,7 +456,7 @@
                                                 </td>
 
                                                 <td class="filament-tables-actions-cell px-4 py-3 whitespace-nowrap">
-                                                    <div class="flex items-center gap-4 justify-end">
+                                                    <div class="flex items-center gap-4 justify-end text-red-600">
                                                         <button @click="window.location.href=window.reverse('custom_admin:delete_task', { slug: item.slug })" type="button" class="filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-sm text-danger-600 hover:text-danger-500 dark:text-danger-500 dark:hover:text-danger-400 filament-tables-link-action">
                                                             <svg class="filament-link-icon w-4 h-4 mr-1 rtl:ml-1"
                                                                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -480,7 +480,7 @@
                             </div>
                         </div>
                     </div>
-
+                  
                     <div x-show="activeTab === 1" class="filament-resource-relation-manager">
                         <div class="filament-tables-component">
                             <div class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700">
@@ -562,13 +562,13 @@
                                                     </label>
 
                                                     <div class="relative group">
-                                                        <span class="absolute inset-y-0 left-0 flex items-center justify-center w-9 h-9 text-gray-400 pointer-events-none group-focus-within:text-primary-500">
-                                                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                                             stroke="currentColor" aria-hidden="true">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                                        </svg>        </span>
+<span class="absolute inset-y-0 left-0 flex items-center justify-center w-9 h-9 text-gray-400 pointer-events-none group-focus-within:text-primary-500">
+<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+     stroke="currentColor" aria-hidden="true">
+<path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+</svg>        </span>
 
-                                                        <input placeholder="Search" type="search"
+                                                    <input placeholder="Search" type="search"
                                                                autocomplete="off"
                                                                 x-ref="searchField"
                                                                 x-model="comment_search"
@@ -577,6 +577,7 @@
                                                                 placeholder="Search for inbox..."
                                                                 type="search"
                                                                class="block h-9 w-full max-w-xs rounded-lg border-gray-300 pl-9 placeholder-gray-400 shadow-sm transition duration-75 focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400">
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -606,15 +607,13 @@
                                         Select all 0.
                                         </button>
                                         </span>
-
                                     <span>
                                         <button x-on:click="deselectAllRecords" class="text-primary-600 text-sm font-medium">
                                         Deselect all.
                                         </button>
                                         </span>
-                                    </div>
-
-
+                                </div>
+                              
                                 <div class="overflow-y-auto relative dark:border-gray-700 border-t">
                                     <table class="filament-tables-table w-full text-left rtl:text-right divide-y table-auto dark:divide-gray-700">
                                         <thead>
@@ -625,8 +624,7 @@
                                                        wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set"
                                                        type="checkbox">
                                             </td>
-
-
+                                          
                                             <th class="filament-tables-header-cell p-0">
                                                 <button type="button"
                                                         class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
@@ -657,26 +655,23 @@
                                         </tr>
                                         </thead>
 
-                                        <tbody wire:sortable=""
-                                               wire:end.stop="reorderT  able($event.target.sortable.toArray())"
-                                               wire:sortable.options="{ animation: 100 }"
-                                               class="divide-y whitespace-nowrap dark:divide-gray-700">
-                                        <tr x-show="comments.length == 0">
-                                            <td colspan="8">
-                                                <div class="flex items-center justify-center p-4">
-                                                    <div class="filament-tables-empty-state flex flex-1 flex-col items-center justify-center p-6 mx-auto space-y-6 text-center bg-white dark:bg-gray-800">
-                                                        <div class="max-w-md space-y-1">
-                                                            <h2 class="filament-tables-empty-state-heading text-xl font-bold tracking-tight dark:text-white">
-                                                                No records found
-                                                            </h2>
-                                                            <p class="filament-tables-empty-state-description whitespace-normal text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-
+                                        <tbody class="divide-y whitespace-nowrap dark:divide-gray-700">
+                                          <tr x-show="comments.length == 0">
+                                              <td colspan="8">
+                                                  <div class="flex items-center justify-center p-4">
+                                                      <div class="filament-tables-empty-state flex flex-1 flex-col items-center justify-center p-6 mx-auto space-y-6 text-center bg-white dark:bg-gray-800">
+                                                          <div class="max-w-md space-y-1">
+                                                              <h2 class="filament-tables-empty-state-heading text-xl font-bold tracking-tight dark:text-white">
+                                                                  No records found
+                                                              </h2>
+                                                              <p class="filament-tables-empty-state-description whitespace-normal text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                              </p>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                          </tr>
+                                          
                                         <template x-for="comment in user_comments" :key="comment">
                                             <tr class="filament-tables-row hover:bg-gray-50 dark:hover:bg-gray-500/10">
                                                 <td
@@ -718,7 +713,7 @@
                                                         </div>
                                                 </td>
                                                 <td class="filament-tables-actions-cell px-4 py-3 whitespace-nowrap">
-                                                    <div class="flex items-center gap-4 justify-end">
+                                                    <div class="flex items-center gap-4 justify-end text-red-600">
                                                         <button @click="window.location.href=window.reverse('custom_admin:delete_comment', { pk: comment.id })" type="button" class="filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-sm text-danger-600 hover:text-danger-500 dark:text-danger-500 dark:hover:text-danger-400 filament-tables-link-action">
                                                             <svg class="filament-link-icon w-4 h-4 mr-1 rtl:ml-1"
                                                                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -732,7 +727,6 @@
                                                     </div>
                                                 </td>
                                             </tr>
-
                                         </template>
 
                                         </tbody>
@@ -742,7 +736,7 @@
                             </div>
                         </div>
                     </div>
-
+                  
                     <div x-show="activeTab === 2" class="filament-resource-relation-manager">
                         <div class="filament-tables-component">
                             <div class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700">
@@ -985,7 +979,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="filament-tables-actions-cell px-4 py-3 whitespace-nowrap">
-                                                    <div class="flex items-center gap-4 justify-end">
+                                                    <div class="flex items-center gap-4 justify-end text-red-600">
                                                         <button @click="window.location.href=window.reverse('custom_admin:delete_vote', { id: vote.id })" type="button" class="filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-sm text-danger-600 hover:text-danger-500 dark:text-danger-500 dark:hover:text-danger-400 filament-tables-link-action">
                                                             <svg class="filament-link-icon w-4 h-4 mr-1 rtl:ml-1"
                                                                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"

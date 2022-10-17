@@ -4,9 +4,10 @@ function Inbox() {
       search: "",
       pageNumber: 0,
       size: 5,
+      options:['5','15','25','50','All'],
       total: "",
       myForData: inbox,
-      get filteredEmployees() {
+      get inboxes() {
         const start = this.pageNumber * this.size,
           end = start + this.size;
 
@@ -62,6 +63,11 @@ function Inbox() {
       //Return the start range of the paginated results
       startResults() {
         return this.pageNumber * this.size + 1;
+      },
+
+      changeSize(page_size){
+       page_size != 'All' ? this.size = parseInt(page_size) : this.size = this.myForData.length
+       this.inboxes
       },
 
       //Return the end range of the paginated results
