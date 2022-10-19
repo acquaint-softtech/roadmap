@@ -42,8 +42,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.humanize",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "users",
     "project",
+    "custom_admin",
 
     # For tailwind css
     "tailwind",
@@ -56,6 +58,8 @@ INSTALLED_APPS = [
     "mptt",
     "crispy_forms",
     "js_urls",
+    "simple_open_graph",
+    "colorfield"
 ]
 
 CACHES = {
@@ -64,6 +68,8 @@ CACHES = {
         'LOCATION': 'roadmap_cache',
     }
 }
+
+SITE_ID = 2
 
 JS_URLS = (
     'custom_admin:update_user',
@@ -127,6 +133,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "custom_admin.context_processor.general_settings"
             ]
         },
     }

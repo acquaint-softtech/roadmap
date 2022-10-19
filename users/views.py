@@ -58,7 +58,9 @@ class EditProfileView(LoginRequiredMixin, BaseContextView, FormView):
 
     def get_context_data(self, **kwargs):
         context = super(EditProfileView, self).get_context_data()
-        context['notification'] = UserSetting.objects.filter(user=self.request.user).first()
+        notification_obj = UserSetting.objects.filter(user=self.request.user).first()
+        context['notification'] = notification_obj
+        context['option'] = notification_obj.page_par_sizes
         return context
 
     def get_instace(self):
@@ -71,6 +73,7 @@ class EditProfileView(LoginRequiredMixin, BaseContextView, FormView):
         instance.email = form.data.get('email')
         notification.mention_notifications = True if form.data.get('mention_notifications') == 'on' else False
         notification.reply_notifications = True if form.data.get('reply_notifications') == 'on' else False
+        notification.page_par_sizes = self.request.POST['selected'].split(',')
         instance.save()
         notification.save()
         messages.success(self.request, "Saved Profile")
@@ -147,6 +150,7 @@ class MyItemView(LoginRequiredMixin, BaseContextView, TemplateView):
                                                                 'task__slug', 'task__project__slug','task__type__name')), indent=4,
             sort_keys=True, default=str)
 
+        context['options'] = self.request.user.settings.page_par_sizes
         return context
 
 

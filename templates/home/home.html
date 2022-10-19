@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Home page{% endblock title %}
 {% block content %}
-    <div class="prose mb-4">Welcome to our roadmap!</div>
+    <div class="prose mb-4">{{general_settings.welcome_text|safe}}</div>
 {% endblock content %}
 
 

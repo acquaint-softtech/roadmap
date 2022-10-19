@@ -34,7 +34,7 @@
                                         </div>
                                         <footer class="flex items-end justify-between">
                                             <span class="inline-flex items-center justify-center h-6 px-2 text-sm font-semibold tracking-tight text-gray-700 rounded-full bg-gray-50">
-                                                {{data.created}}
+                                                {{data.created|date:"M d, Y"}}
                                             </span>
                                             {% if data.num_votes != 0 %}
                                                 <div class="text-gray-500 text-sm">
@@ -57,7 +57,7 @@
             </section>
         {% endfor %}
     {% endfor %}
-</div>
+<!--</div>-->
 
 
 

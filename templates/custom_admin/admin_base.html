@@ -1,8 +1,11 @@
-<html>
+<html prefix="og: http://ogp.me/ns#">
 <head>
     {% load static tailwind_tags %}
     {% tailwind_css %}
     <script src="{% url 'js_urls' %}" type="text/javascript"></script>
+    {% if general_settings.favicon_img %}
+      <link rel="shortcut icon" href="{{general_settings.favicon_img.url}}"/>
+    {% endif %}
     <script
             src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
             defer

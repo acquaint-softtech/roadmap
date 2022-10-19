@@ -68,7 +68,6 @@ class TaskDetailView(BaseContextView, LoginRequiredMixin, DetailView):
             task__slug=self.kwargs.get('slug')).order_by('-created')[0:10]
         context['is_voted'] = Votes.objects.filter(user=self.request.user, task=self.object).exists()
         users = User.objects.values('id', 'email')
-
         users_data = []
         for user in users:
             users_data.append({'key': user['email'], 'value': user['email']})

@@ -1,14 +1,17 @@
 import json
+import platform
 
 from django.contrib import messages
 from django.db.models import Count
 from django.forms import inlineformset_factory
 from django.http import JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, UpdateView, DeleteView, CreateView
+from django.views.generic import TemplateView, UpdateView, DeleteView, CreateView, FormView
 from django.views.generic.base import ContextMixin, View
 
+from custom_admin.forms import GeneralNotificationForm, ThemeForm
+from custom_admin.models import GeneralSettings
 from project.admin import BoardAdminFormSet
 from project.forms import ProjectCreateForm, AdminTaskForm, AdminCommentForm, BoardForm, AdminUserForm
 from project.models import Project, Task, Message, TaskHistory, Board, Votes, TaskNotification
@@ -27,6 +30,7 @@ class AdminContextView(ContextMixin):
                                                                                  'task__created_by__email').order_by(
             '-created')
         context['task_notifications'] = json.dumps(list(task_notifications), indent=4, sort_keys=True, default=str)
+        context['general_settings'] = GeneralSettings.objects.first()
         return context
 
 
@@ -59,15 +63,16 @@ class ProjectCreateView(AdminContextView, LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("custom_admin:projects")
     template_name = "custom_admin/new_project.html"
 
+    general_settings = GeneralSettings.objects.first()
+
     BoardFormSet = inlineformset_factory(
         Project, Board, form=BoardForm, formset=BoardAdminFormSet,
-        fields=['name', 'detail', 'is_visible', 'is_block_votes', 'is_user_delete', 'is_block_comments'], extra=5,
+        fields=['name', 'detail', 'is_visible', 'is_block_votes', 'is_user_delete', 'is_block_comments'],
+        extra=len(general_settings.default_boards),
         can_delete=True
     )
 
-    formset = BoardFormSet(initial=[
-        {'name': 'Under review'}, {'name': 'Planned'}, {'name': 'In progress'}, {'name': 'Live'}, {'name': 'Closed'}
-    ])
+    formset = BoardFormSet(initial=[{'name': data} for data in general_settings.default_boards])
 
     def get_context_data(self, **kwargs):
         data = AdminContextView.get_context_data(self)
@@ -436,16 +441,56 @@ class ChangeTaskSubscription(LoginRequiredMixin, View):
             {"message": "success", "btn_status": 'Unsubscribe' if task_data.is_subscribed else 'Subscribe'})
 
 
-class AdminThemeView(LoginRequiredMixin, AdminContextView, TemplateView):
+class AdminThemeView(LoginRequiredMixin, AdminContextView, FormView):
     template_name = 'custom_admin/theme.html'
+    form_class = ThemeForm
+    success_url = reverse_lazy('custom_admin:theme')
+
+    def get_context_data(self, **kwargs):
+        context = AdminContextView.get_context_data(self)
+        data = GeneralSettings.objects.first()
+        form = ThemeForm(instance=data)
+        context['form'] = form
+        return context
+    
+    def form_valid(self, form):
+        form = ThemeForm(instance=GeneralSettings.objects.first(), data=self.request.POST,files=self.request.FILES)
+        form.save()
+        return super(AdminThemeView, self).form_valid(form)
+    
+    def form_invalid(self, form):
+        return super(AdminThemeView, self).form_invalid(form)
 
 
-class AdminSettingsView(LoginRequiredMixin, AdminContextView, TemplateView):
+class AdminSettingsView(LoginRequiredMixin, AdminContextView, View):
     template_name = 'custom_admin/settings.html'
+    form_class = GeneralNotificationForm
+    success_url = reverse_lazy('custom_admin:settings')
+
+    def get(self, request, *args, **kwargs):
+        context = AdminContextView.get_context_data(self)
+        data = GeneralSettings.objects.first()
+        form = GeneralNotificationForm(instance=data)
+        context['form'] = form
+        context['board_data'] = data.default_boards
+        return render(request, self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+        form = GeneralNotificationForm(instance=GeneralSettings.objects.first(), data=request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.default_boards = request.POST.get('board_data').split(',')
+            obj.save()
+        return redirect(self.success_url)
 
 
 class AdminSystemView(LoginRequiredMixin, AdminContextView, TemplateView):
-    template_name = 'custom_admin/settings.html'
+    template_name = 'custom_admin/system.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminSystemView, self).get_context_data()
+        context['python_version'] = platform.python_version()
+        return context
 
 
 class ProjectWiseBoard(LoginRequiredMixin, View):
@@ -475,3 +520,5 @@ class VoteDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+

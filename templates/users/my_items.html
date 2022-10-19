@@ -195,7 +195,7 @@
                                         </div>
 
                                         <div class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
-                                            <select
+                                            <select x-on:change="ItemchangeSize($event.target.value)"
                                                 class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
                                                <template x-for="option in options" :key="option">
                                                     <option :value="option" x-text="option"></option>
@@ -228,7 +228,7 @@
 
                                         <div class="flex items-center justify-center">
                                             <div class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
-                                                <select
+                                                <select x-on:change="ItemchangeSize($event.target.value)"
                                                     class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
                                                    <template x-for="option in options" :key="option">
                                                         <option :value="option" x-text="option"></option>
@@ -246,7 +246,7 @@
                                                 <li>
                                                     <button type="button"
                                                         class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
-                                                         x-on:click="prevPage" :disabled="pageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber==0 }" aria-label="Next" rel="next">
+                                                         x-on:click="prevPage" :disabled="ItempageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : ItempageNumber==0 }" aria-label="Next" rel="next">
                                                         <svg class="w-5 h-5 rtl:scale-x-[-1]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                           <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
@@ -265,7 +265,7 @@
                                                 <li>
                                                     <button type="button"
                                                         class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
-                                                          x-on:click="ItemviewPage(Math.ceil(total_of_items/size)-1)" :disabled="pageNumber >= ItempageCount() -1" :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber >= ItempageCount() -1 }">
+                                                          x-on:click="ItemviewPage(Math.ceil(total_of_items/item_page_size)-1)" :disabled="ItempageNumber >= ItempageCount() -1" :class="{ 'disabled cursor-not-allowed text-gray-600' : ItempageNumber >= ItempageCount() -1 }">
                                                         <svg class="w-5 h-5 rtl:scale-x-[-1]"
                                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                             fill="currentColor" aria-hidden="true">
@@ -492,7 +492,7 @@
                                         </div>
 
                                         <div class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
-                                            <select
+                                            <select x-on:change="VotechangeSize($event.target.value)"
                                                 class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
                                                <template x-for="option in options" :key="option">
                                                     <option :value="option" x-text="option"></option>
@@ -525,7 +525,7 @@
 
                                         <div class="flex items-center justify-center">
                                             <div class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
-                                                <select
+                                                <select x-on:change="VotechangeSize($event.target.value)"
                                                     class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
                                                    <template x-for="option in options" :key="option">
                                                         <option :value="option" x-text="option"></option>
@@ -544,7 +544,7 @@
                                                 <li>
                                                     <button type="button"
                                                         class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
-                                                         x-on:click="prevPage" :disabled="pageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber==0 }" aria-label="Next" rel="next">
+                                                         x-on:click="prevPage" :disabled="VotepageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : VotepageNumber==0 }" aria-label="Next" rel="next">
                                                         <svg class="w-5 h-5 rtl:scale-x-[-1]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                           <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
@@ -563,7 +563,7 @@
                                                 <li>
                                                     <button type="button"
                                                         class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
-                                                          x-on:click="VoteviewPage(Math.ceil(total/size)-1)" :disabled="pageNumber >= VotepageCount() -1" :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber >= VotepageCount() -1 }">
+                                                          x-on:click="VoteviewPage(Math.ceil(total/item_page_size)-1)" :disabled="VotepageNumber >= VotepageCount() -1" :class="{ 'disabled cursor-not-allowed text-gray-600' : VotepageNumber >= VotepageCount() -1 }">
                                                         <svg class="w-5 h-5 rtl:scale-x-[-1]"
                                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                             fill="currentColor" aria-hidden="true">
@@ -898,7 +898,7 @@
                                         </div>
 
                                         <div class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
-                                            <select
+                                            <select x-on:change="CommentchangeSize($event.target.value)"
                                                     class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
                                                    <template x-for="option in options" :key="option">
                                                         <option :value="option" x-text="option"></option>
@@ -923,7 +923,7 @@
 
                                         <div class="flex items-center justify-center">
                                             <div class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
-                                                <select
+                                                <select x-on:change="CommentchangeSize($event.target.value)"
                                                     class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
                                                    <template x-for="option in options" :key="option">
                                                         <option :value="option" x-text="option"></option>
@@ -942,7 +942,7 @@
                                                 <li>
                                                     <button type="button"
                                                         class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
-                                                         x-on:click="prevPage" :disabled="pageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber==0 }" aria-label="Next" rel="next">
+                                                         x-on:click="prevPage" :disabled="CommentpageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : CommentpageNumber==0 }" aria-label="Next" rel="next">
                                                         <svg class="w-5 h-5 rtl:scale-x-[-1]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                           <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
@@ -961,7 +961,7 @@
                                                 <li>
                                                     <button type="button"
                                                         class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
-                                                          x-on:click="CommentviewPage(Math.ceil(total/size)-1)" :disabled="pageNumber >= CommentpageCount() -1" :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber >= CommentpageCount() -1 }">
+                                                          x-on:click="CommentviewPage(Math.ceil(total/comment_page_size)-1)" :disabled="CommentpageNumber >= CommentpageCount() -1" :class="{ 'disabled cursor-not-allowed text-gray-600' : CommentpageNumber >= CommentpageCount() -1 }">
                                                         <svg class="w-5 h-5 rtl:scale-x-[-1]"
                                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                             fill="currentColor" aria-hidden="true">
@@ -989,6 +989,7 @@
       var items = {{items|safe}}
       var comments = {{comments|safe}}
       var votes = {{votes|safe}}
+      var options = {{options|safe}}
 </script>
 <script src="{% static 'js/base.js' %}"></script>
 <script src="{% static 'js/my_items.js' %}"></script>
