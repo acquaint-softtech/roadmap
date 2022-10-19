@@ -26,7 +26,6 @@ function Myitems() {
       get user_items() {
         const start = this.ItempageNumber * this.item_page_size,
         end = start + this.item_page_size;
-        console.log(this.item_search,"item_search")
         if (this.item_search === "") {
           this.total_of_items = this.items.length;
           return this.items.slice(start, end);
