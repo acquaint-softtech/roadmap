@@ -6,9 +6,15 @@ function Myitems() {
       vote_search:"",
       metions_search:"",
       selectedOption:5,
-      pageNumber: 0,
+      ItempageNumber: 0,
+      VotepageNumber: 0,
+      MentionpageNumber: 0,
+      CommentpageNumber:0,
       sortCol:null,
-      size: 5,
+      options:options,
+      item_page_size: Math.min.apply(Math,this.options),
+      vote_page_size: Math.min.apply(Math,this.options),
+      comment_page_size: Math.min.apply(Math,this.options),
       total: "",
       total_of_items:"",
       total_of_comments:"",
@@ -16,27 +22,27 @@ function Myitems() {
       items: items,
       comments: comments,
       votes:votes,
-      options:['5','15','25'],
       activeTab:0,
       get user_items() {
-        const start = this.pageNumber * this.size,
-        end = start + this.size;
+        const start = this.ItempageNumber * this.item_page_size,
+        end = start + this.item_page_size;
+        console.log(this.item_search,"item_search")
         if (this.item_search === "") {
           this.total_of_items = this.items.length;
           return this.items.slice(start, end);
         }
         this.total_of_items = this.items.filter((item) => {
-          return (item.name.toLowerCase().includes(this.item_search.toLowerCase()) ||  item.type__name.toLowerCase().includes(this.item_search.toLowerCase()))
+          return (item.name.toLowerCase().includes(this.item_search.toLowerCase()))
         }).length;
         return this.items
           .filter((item) => {
-                 return item.name.toLowerCase().includes(this.item_search.toLowerCase()) || item.type__name.toLowerCase().includes(this.item_search.toLowerCase())
+                 return item.name.toLowerCase().includes(this.item_search.toLowerCase())
           })
         .slice(start, end);
       },
       get user_comments() {
-        const start = this.pageNumber * this.size,
-         end = start + this.size;
+        const start = this.CommentpageNumber * this.comment_page_size,
+         end = start + this.comment_page_size;
         if (this.comment_search === "") {
           this.total_of_comments = this.comments.length;
           return this.comments.slice(start, end);
@@ -51,8 +57,8 @@ function Myitems() {
         .slice(start, end);
       },
       get user_votes() {
-        const start = this.pageNumber * this.size,
-        end = start + this.size;
+        const start = this.VotepageNumber * this.vote_page_size,
+        end = start + this.vote_page_size;
         if (this.vote_search === "") {
           this.total_of_votes = this.votes.length;
           return this.votes.slice(start, end);
@@ -71,6 +77,22 @@ function Myitems() {
           this.size = 10
           this.filteredEmployees
       },
+
+      ItemchangeSize(page_size){
+       page_size != 'All' ? this.item_page_size = parseInt(page_size) : this.item_page_size = this.items.length
+       this.user_items
+      },
+
+      VotechangeSize(page_size){
+       page_size != 'All' ? this.vote_page_size = parseInt(page_size) : this.vote_page_size = this.comments.length
+       this.user_votes
+      },
+
+      CommentchangeSize(page_size){
+       page_size != 'All' ? this.comment_page_size = parseInt(page_size) : this.comment_page_size = this.votes.length
+       this.user_comments
+      },
+
 
       sort(col) {
            if (this.activeTab === 0){
@@ -100,44 +122,44 @@ function Myitems() {
 
       ItemPages(){
         return Array.from({
-          length: Math.ceil(this.total_of_items / this.size),
+          length: Math.ceil(this.total_of_items / this.item_page_size),
         });
       },
 
       CommentPages(){
         return Array.from({
-          length: Math.ceil(this.total_of_comments / this.size),
+          length: Math.ceil(this.total_of_comments / this.comment_page_size),
         });
       },
 
       VotePages(){
         return Array.from({
-          length: Math.ceil(this.total_of_votes / this.size),
+          length: Math.ceil(this.total_of_votes / this.vote_page_size),
         });
       },
 
       //Next Page
       ItemnextPage() {
-        this.pageNumber++;
+        this.ItempageNumber++;
       },
 
       //Previous Page
       ItemprevPage() {
-        this.pageNumber--;
+        this.ItempageNumber--;
       },
 
       //Total number of pages
       ItempageCount() {
-        return Math.ceil(this.total_of_items / this.size);
+        return Math.ceil(this.total_of_items / this.item_page_size);
       },
       //Return the start range of the paginated results
       ItemstartResults() {
-        return this.pageNumber * this.size + 1;
+        return this.ItempageNumber * this.item_page_size + 1;
       },
 
       //Return the end range of the paginated results
       ItemendResults() {
-        let resultsOnPage = (this.pageNumber + 1) * this.size;
+        let resultsOnPage = (this.ItempageNumber + 1) * this.item_page_size;
         if (resultsOnPage <= this.total_of_items) {
           return resultsOnPage;
         }
@@ -146,32 +168,32 @@ function Myitems() {
 
       //Link to navigate to page
       ItemviewPage(index) {
-        this.pageNumber = index;
+        this.ItempageNumber = index;
       },
 
       ////////////// Comment sections /////////////////////
 
       CommentnextPage() {
-        this.pageNumber++;
+        this.CommentpageNumber++;
       },
 
       //Previous Page
       CommentprevPage() {
-        this.pageNumber--;
+        this.CommentpageNumber--;
       },
 
       //Total number of pages
       CommentpageCount() {
-        return Math.ceil(this.total_of_comments / this.size);
+        return Math.ceil(this.total_of_comments / this.comment_page_size);
       },
       //Return the start range of the paginated results
       CommentstartResults() {
-        return this.pageNumber * this.size + 1;
+        return this.CommentpageNumber * this.comment_page_size + 1;
       },
 
       //Return the end range of the paginated results
       CommentendResults() {
-        let resultsOnPage = (this.pageNumber + 1) * this.size;
+        let resultsOnPage = (this.CommentpageNumber + 1) * this.comment_page_size;
         if (resultsOnPage <= this.total_of_comments) {
           return resultsOnPage;
         }
@@ -180,32 +202,32 @@ function Myitems() {
 
       //Link to navigate to page
       CommentviewPage(index) {
-        this.pageNumber = index;
+        this.CommentpageNumber = index;
       },
 
       ////////////// Vote sections /////////////////////
 
       VotenextPage() {
-        this.pageNumber++;
+        this.VotepageNumber++;
       },
 
       //Previous Page
       VoteprevPage() {
-        this.pageNumber--;
+        this.VotepageNumber--;
       },
 
       //Total number of pages
       VotepageCount() {
-        return Math.ceil(this.total_of_votes / this.size);
+        return Math.ceil(this.total_of_votes / this.vote_page_size);
       },
       //Return the start range of the paginated results
       VotestartResults() {
-        return this.pageNumber * this.size + 1;
+        return this.VotepageNumber * this.vote_page_size + 1;
       },
 
       //Return the end range of the paginated results
       VoteendResults() {
-        let resultsOnPage = (this.pageNumber + 1) * this.size;
+        let resultsOnPage = (this.VotepageNumber + 1) * this.vote_page_size;
         if (resultsOnPage <= this.total_of_votes) {
           return resultsOnPage;
         }
@@ -214,7 +236,7 @@ function Myitems() {
 
       //Link to navigate to page
       VoteviewPage(index) {
-        this.pageNumber = index;
+        this.VotepageNumber = index;
       },
     };
 }

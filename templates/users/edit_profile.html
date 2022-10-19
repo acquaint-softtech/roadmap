@@ -13,6 +13,7 @@
     </ul>
 </div>
 
+
 <div class="space-y-6" x-data="{login_popup:false,remove_account_popup:false}">
     <form class="space-y-4" method="post">{% csrf_token %}
         <div class="grid grid-cols-1 filament-forms-component-container gap-6">
@@ -50,8 +51,8 @@
 
                                             <div class="filament-forms-text-input-component flex items-center space-x-2 rtl:space-x-reverse group">
                                                 <div class="flex-1">
-                                                    <input value="{{ request.user.first_name|default_if_none:'' }}" x-data="{}" wire:model.defer="name" type="text"
-                                                           dusk="filament.forms.name" id="name" name="first_name"
+                                                    <input value="{{ request.user.first_name|default_if_none:'' }}"  type="text"
+                                                            id="name" name="first_name"
                                                            class="block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm ring-gray-300">
                                                 </div>
                                             </div>
@@ -137,14 +138,11 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class=" col-span-full">
@@ -159,9 +157,7 @@
                         </div>
                     </div>
 
-                    <div x-bind:class="{ 'invisible h-0 !m-0 overflow-y-hidden': isCollapsed }"
-                         x-bind:aria-expanded="(! isCollapsed).toString()"
-                         class="filament-forms-section-content-wrapper" aria-expanded="true">
+                    <div class="filament-forms-section-content-wrapper" aria-expanded="true">
                         <div class="filament-forms-section-content p-6">
                             <div class="grid grid-cols-1      filament-forms-component-container gap-6">
                                 <div wire:key="QQTSjJBbs6mgQW7eSFuY.per_page_setting.Filament\Forms\Components\MultiSelect"
@@ -176,13 +172,88 @@
                                                     Per page setting
                                                     <sup class="font-medium text-danger-700">*</sup>
                                                 </span>
-
+                                                
                                                 </label>
                                             </div>
-
-                                            <div class="filament-forms-select-component flex items-center space-x-1 rtl:space-x-reverse group">
+                                          <div class="inline-block relative w-64" x-data="dropdown()" x-init="loadOptions()">
+                                            <input type="hidden" name="selected" x-model="selected">
+                                              <div class="flex flex-col items-center relative">
+                                                <div x-on:click="open" class="w-full  svelte-1l8159u">
+                                                  <div class="my-2 p-1 flex border border-gray-200 bg-white rounded svelte-1l8159u">
+                                                    <div class="flex flex-auto flex-wrap">
+                                                      <template x-for="value in selected" :key="value">
+                                                        <div
+                                                          class="flex justify-center items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-teal-700 bg-teal-100 border border-teal-300 ">
+                                                          <div class="text-xs font-normal leading-none max-w-full flex-initial"
+                                                          x-text="value">
+                                                        </div>
+                                                        <div class="flex flex-auto flex-row-reverse">
+                                                          <div x-on:click="remove(value)">
+                                                            <svg class="fill-current h-6 w-6 " role="button" viewBox="0 0 20 20">
+                                                              <path d="M14.348,14.849c-0.469,0.469-1.229,0.469-1.697,0L10,11.819l-2.651,3.029c-0.469,0.469-1.229,0.469-1.697,0
+                                                                                       c-0.469-0.469-0.469-1.229,0-1.697l2.758-3.15L5.651,6.849c-0.469-0.469-0.469-1.228,0-1.697s1.228-0.469,1.697,0L10,8.183
+                                                                                       l2.651-3.031c0.469-0.469,1.228-0.469,1.697,0s0.469,1.229,0,1.697l-2.758,3.152l2.758,3.15
+                                                                                       C14.817,13.62,14.817,14.38,14.348,14.849z"/>
+                                                            </svg>
+                                                          
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                    </template>
+                                                    <div x-show="selected.length== 0" class="flex-1">
+                                                      <input placeholder="Select a option"
+                                                             class="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-gray-800"
+                                                             
+                                                      >
+                                                    </div>
+                                                  </div>
+                                                  <div
+                                                    class="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200 svelte-1l8159u">
+                                                    
+                                                    <button type="button" x-show="isOpen() === true" x-on:click="open"
+                                                            class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
+                                                      <svg version="1.1" class="fill-current h-4 w-4" viewBox="0 0 20 20">
+                                                        <path d="M17.418,6.109c0.272-0.268,0.709-0.268,0.979,0s0.271,0.701,0,0.969l-7.908,7.83
+                                              c-0.27,0.268-0.707,0.268-0.979,0l-7.908-7.83c-0.27-0.268-0.27-0.701,0-0.969c0.271-0.268,0.709-0.268,0.979,0L10,13.25
+                                              L17.418,6.109z"/>
+                                                      </svg>
+                                                    
+                                                    </button>
+                                                    <button type="button" x-show="isOpen() === false" @click="close"
+                                                            class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
+                                                      <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+                                                        <path d="M2.582,13.891c-0.272,0.268-0.709,0.268-0.979,0s-0.271-0.701,0-0.969l7.908-7.83
+                                              c0.27-0.268,0.707-0.268,0.979,0l7.908,7.83c0.27,0.268,0.27,0.701,0,0.969c-0.271,0.268-0.709,0.268-0.978,0L10,6.75L2.582,13.891z
+                                              "/>
+                                                      </svg>
+                                                    
+                                                    </button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="w-full px-4">
+                                                <div x-show.transition.origin.top="isOpen()"
+                                                     class="absolute shadow top-100 bg-white z-40 w-full lef-0 rounded max-h-select overflow-y-auto svelte-5uyqqj"
+                                                     x-on:click.away="close">
+                                                  <div class="flex flex-col w-full">
+                                                    <template x-for="(option,index) in options" :key="option">
+                                                      <div>
+                                                        <div class="cursor-pointer w-full border-gray-100 rounded-t border-b hover:bg-teal-100"
+                                                             @click="select(option.text)">
+                                                          <div x-bind:class="option.selected ? 'border-teal-600' : ''"
+                                                               class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative">
+                                                            <div class="w-full items-center flex">
+                                                              <div class="mx-2 leading-6" x-model="option" x-text="option.text"></div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </template>
+                                                  </div>
+                                                </div>
+                                              </div>
                                             </div>
-
+                                        </div>
                                             <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600">
                                                 <p>Determine how many pages should be available for the items in the
                                                     "My" page for example.</p>
@@ -198,8 +269,6 @@
                 </div>
             </div>
         </div>
-
-
         <div
                 class="fixed inset-0 z-0 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
                 x-show="login_popup"
@@ -240,7 +309,7 @@
                 <div class="border-t"></div>
                 <footer class="flex items-center py-2 space-x-4 mt-2">
                     <button @click="login_popup = false" type="button"
-                            class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
+                            class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
 
                                             <span class="flex items-center gap-1">
                                         <span class="">
@@ -251,10 +320,10 @@
 
                     <a href="{% url 'users:logout' %}">
                         <button type="button"
-                                class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
+                                class="bg-blue-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
 
                                             <span class="flex items-center gap-1">
-                                            <span class="">
+                                            <span class="text-white">
                                                 Logout
                                             </span>
                                             </span>
@@ -306,7 +375,7 @@
                 <div class="border-t"></div>
                 <footer class="flex items-center py-2 space-x-4 mt-2">
                     <button @click="remove_account_popup = false" type="button"
-                            class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
+                            class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
 
                                             <span class="flex items-center gap-1">
                                         <span class="">
@@ -317,10 +386,10 @@
 
                     <a href="{% url 'users:remove_account' %}">
                         <button type="button"
-                                class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
+                                class="bg-red-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
 
                                             <span class="flex items-center gap-1">
-                                            <span class="">
+                                            <span class="text-white">
                                                 Remove account
                                             </span>
                                             </span>
@@ -336,17 +405,17 @@
             <div>
 
                 <button type="submit"
-                        class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+                        class="bg-blue-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
                         wire:click="logoutConfirm" data-ol-has-click-handler="">
                     <span class="flex items-center gap-1">
-                            <span class="">
+                            <span class="text-white">
                     Save
                     </span>
                         </span>
                 </button>
 
 
-                <button class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+                <button class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
                             type="button" @click="login_popup = true">
                         <span class="flex items-center gap-1"> <span class=""> Logout</span> </span>
                 </button>
@@ -354,14 +423,63 @@
             </div>
 
             <div>
-                <button class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+                <button class="bg-red-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
                             type="button" @click="remove_account_popup = true">
-                        <span class="flex items-center gap-1"> <span class=""> Remove account</span> </span>
+                        <span class="flex items-center gap-1"> <span class="text-white"> Remove account</span> </span>
                 </button>
             </div>
         </div>
     </form>
 </div>
+
+<script>
+            function dropdown() {
+                return {
+                    options: [],
+                    all_options : ['5','10','15','25','50'],
+                    selected: {{option|safe}},
+                    selected_value:[],
+                    show: false,
+                    open() { this.show = true },
+                    close() { this.show = false },
+                    isOpen() { return this.show === true },
+                    select(value) {
+                        var page_index = this.selected.indexOf(value)
+                         if (page_index !== -1) {
+                          this.selected.splice(page_index, 1);
+                        }
+                        else{
+                            this.selected.push(value);
+                        }
+                    },
+                    remove(value) {
+                       console.log(value,"value")
+                       var page_index = this.selected.indexOf(value);
+                        if (page_index !== -1) {
+                          this.selected.splice(page_index, 1);
+                        }
+                    },
+                    loadOptions() {
+                        all_option = JSON.parse(JSON.stringify(this.all_options))
+                        for (let i = 0; i < all_option.length; i++) {
+                            this.options.push({
+                                value: all_option[i],
+                                text: all_option[i],
+                                selected: false
+                            });
+                        }
+                    },
+                    selectedValues(){
+                        debugger;
+                        console.log(this.selected,"selected")
+                        return this.selected.map((option)=>{
+                            console.log(this.options[option],"this.options[option].value")
+                            return this.options[option].value;
+                        })
+                    }
+                }
+            }
+        </script>
 
 
 {% endblock %}

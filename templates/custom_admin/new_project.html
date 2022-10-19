@@ -18,7 +18,7 @@
             </header>
           
           
-            <form class="filament-form space-y-6" method="post">{% csrf_token %}
+            <form class="filament-form space-y-6" method="post" x-data="NewProject()">{% csrf_token %}
                 <div class="grid grid-cols-1 filament-forms-component-container gap-6">
                     <div class=" col-span-full ">
                         <div>
@@ -188,34 +188,17 @@
                                                                 {{form.description|add_class:"ckeditor"}}
                                                             </div>
                                                         </div>
-
-
                                                     </div>
                                                 </div>
-
                                             </div>
 
-                                            <div
-                                                    class=" col-span-2     ">
+                                            <div class=" col-span-2">
                                                 <div class="filament-forms-field-wrapper">
-
                                                     <div class="space-y-2">
-                                                        <div
-                                                                class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                            <label
-                                                                    class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
-                                                                    for="data.boards">
-
-
-                                                                <span
-                                                                        class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
-                                                                    Boards
-
-                                                                </span>
-
-
+                                                        <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.boards">
+                                                                <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Boards</span>
                                                             </label>
-
                                                         </div>
 
                                                         <div>
@@ -223,9 +206,7 @@
                                                                 <button type="button"
                                                                         class="filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-sm text-primary-600 hover:text-primary-500 dark:text-primary-500 dark:hover:text-primary-400"
                                                                         x-on:click="$dispatch('repeater-collapse', 'data.boards')">
-
                                                                     Collapse all
-
                                                                 </button>
 
                                                                 <button type="button"
@@ -241,12 +222,10 @@
                                                         <div class="filament-forms-repeater-component space-y-6 rounded-xl">
                                                             <ul>
                                                                 {{ boards.management_form }}
-                                                                <div class="grid grid-cols-1 gap-6">
+                                                                <div class="grid grid-cols-1 gap-6" id="id_projects">
                                                                     {% for board_form in boards.forms %}
-                                                                    <li class="bg-white border border-gray-300 shadow-sm rounded-xl relative dark:bg-gray-800 dark:border-gray-600">
-                                                                            <header
-                                                                                x-on:click.stop="isCollapsed = ! isCollapsed"
-                                                                                class="flex items-center h-10 overflow-hidden border-b bg-gray-50 rounded-t-xl dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
+                                                                    <li id="id_form_{{forloop.counter}}" class="bg-white border border-gray-300 shadow-sm rounded-xl relative dark:bg-gray-800 dark:border-gray-600">
+                                                                            <header class="flex items-center h-10 overflow-hidden border-b bg-gray-50 rounded-t-xl dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
                                                                             <button x-on:click.stop="" type="button" class="flex items-center justify-center flex-none w-10 h-10 text-gray-400 border-r transition hover:text-gray-300 dark:text-gray-400 dark:border-gray-700 dark:hover:text-gray-500">
                                                                                 <span class="sr-only">
                                                                                     Move down
@@ -267,7 +246,7 @@
                                                                             <div class="flex-1"></div>
                                                                             <ul class="flex divide-x rtl:divide-x-reverse dark:divide-gray-700">
                                                                                 <li>
-                                                                                    <button type="button" class="flex items-center justify-center flex-none w-10 h-10 text-danger-600 transition hover:text-danger-500 dark:text-danger-500 dark:hover:text-danger-400">
+                                                                                    <button type="button" @click="RemoveBoard($event,{{forloop.counter}})" class="flex items-center justify-center flex-none w-10 h-10 text-danger-600 transition hover:text-danger-500 dark:text-danger-500 dark:hover:text-danger-400">
                                                                                         <span class="sr-only">Delete</span>
 
                                                                                         <svg class="w-4 h-4"
@@ -284,9 +263,9 @@
                                                                                 </li>
 
                                                                                 <li>
-                                                                                    <button x-on:click.stop="isCollapsed = ! isCollapsed" type="button"
+                                                                                    <button  type="button"
                                                                                             class="flex items-center justify-center flex-none w-10 h-10 text-gray-400 transition hover:text-gray-300 dark:text-gray-400 dark:hover:text-gray-500">
-                                                                                        <svg x-show="! isCollapsed"
+                                                                                        <svg
                                                                                              class="w-4 h-4"
                                                                                              xmlns="http://www.w3.org/2000/svg"
                                                                                              viewBox="0 0 20 20"
@@ -297,12 +276,11 @@
                                                                                                   clip-rule="evenodd">
                                                                                             </path>
                                                                                         </svg>
-                                                                                        <span class="sr-only"
-                                                                                              x-show="! isCollapsed">
+                                                                                        <span class="sr-only">
                                                                                             Collapse
                                                                                         </span>
 
-                                                                                        <svg x-show="isCollapsed"
+                                                                                        <svg
                                                                                              class="w-4 h-4"
                                                                                              xmlns="http://www.w3.org/2000/svg"
                                                                                              viewBox="0 0 20 20"
@@ -314,16 +292,11 @@
                                                                                                   clip-rule="evenodd">
                                                                                             </path>
                                                                                         </svg>
-                                                                                        <span class="sr-only"
-                                                                                              x-show="isCollapsed"
-                                                                                              style="display: none;">
-                                                                                            Expand
-                                                                                        </span>
                                                                                     </button>
                                                                                 </li>
                                                                             </ul>
                                                                         </header>
-                                                                        <div class="p-6" x-show="! isCollapsed">
+                                                                        <div class="p-6">
                                                                             <div class="grid grid-cols-1 filament-forms-component-container gap-6">
                                                                                 <div class="col-span-full">
                                                                                     <div>
@@ -516,36 +489,19 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
-                                                                        <div class="p-2 text-xs text-center text-gray-400"
-                                                                             x-show="isCollapsed"
-                                                                             style="display: none;">
-                                                                            Content collapsed
-                                                                        </div>
                                                                     </li>
                                                                   {% endfor %}
                                                                 </div>
                                                             </ul>
 
                                                             <div class="relative flex justify-center">
-                                                                <button type="button"
-                                                                        class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2rem] px-3 text-sm text-white shadow focus:ring-white border-transparent bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700">
-                                                                    <svg viewBox="0 0 24 24" fill="none"
-                                                                         xmlns="http://www.w3.org/2000/svg"
-                                                                         class="animate-spin filament-button-icon w-4 h-4 mr-1 -ml-1.5 rtl:ml-1 rtl:-mr-1.5">
-                                                                        <path opacity="0.2" fill-rule="evenodd"
-                                                                              clip-rule="evenodd"
-                                                                              d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                                                              fill="currentColor"></path>
-                                                                        <path d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z" fill="currentColor"></path>
-                                                                    </svg>
-
+                                                                <button type="button" @click="AddBoard()"
+                                                                        class="bg-blue-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2rem] px-3 text-sm text-white shadow focus:ring-white border-transparent bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700">
                                                                     <span class="flex items-center gap-1">
-                                                                        <span class="">
+                                                                        <span class="text-white">
                                                                             Add to boards
                                                                         </span>
                                                                     </span>
-
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -564,24 +520,24 @@
                 <div
                         class="filament-page-actions flex flex-wrap items-center gap-4 justify-start filament-form-actions">
                     <button type="submit" name="submit"
-                            class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action">
+                            class="bg-blue-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action">
                         <span class="flex items-center gap-1">
-                            <span class="">
+                            <span class="text-white">
                                 Create
                             </span>
                         </span>
                     </button>
 
-                    <button x-mousetrap.global.mod-shift-s="" type="button"
-                            class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action">
+                    <button type="button"
+                            class="bg-blue-600 inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action">
                         <span class="flex items-center gap-1">
-                            <span class="">
+                            <span class="text-white">
                                 Create &amp; create another
                             </span>
                         </span>
                     </button>
 
-                    <a class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action"
+                    <a class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action"
                        href="{% url 'custom_admin:projects' %}">
 
                         <span class="">
@@ -593,4 +549,32 @@
         </div>
     </div>
 </div>
+
+<script>
+  
+  
+  function NewProject(){
+   
+    return {
+      AddBoard(){
+        const node = document.getElementById("id_projects").lastElementChild;
+        const clone = node.cloneNode(true);
+        document.getElementById("id_projects").appendChild(clone);
+        document.getElementById("id_category_project-TOTAL_FORMS").value = parseInt(document.getElementById("id_category_project-TOTAL_FORMS").value) + 1
+        return true
+      },
+      RemoveBoard(event,index){
+        if (parseInt(document.getElementById("id_category_project-TOTAL_FORMS").value) > 1){
+          document.getElementById("id_category_project-TOTAL_FORMS").value = parseInt(document.getElementById("id_category_project-TOTAL_FORMS").value) - 1
+          event.currentTarget.offsetParent.remove()
+        }
+      }
+    }
+  
+  }
+  
+  
+</script>
+
+
 {% endblock content %}
