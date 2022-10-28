@@ -4,7 +4,7 @@ function Myitems() {
       item_search: "",
       comment_search:"",
       vote_search:"",
-      metions_search:"",
+      mention_search:"",
       selectedOption:5,
       ItempageNumber: 0,
       VotepageNumber: 0,
@@ -14,14 +14,17 @@ function Myitems() {
       options:options,
       item_page_size: Math.min.apply(Math,this.options),
       vote_page_size: Math.min.apply(Math,this.options),
+      mention_page_size: Math.min.apply(Math,this.options),
       comment_page_size: Math.min.apply(Math,this.options),
       total: "",
       total_of_items:"",
       total_of_comments:"",
       total_of_votes:"",
+      total_of_mentions:"",
       items: items,
       comments: comments,
       votes:votes,
+      mentions:mentions,
       activeTab:0,
       get user_items() {
         const start = this.ItempageNumber * this.item_page_size,
@@ -72,9 +75,27 @@ function Myitems() {
          .slice(start, end);
         },
 
-      changePageSize(index){
-          this.size = 10
-          this.filteredEmployees
+      get user_mentions(){
+        const start = this.MentionpageNumber * this.mention_page_size,
+        end = start + this.mention_page_size;
+         if (this.mention_search === "") {
+          this.total_of_mentions = this.mentions.length;
+          return this.mentions.slice(start, end);
+        }
+        this.total_of_mentions = this.mentions.filter((item) => {
+          return (item.task__name.toLowerCase().includes(this.mention_search.toLowerCase()))
+        }).length;
+
+        return this.mentions
+          .filter((item) => {
+                 return item.task__name.toLowerCase().includes(this.mention_search.toLowerCase())
+          })
+        .slice(start, end);
+      },
+
+      MentionchangeSize(page_size){
+       page_size != 'All' ? this.mention_page_size = parseInt(page_size) : this.mention_page_size = this.mentions.length
+       this.user_mentions
       },
 
       ItemchangeSize(page_size){
@@ -124,6 +145,15 @@ function Myitems() {
           length: Math.ceil(this.total_of_items / this.item_page_size),
         });
       },
+
+      MentionPages(){
+        return Array.from({
+          length: Math.ceil(this.total_of_mentions / this.mention_page_size),
+        });
+      },
+
+
+//      MentionviewPage
 
       CommentPages(){
         return Array.from({
@@ -236,6 +266,38 @@ function Myitems() {
       //Link to navigate to page
       VoteviewPage(index) {
         this.VotepageNumber = index;
+      },
+
+      //////////////////// Mention section ////////////
+      MentionnextPage() {
+        this.MentionpageNumber++;
+      },
+
+      //Previous Page
+      MentionprevPage() {
+        this.MentionpageNumber--;
+      },
+
+      //Total number of pages
+      MentionpageCount() {
+        return Math.ceil(this.total_of_mentions / this.total_of_mentions);
+      },
+      //Return the start range of the paginated results
+      MentionstartResults() {
+        return this.MentionpageNumber * this.mention_page_size + 1;
+      },
+
+      //Return the end range of the paginated results
+      MentionendResults() {
+        let resultsOnPage = (this.MentionpageNumber + 1) * this.mention_page_size;
+        if (resultsOnPage <= this.total_of_mentions) {
+          return resultsOnPage;
+        }
+        return this.total_of_mentions;
+      },
+      //Link to navigate to page
+      MentionviewPage(index) {
+        this.MentionpageNumber = index;
       },
     };
 }

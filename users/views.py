@@ -1,7 +1,7 @@
 import json
 
 from django.contrib import messages
-from django.contrib.auth import logout,login
+from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetConfirmView
@@ -27,9 +27,9 @@ class LoginRequiredMixin(object):
         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 
-class RegisterView(CreateView):
+class RegisterView(BaseContextView,CreateView):
     form_class = RegisterUserForm
-    success_url = reverse_lazy("users:signin")
+    success_url = reverse_lazy("users:signing")
     template_name = "users/register.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -40,6 +40,7 @@ class RegisterView(CreateView):
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.role = Group.objects.get_or_create(name='user')[0]
+        obj.mention_name = obj.first_name.lower().replace(' ', '-')
         obj.save()
         messages.success(
             self.request,
@@ -70,6 +71,8 @@ class EditProfileView(LoginRequiredMixin, BaseContextView, FormView):
         notification = self.get_context_data()['notification']
         instance = self.get_instace()
         instance.first_name = form.data.get('first_name')
+        instance.mention_name = form.data.get('mention_name') if form.data.get('mention_name') else form.data.get(
+            'first_name').lower().replace(' ', '-')
         instance.email = form.data.get('email')
         notification.mention_notifications = True if form.data.get('mention_notifications') == 'on' else False
         notification.reply_notifications = True if form.data.get('reply_notifications') == 'on' else False
@@ -83,7 +86,7 @@ class EditProfileView(LoginRequiredMixin, BaseContextView, FormView):
         return super(EditProfileView, self).form_invalid(form)
 
 
-class CustomLoginView(LoginView):
+class CustomLoginView(BaseContextView,LoginView):
     template_name = "users/login.html"
     form_class = LoginForm
     success_message = 'Login successfully'
@@ -121,7 +124,7 @@ class RemoveAccountView(LoginRequiredMixin, View):
 
 
 class LogoutView(LoginRequiredMixin, View):
-    login_url = reverse_lazy("users:signin")
+    login_url = reverse_lazy("users:signing")
 
     def get(self, *args, **kwargs):
         logout(self.request)
@@ -141,15 +144,26 @@ class MyItemView(LoginRequiredMixin, BaseContextView, TemplateView):
             indent=4, sort_keys=True,
             default=str)
         context['comments'] = json.dumps(
-            list(Message.objects.filter(user=self.request.user).annotate(num_votes=Count('task__user_task')).values('text','num_votes','task__name', 'created', 'task__slug','task__project__title','task__type__name'
-                                                                       ,'id')),
+            list(Message.objects.filter(user=self.request.user).annotate(num_votes=Count('task__user_task')).values(
+                'text', 'num_votes', 'task__name', 'created', 'task__slug', 'task__project__title', 'task__type__name'
+                , 'id')),
             indent=4, sort_keys=True, default=str)
         context['votes'] = json.dumps(list(
-            Votes.objects.filter(user=self.request.user).annotate(num_votes=Count('task')).values('task__name', 'task__project__title',
-                                                                'task__is_subscribed','created','num_votes',
-                                                                'task__slug', 'task__project__slug','task__type__name')), indent=4,
+            Votes.objects.filter(user=self.request.user).annotate(num_votes=Count('task')).values('task__name',
+                                                                                                  'task__project__title',
+                                                                                                  'task__is_subscribed',
+                                                                                                  'created',
+                                                                                                  'num_votes',
+                                                                                                  'task__slug',
+                                                                                                  'task__project__slug',
+                                                                                                  'task__type__name')),
+            indent=4,
             sort_keys=True, default=str)
 
+        context['recent_mentions'] = json.dumps(
+            list(Message.objects.filter(mention_user=self.request.user).values('task__name', 'text', 'created','task__slug')),
+            indent=4,
+            sort_keys=True, default=str)
         context['options'] = self.request.user.settings.page_par_sizes
         return context
 

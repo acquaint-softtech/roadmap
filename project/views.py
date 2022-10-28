@@ -1,5 +1,6 @@
 # Create your views here.
 import json
+import re
 
 from django.db.models import Count
 from django.http import JsonResponse
@@ -25,7 +26,7 @@ class ProjectList(BaseContextView, LoginRequiredMixin, ListView):
         return projects
 
 
-class TaskList(BaseContextView, LoginRequiredMixin, ListView):
+class TaskList(BaseContextView, ListView):
     model = Task
     template_name = 'projects/project_detail.html'
     context_object_name = 'tasks'
@@ -50,7 +51,7 @@ class TaskList(BaseContextView, LoginRequiredMixin, ListView):
         return tasks
 
 
-class TaskDetailView(BaseContextView, LoginRequiredMixin, DetailView):
+class TaskDetailView(BaseContextView, DetailView):
     model = Task
     template_name = 'projects/task_detail.html'
 
@@ -66,13 +67,15 @@ class TaskDetailView(BaseContextView, LoginRequiredMixin, DetailView):
             task__slug=self.kwargs.get('slug'))
         context['history_data'] = TaskHistory.objects.select_related('task', 'action_by').filter(
             task__slug=self.kwargs.get('slug')).order_by('-created')[0:10]
-        context['is_voted'] = Votes.objects.filter(user=self.request.user, task=self.object).exists()
-        users = User.objects.values('id', 'email')
-        users_data = []
-        for user in users:
-            users_data.append({'key': user['email'], 'value': user['email']})
+        context['is_voted'] = Votes.objects.filter(user=self.request.user,
+                                                   task=self.object).exists() if self.request.user.is_authenticated \
+            else False
 
-        context['users'] = json.dumps(list(users_data), indent=4, sort_keys=True, default=str)
+        users = list(User.objects.exclude(
+            email=self.request.user.email if self.request.user.is_authenticated else '').values_list('mention_name',
+                                                                                                     flat=True))
+        context['users'] = json.dumps(users, indent=4, sort_keys=True)
+
         return context
 
 
@@ -99,8 +102,18 @@ class SaveCommentView(BaseContextView, LoginRequiredMixin, View):
             return redirect('project:task_detail', slug=task_slug)
 
         if message_id:
-            Message.objects.filter(id=message_id).update(text=text_data)
+            obj = Message.objects.filter(id=message_id).first()
+            obj.text = text_data
+            obj.save()
         else:
-            Message.objects.create(text=text_data, task_id=task_id, user=request.user, parent_id=parent_id)
+            obj = Message.objects.create(text=text_data, task_id=task_id, user=request.user, parent_id=parent_id)
+
+        if '@' in text_data:
+            mention_users = re.findall("@([a-zA-Z0-9]{1,15})", re.sub(r'<.*?>', '', text_data))
+            user_obj = User.objects.filter(mention_name__in=mention_users)
+            for user in user_obj:
+                obj.mention_user.add(user)
+
+            obj.save()
 
         return redirect('project:task_detail', slug=task_slug)

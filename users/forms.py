@@ -14,6 +14,7 @@ class RegisterUserForm(UserCreationForm):
             "email",
             "password1",
             "password2",
+
         )
 
     def __init__(self, *args, **kwargs):
@@ -35,6 +36,7 @@ class UpdateUserForm(forms.Form):
             'mention_notifications',
             'reply_notifications',
             'page_par_sizes',
+            "mention_name"
         )
 
 
