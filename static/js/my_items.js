@@ -78,7 +78,6 @@ function Myitems() {
       get user_mentions(){
         const start = this.MentionpageNumber * this.mention_page_size,
         end = start + this.mention_page_size;
-        console.log(this.mention_search,"mention_search")
          if (this.mention_search === "") {
           this.total_of_mentions = this.mentions.length;
           return this.mentions.slice(start, end);

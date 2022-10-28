@@ -479,7 +479,6 @@
                         }
                     },
                     remove(value) {
-                       console.log(value,"value")
                        var page_index = this.selected.indexOf(value);
                         if (page_index !== -1) {
                           this.selected.splice(page_index, 1);
@@ -496,10 +495,7 @@
                         }
                     },
                     selectedValues(){
-                        debugger;
-                        console.log(this.selected,"selected")
                         return this.selected.map((option)=>{
-                            console.log(this.options[option],"this.options[option].value")
                             return this.options[option].value;
                         })
                     }

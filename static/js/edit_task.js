@@ -25,7 +25,6 @@ function TaskEdit() {
       Boards($event,project_id){
         $event.target ? project_id = $event.target.value : project_id = $event
         if (project_id != 'None'){
-            console.log(project_id,"project_id")
             fetch('/admin/get_project_wise_board/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json','X-CSRFToken':this.csrf_token },
@@ -54,7 +53,6 @@ function TaskEdit() {
       get user_comments() {
         const start = this.pageNumber * this.size,
          end = start + this.size;
-         console.log(this.comments,"this.comments")
         if (this.comment_search === "") {
           this.total_of_comments = this.comments.length;
           return this.comments.slice(start, end);
