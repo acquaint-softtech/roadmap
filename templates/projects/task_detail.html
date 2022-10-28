@@ -5,7 +5,7 @@
 
 {% block title %}Home page{% endblock title %}
 {% block content %}
-{{form.media}}
+{{message_form.media}}
 {% load mptt_tags %}
 
 <div class="pb-4">
@@ -64,7 +64,7 @@
                         <form method="post" action="{% url 'custom_admin:change_task_status' %}">
                           <input type="hidden" value="{{object.slug}}" name="task_slug">
                           {% csrf_token %}
-                             <select onchange="this.form.submit()" name="task_status" class="float-right inline-flex items-center justify-center h-8 px-3 pt-1.5 pr-8 text-sm tracking-tight font-bold text-gray-700 border border-gray-400 rounded-lg bg-white">
+                             <select {% if request.user.is_authenticated %} onchange="this.form.submit()" {% else %}onchange="window.location.href='/login'"{% endif %} name="task_status" class="float-right inline-flex items-center justify-center h-8 px-3 pt-1.5 pr-8 text-sm tracking-tight font-bold text-gray-700 border border-gray-400 rounded-lg bg-white">
                                {% for board in boards %}
                                   <option value="{{board.id}}" {% if board.name == object.type.name %}selected{% endif %}>{{board.name}}</option>
                                {% endfor %}
@@ -73,18 +73,13 @@
                     </div>
                 </div>
             </header>
-
             <div class="border-t"></div>
-
             <div class="p-4 prose break-words">
                 <p>{{object.description|safe}}</p>
-
             </div>
-        </div>
-      
           {% recursetree message_data %}
             {% for child in node.get_family %}
-                <div class="block py-2 overflow-hidden transition" x-data="{ show: false,showing_btn:true,showing_replay: false,showing_replay_btn:true,parent_id:'',text_value:'',message_id:''}" id="comment-6" {% if child.get_level == 1 %}style="margin-left: 50px"{% elif  child.get_level == 2 %}style="margin-left: 70px"{% elif  child.get_level == 3 %}style="margin-left: 90px"{% endif %}>
+                <div class="block py-2 overflow-hidden transition" x-data="{ show: false,showing_btn:true,showing_replay: false,message_text:'',showing_replay_btn:true,parent_id:'',text_value:'',message_id:''}" id="comment-6" {% if child.get_level == 1 %}style="margin-left: 50px"{% elif  child.get_level == 2 %}style="margin-left: 70px"{% elif  child.get_level == 3 %}style="margin-left: 90px"{% endif %}>
                   <header class="flex justify-between items-center">
                     <div class="flex items-center px-4 py-2 space-x-2">
                       <div class="flex items-center space-x-3 overflow-hidden">
@@ -95,6 +90,11 @@
                         </div>
                         <div class="overflow-hidden font-medium flex items-center space-x-2">
                           <p class="truncate">{{ child.user.email|safe }}</p>
+                          {% if object.created_by ==  request.user %}
+                            <span class="bg-red-500 text-white inline-flex items-center justify-center py-0.5 px-2 text-xs font-semibold tracking-tight rounded-full">
+                              Item author
+                            </span>
+                          {% endif %}
                         </div>
                       </div>
                       <span>·</span>
@@ -105,11 +105,13 @@
                     <div class="p-2 flex justify-between gap-2 items-center">
                   
                       {% if child.user == request.user %}
+                      {% with text_data=child.text|safe %}
                       <a class="text-xs font-medium text-gray-500 hover:underline cursor-pointer"
-                         @click="show = !show,parent_id='',message_id={{child.id}},showing_btn = !showing_btn"
-                         x-show="showing_btn">
+                         @click="show = !show,parent_id='',message_id={{child.id}},showing_btn = !showing_btn",
+                         x-show="showing_btn"  x-on:click="setCkeditorData('{{child.id}}')">
                         Edit
                       </a>
+                      {% endwith %}
                       <a class="text-xs font-medium text-gray-500 hover:underline cursor-pointer" x-show="!showing_btn"
                          @click="showing_btn= !showing_btn,show = !show,parent_id=''">
                         Cancel
@@ -126,9 +128,8 @@
                       </a>
                       {% endif %}
                   
-                      <button x-tooltip.raw="Click to copy link to this comment"
-                              x-clipboard.raw="http://192.168.1.163:8001/items/4-new-task-2#comment-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-brand-500" fill="none"
+                      <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="text-red h-4 w-4 text-brand-500" fill="none"
                              viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                           <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
@@ -141,50 +142,38 @@
                     <p>{{ child.text|safe }}</p>
                   </div>
                   <div style="margin-top:10px" x-show="showing_replay === true || show === true">
-                    <form method="post"  action="{% url 'project:save_comment' %}">{% csrf_token %}
-                         <textarea class="ckeditor" name="text" id="comment_{{child.id}}" required>{{child.text|safe}}</textarea>
+                    <form method="post"  action="{% url 'project:save_comment' %}" onsubmit="submit.disabled=true; return true;">{% csrf_token %}
+                      {% with child_msg_id=child.id data=child.text %}
+                        {% render_field message_form.text id=child_msg_id %}
+                      {% endwith %}
+                        <input type="hidden" value="{{child.text}}" id="id_child_msg_{{child.id}}">
                         <input type="hidden" name="message_id"  x-model="message_id">
                         <input type="hidden" name="task_id" value="{{object.id}}">
                         <input type="hidden" name="task_slug" value="{{object.slug}}">
                         <input type="hidden" name="parent_id"  x-model="parent_id">
                         <input type="hidden" name="test" x-model="text_value">
-                    <button
-                        class="mt-3 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
-                        type="submit">
-                        <span class="flex items-center gap-1"> <span class="">Submit</span></span>
-                      </button>
+                    <a {% if request.user.is_authenticated %} href="#" {% else %} href="{% url 'users:signing' %}" {% endif %}><button name="submit"
+                        class="bg-blue-600 mt-3 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+                        type={% if request.user.is_authenticated %} "submit" {% else %}"button" {% endif %}>
+                        <span class="flex items-center gap-1 text-white"> <span class="">Submit</span></span>
+                    </button></a>
                 </form>
                   </div>
                 </div>
             {% endfor %}
           {% endrecursetree %}
-            <div x-init='()=> {let tribute = new Tribute(
-            {
-                trigger: "@",
-                values: users,
-                noMatchTemplate:"<span class=\"p-2\">No match found</span>",
-                menuItemTemplate: function (item) {
-                   return "<div class=\"flex items-center space-x-2\"><div>" + item.string + "</div></div>";
-                }
-            }
-        )
-     ;tribute.attach($refs.textarea);}'
-     class="ml-4 mt-3">
-    <form enctype="multipart/form-data" action="{% url 'project:save_comment' %}" method="post" class="mt-2">{% csrf_token %}
+    <form enctype="multipart/form-data" action="{% url 'project:save_comment' %}" method="post" class="mt-2" onsubmit="submit.disabled=true; return true;">{% csrf_token %}
         <div class="mb-6 mt-2">
             <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Description</label>
-<!--          {{ message_form.text|add_class:"ckeditor"}}-->
-            <textarea name="text" required x-ref="textarea" rows="5" cols="50"></textarea>
-            <span>{{message_form.text.description}}</span>
+            {{message_form.text}}
+            <span>{{message_form.errors.description}}</span>
         </div>
         <input type="hidden" name="task_id" value="{{object.id}}">
         <input type="hidden" name="task_slug" value="{{object.slug}}">
-        <button class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out mt-3" type="submit">Save</button>
+      <a {% if request.user.is_authenticated %} href="#" {% else %} href="{% url 'users:signing' %}" {% endif %}><button class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out mt-3" name="submit" type={% if request.user.is_authenticated %} "submit" {% else %}"button" {% endif %}>Save</button></a>
+        </div>
     </form>
 </div>
-        </div>
-</div>
-
     <div class="lg:col-span-1 space-y-4" x-data="task_details()">
         <div class="p-2 space-y-2 bg-white shadow rounded-xl space-y-4">
             <header class="px-2 py-2">
@@ -195,13 +184,12 @@
             </header>
 
             <div class="border-t"></div>
-
-            <div >
+            <div>
                 <div class="flex items-center space-x-4 p-1">
-                    <button type="button"  x-on:click="GiveVote()"
-                         class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
+                    <button type="button"  x-on:click="GiveVote()" :class="{ 'bg-blue-600': voted }"
+                         class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
                         <span class="flex items-center gap-1">
-                            <span class="">
+                            <span class="" :class="{'text-white': voted }">
                                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="2" stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -221,16 +209,6 @@
                 <div class="py-1 mx-2">
                 </div>
             </div>
-
-            <!-- Livewire Component wire-end:uHzPtNpzjetSt4myETjI -->
-            <div class="border-t mb-2"></div>
-
-            <div>
-                <a class="text-primary-500 hover:text-primary-700 border-b ml-1"
-                    href="{% if object.created_by.is_superuser %}{% url 'custom_admin:update_task' object.slug %}{% else %}#{% endif %}">Edit item</a>
-            </div>
-          
-            <div class="border-t mb-2"></div>
               {% if object.created_by.is_superuser %}
                 <div>
                     <a class="text-red-500 hover:text-red-700 border-b ml-1"
@@ -283,56 +261,17 @@
         </div>
     </div>
 </div>
-
+</div>
+</div>
 
 <script>
     let users = {{users|safe}}
-    function task_details() {
-        return {
-          sub_btn_text: {% if object.is_subscribed %}'Unsubscribe'{% else %}'Subscribe'{% endif %},
-          vote_btn : {% if is_voted %}'Voted'{% else %}'Vote here'{% endif %},
-          vote_count : '{{object.get_vote_count}}',
-          sub_btn_showing : {% if is_voted %}true{% else %}false{% endif %},
-          TaskSubscription() {
-            this.formData = {'task_id':'{{object.id}}'}
-            fetch('/admin/change_task_subscription_status/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json','X-CSRFToken':'{{csrf_token}}' },
-                body: JSON.stringify(this.formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                this.sub_btn_text = data.btn_status
-            })
-          },
-          GiveVote(){
-            this.formData = {'task_id':'{{object.id}}'}
-            fetch('/admin/change_task_vote/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json','X-CSRFToken':'{{csrf_token}}' },
-                body: JSON.stringify(this.formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message == 'success'){
-                    if (data.created){
-                        this.vote_btn = 'Voted'
-                        this.sub_btn_showing = true
-                        this.sub_btn_text='Unsubscribe'
-                        this.vote_count = parseInt(this.vote_count) + 1
-                    }
-                    else{
-                        this.vote_btn = 'Vote here'
-                        this.sub_btn_showing = false
-                        this.sub_btn_text='Subscribe'
-                        this.vote_count = 0
-                    }
-                }
-             })
-          }
-        }
-    }
+    var logged_user = '{{request.user.is_authenticated}}'
+    var subscribed = '{{object.is_subscribed}}'
+    var is_voted = '{{is_voted}}'
+    var vote_count = '{{object.get_vote_count}}'
+    var task_id = '{{object.id}}'
+    var csrf_token = '{{csrf_token}}'
 </script>
-
-
+<script src="{% static 'js/task_details.js' %}"></script>
 {% endblock content %}

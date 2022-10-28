@@ -1,3 +1,4 @@
+import os
 import uuid
 
 from ckeditor.fields import RichTextField
@@ -33,8 +34,9 @@ class Board(TimeStampModel):
     is_block_votes = models.BooleanField(default=False)
     is_user_delete = models.BooleanField(default=False)
     is_block_comments = models.BooleanField(default=False)
-    detail = models.TextField(null=True,blank=True)
-    sort_item =models.CharField(choices=(('Popular', 'Popular'), ('Latest', 'Latest')),blank=True, null=True,max_length=100)
+    detail = models.TextField(null=True, blank=True)
+    sort_item = models.CharField(choices=(('Popular', 'Popular'), ('Latest', 'Latest')), blank=True, null=True,
+                                 max_length=100)
     project = models.ForeignKey(Project, related_name='category_project',
                                 on_delete=models.CASCADE, null=True, blank=True)
 
@@ -75,8 +77,9 @@ class Message(TimeStampModel, MPTTModel):
 
     task = models.ForeignKey(Task, related_name='message_task',
                              on_delete=models.CASCADE, null=True, blank=True)
-    text = RichTextField(null=True)
-
+    text = RichTextField(null=True, extra_plugins=['mentions'], external_plugin_resources=[
+        ('mentions', '/static/ckeditor/ckeditor/plugins/mentions/', 'plugin.js',)])
+    mention_user = models.ManyToManyField(User, related_name='mentioned_user', blank=True)
 
     class MPTTMeta:
         level_attr = 'mptt_level'
@@ -100,6 +103,6 @@ class Votes(TimeStampModel):
 class TaskNotification(TimeStampModel):
     task = models.ForeignKey(Task, related_name='task_notification',
                              on_delete=models.CASCADE, null=True, blank=True)
-    assign_by = models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True)
+    assign_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     is_read = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)

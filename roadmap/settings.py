@@ -43,6 +43,16 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    # 'wagtail.contrib.forms',
+    # 'wagtail.contrib.redirects',
+    # 'wagtail.embeds',
+    # 'wagtail.sites',
+    # 'wagtail.core',
+    # 'wagtail.users',
+    # 'wagtail.snippets',
+    # 'wagtail.search',
+    # 'wagtail.admin',
+    # 'wagtail',
     "users",
     "project",
     "custom_admin",
@@ -59,7 +69,8 @@ INSTALLED_APPS = [
     "crispy_forms",
     "js_urls",
     "simple_open_graph",
-    "colorfield"
+    "colorfield",
+    # "wagtail_opengraph_image_generator"
 ]
 
 CACHES = {
@@ -80,7 +91,8 @@ JS_URLS = (
     'custom_admin:delete_task',
     'custom_admin:update_comment',
     'custom_admin:delete_comment',
-    'custom_admin:delete_vote'
+    'custom_admin:delete_vote',
+    'users:signing'
 )
 TAILWIND_APP_NAME = 'user_themes'
 
@@ -91,11 +103,16 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 CKEDITOR_CONFIGS = {
     'default':
-        {'toolbar': 'Custom',
-         'toolbar_Custom': [
-             ['Bold', 'Link', 'Unlink', 'Image'],
-         ],
-         }}
+        {
+            'toolbar': 'Custom',
+            'toolbar_Custom': [
+                ['Bold', 'Link', 'Unlink', 'Image'],
+            ],
+            'extraPlugins': ['mentions','tableresize','textmatch','textmatch'],
+            'height': 300,
+            'width': 700,
+        }
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

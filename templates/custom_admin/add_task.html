@@ -1,5 +1,6 @@
 {% extends 'custom_admin/admin_base.html' %}
 {% load widget_tweaks %}
+{% load static %}
 {% block content %}
 <div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
 
@@ -58,7 +59,7 @@
                                                                         class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                         Title
 
-                                                                        <sup class="font-medium text-danger-700">*</sup>
+                                                                        <sup class="font-medium text-red-600">*</sup>
                                                                     </span>
                                                                 </label>
                                                             </div>
@@ -90,7 +91,7 @@
                                                                         class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                         User
 
-                                                                        <sup class="font-medium text-danger-700">*</sup>
+                                                                        <sup class="font-medium text-red-600">*</sup>
                                                                     </span>
                                                                 </label>
 
@@ -122,7 +123,7 @@
                                                                     <span
                                                                         class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                         Content
-                                                                        <sup class="font-medium text-danger-700">*</sup>
+                                                                        <sup class="font-medium text-red-600">*</sup>
                                                                     </span>
                                                                 </label>
 
@@ -407,7 +408,7 @@
                                                                     class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                     Project
 
-                                                                    <sup class="font-medium text-danger-700">*</sup>
+                                                                    <sup class="font-medium text-red-600">*</sup>
                                                                 </span>
                                                             </label>
                                                         </div>
@@ -437,7 +438,7 @@
                                                                     class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                     Board
 
-                                                                    <sup class="font-medium text-danger-700">*</sup>
+                                                                    <sup class="font-medium text-red-600">*</sup>
                                                                 </span>
                                                             </label>
                                                         </div>
@@ -555,25 +556,9 @@
 </div>
 
 <script>
-    function addTask() {
-        return {
-            boards: [],
-            GetBoards($event) {
-                let project_id = $event.target.value
-                fetch('/admin/get_project_wise_board/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{csrf_token}}' },
-                    body: JSON.stringify({ 'project_id': $event.target.value })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.message == 'success') {
-                            let boards = JSON.parse(data.boards)
-                            this.boards = boards
-                        }
-                    })
-            }
-        }
-    }
+    var csrf_token = '{{csrf_token}}'
 </script>
+<script src="{% static 'js/new_task.js' %}"></script>
+
+
 {% endblock content %}

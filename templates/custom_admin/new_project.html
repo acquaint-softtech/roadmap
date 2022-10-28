@@ -33,7 +33,7 @@
                                                             <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.title">
                                                                 <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                     Title
-                                                                    <sup class="font-medium text-danger-700">*</sup>
+                                                                    <sup class="font-medium text-red-600">*</sup>
                                                                 </span>
                                                             </label>
 
@@ -427,7 +427,7 @@
                                                                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                                                                             <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.boards.1fcf8173-8cc5-474a-8b12-776ad5c9fdcc.title">
                                                                                                                 <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Title
-                                                                                                                    <sup class="font-medium text-danger-700">*</sup>
+                                                                                                                    <sup class="font-medium text-red-600">*</sup>
                                                                                                                 </span>
                                                                                                             </label>
                                                                                                         </div>
@@ -451,7 +451,7 @@
                                                                                                                     Sort
                                                                                                                     items
                                                                                                                     by
-                                                                                                                    <sup class="font-medium text-danger-700">*</sup>
+                                                                                                                    <sup class="font-medium text-red-600">*</sup>
                                                                                                                 </span>
                                                                                                             </label>
                                                                                                         </div>
@@ -550,31 +550,7 @@
     </div>
 </div>
 
-<script>
-  
-  
-  function NewProject(){
-   
-    return {
-      AddBoard(){
-        const node = document.getElementById("id_projects").lastElementChild;
-        const clone = node.cloneNode(true);
-        document.getElementById("id_projects").appendChild(clone);
-        document.getElementById("id_category_project-TOTAL_FORMS").value = parseInt(document.getElementById("id_category_project-TOTAL_FORMS").value) + 1
-        return true
-      },
-      RemoveBoard(event,index){
-        if (parseInt(document.getElementById("id_category_project-TOTAL_FORMS").value) > 1){
-          document.getElementById("id_category_project-TOTAL_FORMS").value = parseInt(document.getElementById("id_category_project-TOTAL_FORMS").value) - 1
-          event.currentTarget.offsetParent.remove()
-        }
-      }
-    }
-  
-  }
-  
-  
-</script>
+<script src="{% static 'js/new_project.js' %}"></script>
 
 
 {% endblock content %}

@@ -1,3 +1,5 @@
+import uuid
+
 from ckeditor.widgets import CKEditorWidget
 from django import forms
 from django.core.exceptions import ValidationError
@@ -18,10 +20,15 @@ class ProjectCreateForm(forms.ModelForm):
             "is_private"
         )
 
+
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super(ProjectCreateForm, self).__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs['class'] = 'block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 ring-gray-300 dark:ring-gray-600'
+        self.fields['title'].widget.attrs[
+            'class'] = 'block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition ' \
+                       'duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 ' \
+                       'sm:py-2.5 sm:text-sm dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 ' \
+                       'ring-gray-300 dark:ring-gray-600 '
         self.fields['url'].widget.attrs[
             'class'] = 'block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition ' \
                        'duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 ' \
@@ -41,7 +48,6 @@ class ProjectCreateForm(forms.ModelForm):
         self.fields["description"].error_messages[
             "required"
         ] = "Please enter project description."
-
 
     def clean_title(self):
         title = self.cleaned_data['title']
@@ -228,7 +234,10 @@ class AdminUserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AdminUserForm, self).__init__(*args, **kwargs)
         self.fields['role'].widget.attrs[
-            'class'] = 'block w-full rounded-lg border-none px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 ring-gray-300 dark:ring-gray-600'
+            'class'] = 'block w-full rounded-lg border-none px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ' \
+                       'transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 ' \
+                       'disabled:opacity-70 sm:py-2.5 sm:text-sm dark:bg-gray-700 dark:text-white ' \
+                       'dark:focus:ring-primary-500 ring-gray-300 dark:ring-gray-600 '
         self.fields['first_name'].required = True
         self.fields['role'].required = False
         self.fields['role'].empty_label = 'Select an option'

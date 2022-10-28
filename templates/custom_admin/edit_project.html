@@ -32,7 +32,7 @@
                                                             <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.title">
                                                                 <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                     Title
-                                                                    <sup class="font-medium text-danger-700">*</sup>
+                                                                    <sup class="font-medium text-red-600">*</sup>
                                                                 </span>
                                                             </label>
 
@@ -86,11 +86,11 @@
                                                                 </span>
                                                             </label>
                                                         </div>
+                                                      
 
                                                         <div class="filament-forms-text-input-component flex items-center space-x-2 rtl:space-x-reverse group">
                                                             <div class="flex-1">
-                                                                <input
-                                                                        type="text" class="block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 ring-gray-300 dark:ring-gray-600">
+                                                                <input type="text" value="{{object.slug}}" class="block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 ring-gray-300 dark:ring-gray-600">
                                                             </div>
                                                         </div>
                                                         <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
@@ -103,30 +103,16 @@
 
                                             <div class=" col-span-1">
                                                 <div class="filament-forms-field-wrapper">
-
                                                     <div class="space-y-2">
-                                                        <div
-                                                                class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                            <label
-                                                                    class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
-                                                                    for="data.icon">
-
-
-                                                                <span
-                                                                        class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                        <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.icon">
+                                                                <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                     Icon
-
                                                                 </span>
-
-
                                                             </label>
-
                                                         </div>
 
-                                                        <div
-                                                                class="filament-forms-select-component flex items-center space-x-1 rtl:space-x-reverse group">
-
-
+                                                        <div class="filament-forms-select-component flex items-center space-x-1 rtl:space-x-reverse group">
                                                             <div class="flex-1 min-w-0">
                                                                 <div>
                                                                     <select class="w-full rounded-lg border-gray-300">
@@ -448,7 +434,7 @@
                                                                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                                                                             <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.boards.1fcf8173-8cc5-474a-8b12-776ad5c9fdcc.title">
                                                                                                                 <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Title
-                                                                                                                    <sup class="font-medium text-danger-700">*</sup>
+                                                                                                                    <sup class="font-medium text-red-600">*</sup>
                                                                                                                 </span>
                                                                                                             </label>
                                                                                                         </div>
@@ -472,7 +458,7 @@
                                                                                                                     Sort
                                                                                                                     items
                                                                                                                     by
-                                                                                                                    <sup class="font-medium text-danger-700">*</sup>
+                                                                                                                    <sup class="font-medium text-red-600">*</sup>
                                                                                                                 </span>
                                                                                                             </label>
                                                                                                         </div>

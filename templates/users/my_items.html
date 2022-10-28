@@ -644,8 +644,8 @@
                                                     <input placeholder="Search" type="search"
                                                            autocomplete="off"
                                                             x-ref="searchField"
-                                                            x-model="metions_search"
-                                                            x-on:click="viewPage(0)"
+                                                            x-model="mention_search"
+                                                            x-on:click="MentionviewPage(0)"
                                                             placeholder="Search"
                                                            class="block h-9 w-full max-w-xs rounded-lg border-gray-300 pl-9 placeholder-gray-400 shadow-sm transition duration-75 focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 sm:text-sm">
                                                 </div>
@@ -694,7 +694,7 @@
                                            wire:end.stop="reorderTable($event.target.sortable.toArray())"
                                            wire:sortable.options="{ animation: 100 }"
                                            class="divide-y whitespace-nowrap">
-                                    <tr>
+                                    <tr x-show="mentions.length == 0">
                                         <td colspan="3">
                                             <div class="flex items-center justify-center p-4">
                                                 <div class="filament-tables-empty-state flex flex-1 flex-col items-center justify-center p-6 mx-auto space-y-6 text-center bg-white">
@@ -712,9 +712,138 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    
+                                    <template x-for="mention in user_mentions" :key="mention">
+                                        <tr class="filament-tables-row hover:bg-gray-50 dark:hover:bg-gray-500/10">
+                                            <td
+                                                class="filament-tables-reorder-cell w-4 px-4 whitespace-nowrap text-gray-500 transition group-hover:text-primary-500 dark:text-gray-400 dark:group-hover:text-primary-400 hidden">
+                                                <svg class="block h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                    aria-hidden="true">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M4 6h16M4 12h16M4 18h16"></path>
+                                                </svg>
+                                            </td>
+
+                                            <td class="filament-tables-cell dark:text-white"
+                                                wire:loading.remove.delay="wire:loading.remove.delay"
+                                                wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                                <div class="filament-tables-text-column px-4 py-3 whitespace-normal">
+                                                    <p x-html="mention.text"></p>
+                                                </div>
+                                            </td>
+
+                                            <td class="filament-tables-cell dark:text-white"
+                                                wire:loading.remove.delay="wire:loading.remove.delay"
+                                                wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                                <div class="filament-tables-text-column px-4 py-3 whitespace-normal" @click="window.location.href=window.reverse('custom_admin:update_task', { slug: mention.task__slug })">
+                                                    <p x-text="mention.task__name"></p>
+                                                </div>
+                                            </td>
+                                            
+                                            <td class="filament-tables-cell dark:text-white"
+                                                wire:loading.remove.delay="wire:loading.remove.delay"
+                                                wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                                <div class="filament-tables-text-column px-4 py-3 whitespace-normal" @click="window.location.href=window.reverse('custom_admin:update_user', { pk: user.id })">
+                                                    <p x-text="date_format(mention.created)"></p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    
+                                    
                                     </tbody>
 
                                 </table>
+                               <div class="p-2 border-t">
+                                <nav role="navigation" aria-label="Pagination Navigation"
+                                     class="filament-tables-pagination flex items-center justify-between">
+                                    <div class="flex justify-between items-center flex-1 lg:hidden">
+                                        <div class="w-10">
+                                        </div>
+
+                                        <div class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
+                                            <select x-on:change="MentionchangeSize($event.target.value)"
+                                                    class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
+                                                   <template x-for="option in options" :key="option">
+                                                        <option :value="option" x-text="option"></option>
+                                                    </template>
+                                            </select>
+
+                                            <label for="tableRecordsPerPageSelect" class="text-sm font-medium">
+                                                per page
+                                            </label>
+                                        </div>
+
+                                        <div class="w-10">
+                                        </div>
+                                    </div>
+
+                                    <div class="hidden flex-1 items-center lg:grid grid-cols-3">
+                                        <div class="flex items-center">
+                                            <div class="pl-2 text-sm font-medium dark:text-white">
+                                                Showing <span x-text="MentionstartResults()"></span> to <span x-text="MentionendResults()"></span> of <span x-text="total_of_mentions"></span> results
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center justify-center">
+                                            <div class="flex items-center space-x-2 filament-tables-pagination-records-per-page-selector rtl:space-x-reverse">
+                                                <select x-on:change="MentionchangeSize($event.target.value)"
+                                                    class="h-8 text-sm pr-8 leading-none transition duration-75 bordesr-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:focus:border-primary-500">
+                                                   <template x-for="option in options" :key="option">
+                                                        <option :value="option" x-text="option"></option>
+                                                    </template>
+                                                </select>
+
+                                                <label for="tableRecordsPerPageSelect" class="text-sm font-medium">
+                                                    per page
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center justify-end">
+                                        <div class="py-3 border rounded-lg dark:border-gray-600">
+                                            <ol class="flex items-center text-sm text-gray-500 divide-x rtl:divide-x-reverse divide-gray-300 dark:text-gray-400 dark:divide-gray-600">
+                                                <li>
+                                                    <button type="button"
+                                                        class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
+                                                         x-on:click="prevPage" :disabled="MentionpageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : MentionpageNumber==0 }" aria-label="Next" rel="next">
+                                                        <svg class="w-5 h-5 rtl:scale-x-[-1]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                        <span></span>
+                                                    </button>
+                                                </li>
+                                                <template x-for="(page,index) in MentionPages()" :key="index">
+                                                    <li>
+                                                        <button type="button"
+                                                            class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 focus:text-primary-600 transition"
+                                                             x-on:click="MentionviewPage(index)">
+                                                            <span x-text="index+1"></span>
+                                                        </button>
+                                                    </li>
+                                                </template>
+                                                <li>
+                                                    <button type="button"
+                                                        class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
+                                                          x-on:click="MentionviewPage(Math.ceil(total/mention_page_size)-1)" :disabled="MentionpageNumber >= MentionpageCount() -1" :class="{ 'disabled cursor-not-allowed text-gray-600' : MentionpageNumber >= MentionpageCount() -1 }">
+                                                        <svg class="w-5 h-5 rtl:scale-x-[-1]"
+                                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                            fill="currentColor" aria-hidden="true">
+                                                            <path fill-rule="evenodd"
+                                                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                                clip-rule="evenodd"></path>
+                                                        </svg>
+                                                        <span></span>
+                                                    </button>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </div>
+
+                                    </div>
+                                </nav>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -989,6 +1118,8 @@
       var items = {{items|safe}}
       var comments = {{comments|safe}}
       var votes = {{votes|safe}}
+      var mentions = {{recent_mentions|safe}}
+      console.log(mentions,"mentions")
       var options = {{options|safe}}
 </script>
 <script src="{% static 'js/base.js' %}"></script>

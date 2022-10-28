@@ -33,8 +33,7 @@
                     <div class="filament-forms-section-content-wrapper" aria-expanded="true">
                         <div class="filament-forms-section-content p-6">
                             <div class="grid grid-cols-1      filament-forms-component-container gap-6">
-                                <div wire:key="QQTSjJBbs6mgQW7eSFuY.name.Filament\Forms\Components\TextInput"
-                                     class=" col-span-1     ">
+                                <div class="col-span-1">
                                     <div class="filament-forms-field-wrapper">
 
                                         <div class="space-y-2">
@@ -56,6 +55,33 @@
                                                            class="block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm ring-gray-300">
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                              
+                                <div class="col-span-1">
+                                    <div class="filament-forms-field-wrapper">
+                                        <div class="space-y-2">
+                                            <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
+                                                       for="email">
+                                                <span class="text-sm font-medium leading-4 text-gray-700">
+                                                    Username
+                                                    <sup class="font-medium text-danger-700">*</sup>
+                                                        </span>
+                                                </label>
+                                            </div>
+                                            <div class="filament-forms-text-input-component flex items-center space-x-2 rtl:space-x-reverse group">
+                                                <div class="flex-1">
+                                                    <input value="{{ request.user.mention_name|default_if_none:'' }}" wire:model.defer="email" type="text"
+                                                           dusk="filament.forms.email" id="id_mention_name" name="mention_name"
+                                                           class="block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm ring-gray-300"
+                                                    >
+                                                </div>
+                                            </div>
+                                          <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600">
+                                              <p>This username will be used to mention your name in comments.</p>
+                                          </div>
                                         </div>
                                     </div>
                                 </div>
