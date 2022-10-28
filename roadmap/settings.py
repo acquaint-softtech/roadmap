@@ -43,16 +43,6 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-    # 'wagtail.contrib.forms',
-    # 'wagtail.contrib.redirects',
-    # 'wagtail.embeds',
-    # 'wagtail.sites',
-    # 'wagtail.core',
-    # 'wagtail.users',
-    # 'wagtail.snippets',
-    # 'wagtail.search',
-    # 'wagtail.admin',
-    # 'wagtail',
     "users",
     "project",
     "custom_admin",
@@ -70,7 +60,6 @@ INSTALLED_APPS = [
     "js_urls",
     "simple_open_graph",
     "colorfield",
-    # "wagtail_opengraph_image_generator"
 ]
 
 CACHES = {
