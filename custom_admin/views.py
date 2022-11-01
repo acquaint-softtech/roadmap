@@ -1,6 +1,8 @@
 import json
+import os
 import platform
 
+from django.conf import settings
 from django.contrib import messages
 from django.db.models import Count
 from django.forms import inlineformset_factory
@@ -235,13 +237,11 @@ class TaskUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
                                                                  'user__email').order_by('-created')),
             indent=4, sort_keys=True, default=str)
         context['votes'] = json.dumps(list(
-            Votes.objects.filter(task=self.object).values('task__is_subscribed','id',
+            Votes.objects.filter(task=self.object).values('task__is_subscribed', 'id',
                                                           'task__slug', 'task__project__slug', 'user__email',
                                                           'created').order_by('-created')),
             indent=4,
             sort_keys=True, default=str)
-
-
 
         context['task_histories'] = json.dumps(list(
             TaskHistory.objects.filter(task=self.object).values('note', 'created', 'action_by__email').order_by(
@@ -313,7 +313,7 @@ class CommentUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = AdminContextView.get_context_data(self)
         context['data'] = {'app_name': 'Comment', 'type': 'Edit', 'listing_url': reverse_lazy("custom_admin:comments")}
-        return  context
+        return context
 
 
 class CommentDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
@@ -452,12 +452,12 @@ class AdminThemeView(LoginRequiredMixin, AdminContextView, FormView):
         form = ThemeForm(instance=data)
         context['form'] = form
         return context
-    
+
     def form_valid(self, form):
-        form = ThemeForm(instance=GeneralSettings.objects.first(), data=self.request.POST,files=self.request.FILES)
+        form = ThemeForm(instance=GeneralSettings.objects.first(), data=self.request.POST, files=self.request.FILES)
         form.save()
         return super(AdminThemeView, self).form_valid(form)
-    
+
     def form_invalid(self, form):
         return super(AdminThemeView, self).form_invalid(form)
 
@@ -471,6 +471,9 @@ class AdminSettingsView(LoginRequiredMixin, AdminContextView, View):
         context = AdminContextView.get_context_data(self)
         data = GeneralSettings.objects.first()
         form = GeneralNotificationForm(instance=data)
+        context['total_og_img'] = len(
+            os.listdir(os.path.join(settings.MEDIA_ROOT, 'project_og_img'))) if os.path.exists(
+            os.path.join(settings.MEDIA_ROOT, 'project_og_img')) else 0
         context['form'] = form
         context['board_data'] = data.default_boards
         return render(request, self.template_name, context=context)
@@ -522,3 +525,19 @@ class VoteDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
         return self.post(request, *args, **kwargs)
 
 
+class RemoveOGImage(AdminContextView, LoginRequiredMixin, View):
+    success_url = reverse_lazy('custom_admin:settings')
+
+    def post(self, request, *args, **kwargs):
+
+        if 'og_img_name' in request.POST:
+            file_name = request.POST['og_img_name']
+            redirect_path = request.POST['redirect_url']
+            if os.path.exists(os.path.join(settings.MEDIA_ROOT, "project_og_img", file_name)):
+                os.remove(os.path.join(settings.MEDIA_ROOT, "project_og_img", file_name))
+            return redirect(redirect_path)
+
+        else:
+            for file in os.listdir(os.path.join(settings.MEDIA_ROOT, "project_og_img")):
+                os.remove(os.path.join(settings.MEDIA_ROOT, "project_og_img", file))
+            return redirect(self.success_url)

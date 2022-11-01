@@ -13,6 +13,7 @@ from project.forms import MessageForm
 from project.models import Project, Task, Message, TaskHistory, Board, Votes
 from users.models import User
 from users.views import LoginRequiredMixin
+from django.db import connection
 
 
 class ProjectList(BaseContextView, LoginRequiredMixin, ListView):
@@ -29,12 +30,11 @@ class ProjectList(BaseContextView, LoginRequiredMixin, ListView):
 class TaskList(BaseContextView, ListView):
     model = Task
     template_name = 'projects/project_detail.html'
-    context_object_name = 'tasks'
 
-    def get_queryset(self, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs):
+        context = super(TaskList, self).get_context_data(*args, **kwargs)
         tasks = []
-        task_data = super(TaskList, self).get_queryset(*args, **kwargs)
-        task_data = task_data.select_related('type').annotate(num_votes=Count('user_task')).filter(
+        task_data = Task.objects.select_related('type').annotate(num_votes=Count('user_task')).filter(
             project__slug=self.kwargs.get('slug')).values('name',
                                                           'created',
                                                           'type__name',
@@ -48,7 +48,9 @@ class TaskList(BaseContextView, ListView):
                 board: task_data.filter(type__name=board)
             })
 
-        return tasks
+        context['tasks'] = tasks
+        context['project_name'] = Project.objects.filter(slug=self.kwargs.get('slug')).first()
+        return context
 
 
 class TaskDetailView(BaseContextView, DetailView):
@@ -56,8 +58,7 @@ class TaskDetailView(BaseContextView, DetailView):
     template_name = 'projects/task_detail.html'
 
     def get_context_data(self, *args, **kwargs):
-        context = super(TaskDetailView,
-                        self).get_context_data(*args, **kwargs)
+        context = super(TaskDetailView, self).get_context_data(*args, **kwargs)
         context["message_form"] = MessageForm()
         context["boards"] = Board.objects.filter(project=self.object.project).values('name', 'id')
         context['votes'] = list(

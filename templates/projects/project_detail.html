@@ -1,7 +1,15 @@
 {% extends 'home/base.html' %}
 {% load static %}
+{% load admin_extra_filters %}
 {% block title %}Home page{% endblock title %}
 {% block content %}
+{% block extra_head %}
+{{ block.super }}
+  <meta property="og:title" content="Roadmap Project">
+  <meta property="og:url" content="{{ request.path }}">
+  <meta property="og:image" content="{% generate_og_image project_name.title project_name.slug 'Project' %}">
+  <meta name="description" property="og:description" content="Roadmap Project page">
+{% endblock %}
 
 
 <div class="inline-flex h-full w-full min-w-full gap-4 flex-nowrap overflow-scroll">

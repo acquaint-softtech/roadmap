@@ -1,9 +1,15 @@
-
-
 {% extends "home/base.html" %}
-<meta property="og:title" content="Login page">
-
+{% load admin_extra_filters %}
 {% block content %}
+{% block extra_head %}
+{{ block.super }}
+  <meta property="og:title" content="Roadmap Login">
+  <meta property="og:url" content="{{ request.path }}">
+  <meta property="og:image" content="{% generate_og_image 'Login' '' '' %}">
+  <meta name="description" property="og:description" content="Roadmap login page">
+{% endblock %}
+
+
 <div class=" relative overflow-hidden flex justify-center z-0">
     <div class="z-10 flex-1 w-full max-w-lg py-8 md:py-16">
         <div class="w-full max-w-md px-4 mx-auto sm:px-6 md:px-8">

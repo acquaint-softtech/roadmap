@@ -1,5 +1,13 @@
 {% extends "home/base.html" %}
 {% block content %}
+{% load admin_extra_filters %}
+{% block extra_head %}
+{{ block.super }}
+  <meta property="og:title" content="Roadmap Registration">
+  <meta property="og:url" content="{{ request.path }}">
+  <meta property="og:image" content="{% generate_og_image 'Register' '' '' %}">
+  <meta name="description" property="og:description" content="Roadmap Register page">
+{% endblock %}
 <div class=" relative overflow-hidden flex justify-center z-0">
         <div class="z-10 flex-1 w-full max-w-lg py-8 md:py-16">
             <div class="w-full max-w-md px-4 mx-auto sm:px-6 md:px-8">

@@ -2,7 +2,15 @@
 {% load static %}
 {% block title %}Home page{% endblock title %}
 {% block content %}
+{% load admin_extra_filters %}
+{% block extra_head %}
+{{ block.super }}
+  <meta property="og:title" content="Roadmap Dashboard">
+  <meta property="og:url" content="{{ request.path }}">
+  <meta property="og:image" content="{% generate_og_image 'Dashboard' '' '' %}">
+  <meta name="description" property="og:description" content="Roadmap Dashboard page">
     <div class="prose mb-4">{{general_settings.welcome_text|safe}}</div>
+{% endblock %}
 {% endblock content %}
 
 
