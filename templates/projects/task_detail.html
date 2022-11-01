@@ -2,9 +2,19 @@
 {% load static %}
 {% load widget_tweaks %}
 {% load humanize %}
+{% load admin_extra_filters %}
 
 {% block title %}Home page{% endblock title %}
 {% block content %}
+{% block extra_head %}
+{{ block.super }}
+  <meta property="og:title" content="Roadmap Task">
+  <meta property="og:url" content="{{ request.path }}">
+  <meta property="og:image" content="{% generate_og_image object.name object.slug 'Task' %}">
+  <meta name="description" property="og:description" content="Roadmap Task page">
+{% endblock %}
+
+
 {{message_form.media}}
 {% load mptt_tags %}
 

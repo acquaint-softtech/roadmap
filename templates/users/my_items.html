@@ -1,6 +1,14 @@
 {% extends 'home/base.html' %}
 {% load static %}
 {% block content %}
+{% load admin_extra_filters %}
+{% block extra_head %}
+{{ block.super }}
+  <meta property="og:title" content="Roadmap Items">
+  <meta property="og:url" content="{{ request.path }}">
+  <meta property="og:image" content="{% generate_og_image 'Items' '' '' %}">
+  <meta name="description" property="og:description" content="Roadmap Items page">
+{% endblock %}
     <div class="pb-4">
         <ul class="flex items-center space-x-0.5 text-sm font-medium text-gray-600">
 
