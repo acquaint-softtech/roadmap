@@ -34,5 +34,4 @@ urlpatterns = [
     path('get_project_wise_board/', views.ProjectWiseBoard.as_view(), name='get_project_wise_board'),
     path('notification/', views.NotificationView.as_view(), name='read_notification'),
     path('remove_og_img/', views.RemoveOGImage.as_view(), name='remove_og_image'),
-
 ]

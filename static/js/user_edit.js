@@ -5,6 +5,9 @@ function UserEdit() {
       comment_search:"",
       vote_search:"",
       pageNumber: 0,
+      delete_popup:false,
+      delete_popup_header_text:'',
+      delete_popup_url:'',
       sortCol:null,
       size: 5,
       total: "",
@@ -71,6 +74,12 @@ function UserEdit() {
       changePageSize(index){
           this.size = 10
           this.filteredEmployees
+      },
+
+      showingPopup(name,url){
+        this.delete_popup_header_text = 'Delete ' + name
+        this.delete_popup_url = url
+        this.delete_popup = true
       },
 
       sort(col) {

@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% block content %}
 {{form.media}}
-<div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
+<div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full" x-data="{delete_popup:false}">
     <div class="filament-page filament-resources-edit-record-page filament-resources-comments filament-resources-record-22">
         <div class="space-y-6">
             <header
@@ -12,17 +12,16 @@
                 </h1>
                 <div class="filament-page-actions flex flex-wrap items-center gap-4 justify-start shrink-0">
                     <a class="bg-blue-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800  dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action"
-                        href="#">
+                        href="{% url 'project:task_detail' object.task.slug %}">
                         <span class="text-white">
                             View public
                         </span>
                     </a>
-                    <a href="{% url 'custom_admin:delete_comment' object.id %}">
-                      <button class="bg-red-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800  dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+                    
+                      <button @click="delete_popup = true" class="bg-red-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800  dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
                               type="button">
                           <span class="flex items-center gap-1"> <span class="text-white"> Delete</span></span>
                       </button>
-                    </a>
                 </div>
             </header>
 
@@ -142,6 +141,57 @@
                     </a>
                 </div>
             </form>
+          
+            <div class="fixed inset-0 z-10 flex items-center justify-center overflow-auto bg-black bg-opacity-50" x-show="delete_popup" >
+                  <!-- OG-IMAGE Modal inner -->
+                  <div x-cloak  class=" px-6 py-4 mx-auto text-left bg-white rounded shadow-lg w-1/2 h-100">
+                    <!-- Title / Close-->
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-xl font-semibold tracking-tight">
+                            <div>
+                               Delete Comment
+                            </div>
+                            <div class="text-medium">
+                            </div>
+                        </h2>
+    
+                        <button type="button" class="z-50 cursor-pointer" @click="delete_popup = false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                 viewBox="0 0 24 24" fill="none" stroke="black">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="border-t"></div>
+                    <div class="py-2 mt-3 mb-3">
+                        <p>Are you sure you would like to do this?</p>
+                    </div>
+                    <div class="border-t"></div>
+                    <footer class="flex items-center py-2 space-x-4 mt-2">
+                        <button @click="delete_popup = false" type="button"
+                                class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
+                          <span class="flex items-center gap-1">
+                              <span class="">
+                                  Cancel
+                              </span>
+                          </span>
+                        </button>
+                          <button type="button"  @click="window.location.href=window.reverse('custom_admin:delete_comment', { pk: {{object.id}} })" class="bg-red-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
+                              <span class="flex items-center gap-1">
+                                <span class="text-white">
+                                    Delete
+                                </span>
+                              </span>
+                          </button>
+                    </footer>
+            
+                
+        </div>
+            
+            </div>
+          
+          
         </div>
     </div>
 </div>

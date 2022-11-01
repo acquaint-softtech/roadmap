@@ -1,6 +1,7 @@
  function GeneralSettings(){
       return{
         activeTab : 0,
+        og_popup : false,
         boards : boards,
         RemoveTag(name){
           data = JSON.parse(JSON.stringify(this.boards))

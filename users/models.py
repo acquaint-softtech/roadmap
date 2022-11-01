@@ -5,6 +5,10 @@ from django.db import models
 from users.manager import CustomUserManager
 
 
+def get_default_pages():
+    return list(5, 10, 15)
+
+
 class User(AbstractUser):
     username = None
     USERNAME_FIELD = 'email'
@@ -12,8 +16,7 @@ class User(AbstractUser):
     email = models.EmailField("email address", unique=True)
     role = models.ForeignKey(Group, related_name='user_group', on_delete=models.SET_NULL, null=True)
     objects = CustomUserManager()
-    mention_name = models.CharField(max_length=100,null=True,blank=True)
-
+    mention_name = models.CharField(max_length=100, null=True, blank=True)
 
 
 class Profile(models.Model):
@@ -33,7 +36,7 @@ class UserSetting(models.Model):
     favicon_url = models.URLField(null=True, blank=True)
     page_par_sizes = ArrayField(
         models.CharField(choices=(('5', '5'), ('10', '10'), ('15', '15'), ('25', '25'), ('50', '50')), max_length=2),
-        blank=True, null=True, default=list((5, 10, 15))
+        blank=True, null=True, default=get_default_pages
     )
     mention_notifications = models.BooleanField(default=True)
     reply_notifications = models.BooleanField(default=True)
