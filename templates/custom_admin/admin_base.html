@@ -11,6 +11,9 @@
             defer
     ></script>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+    <style>
+          [x-cloak] { display: none }
+    </style>
 </head>
 <body class="flex bg-gray-100 min-h-screen"  x-data="adminHome()" x-init="init()">
 <div class="filament-sidebar-close-overlay fixed inset-0 z-20 w-full h-full bg-gray-900/50 lg:hidden"></div>
@@ -363,7 +366,7 @@
                             </button>
                         </div>
 
-                        <div class="filament-modal inline-block" x-show="open_notification">
+                        <div class="filament-modal inline-block" x-cloak x-show="open_notification">
                             <div class="fixed inset-0 z-40 flex items-center min-h-screen overflow-y-auto transition">
                                 <div
                                     class="filament-modal-close-overlay fixed inset-0 w-full h-full bg-black/50 cursor-pointer">
@@ -473,7 +476,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="filament-dropdown" >
+                <div class="filament-dropdown">
                     <div class="filament-dropdown-trigger cursor-pointer ml-4"
                        x-on:click="open_toggle = !open_toggle">
                         <div class="w-10 h-10 rounded-full bg-gray-200 bg-cover bg-center dark:bg-gray-900"
@@ -481,7 +484,7 @@
                         </div>
                     </div>
 
-                    <div class="filament-dropdown-panel absolute z-10 w-full rounded-lg bg-white shadow-lg ring-1 ring-black/5 transition dark:bg-gray-800 dark:ring-white/10 max-w-[14rem] absolute top-12 right-9"
+                    <div x-cloak class="filament-dropdown-panel absolute z-10 w-full rounded-lg bg-white shadow-lg ring-1 ring-black/5 transition dark:bg-gray-800 dark:ring-white/10 max-w-[14rem] absolute top-12 right-9"
                          x-show="open_toggle">
                         <ul class="py-1 space-y-1">
                             <div>

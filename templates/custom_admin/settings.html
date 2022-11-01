@@ -13,8 +13,7 @@
                   {{form.media}}
                     {% if total_og_img > 0 %}
                       <div class="filament-page-actions flex flex-wrap items-center gap-4 justify-start shrink-0">
-                          <form method="post" action="{% url 'custom_admin:remove_og_image' %}">{% csrf_token %}
-                            <button type="submit"
+                            <button type="button"  @click="og_popup = true"
                                   class="bg-blue-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action">
                                 <span class="flex items-center gap-1">
                                   <span class="text-white">
@@ -22,10 +21,61 @@
                                 </span>
                               </span>
                             </button>
-                          </form>
                       </div>
                     {% endif %}
                 </header>
+              
+                <div  class="fixed inset-0 z-10 flex items-center justify-center overflow-auto bg-black bg-opacity-50" x-show="og_popup" >
+                  <!-- OG-IMAGE Modal inner -->
+                  <div x-cloak  class=" px-6 py-4 mx-auto text-left bg-white rounded shadow-lg w-1/2 h-100" @click.away="og_popup = false">
+                    <!-- Title / Close-->
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-xl font-semibold tracking-tight">
+                            <div>
+                               Delete OG image
+                            </div>
+                            <div class="text-medium">
+                            </div>
+                        </h2>
+    
+                        <button type="button" class="z-50 cursor-pointer" @click="og_popup = false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                 viewBox="0 0 24 24" fill="none" stroke="black">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="border-t"></div>
+                    <div class="py-2 mt-3 mb-3">
+                        <p>Are you sure you'd like to delete the OG image for this item? This could be especially handy if you have changed branding color, if you feel this image is not correct.</p>
+                    </div>
+                    <div class="border-t"></div>
+                    <footer class="flex items-center py-2 space-x-4 mt-2">
+                        <button @click="og_popup = false" type="button"
+                                class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
+                          <span class="flex items-center gap-1">
+                              <span class="">
+                                  Cancel
+                              </span>
+                          </span>
+                        </button>
+                      
+                        <form method="post" action="{% url 'custom_admin:remove_og_image' %}" class="pt-1">{% csrf_token %}
+                          <button type="submit" class="bg-blue-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800">
+                              <span class="flex items-center gap-1">
+                                <span class="text-white">
+                                    Confirm
+                                </span>
+                              </span>
+                            </button>
+                        </form>
+                    </footer>
+            
+                
+        </div>
+                
+                </div>
 
 
                 <form class="filament-form space-y-6" method="post" onkeydown="return event.key != 'Enter';">{% csrf_token %}
@@ -727,6 +777,7 @@ Custom header script
         </div>
     </div>
 
+    
 
     <!-- footer div -->
     <div class="filament-main-footer py-4 shrink-0">

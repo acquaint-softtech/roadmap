@@ -5,6 +5,10 @@ function TaskEdit() {
       vote_search:"",
       pageNumber: 0,
       sortCol:null,
+      delete_popup:false,
+      delete_popup_header_text:'',
+      delete_popup_url:'',
+      og_popup:false,
       size: 5,
       task_histories: task_histories,
       comments: comments,
@@ -103,6 +107,12 @@ function TaskEdit() {
         return Array.from({
           length: Math.ceil(this.total / this.size),
         });
+      },
+
+      showingPopup(name,url){
+        this.delete_popup_header_text = 'Delete ' + name
+        this.delete_popup_url = url
+        this.delete_popup = true
       },
 
       //Next Page

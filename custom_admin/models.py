@@ -1,11 +1,14 @@
 from ckeditor.fields import RichTextField
+from colorfield.fields import ColorField
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
-from colorfield.fields import ColorField
+
 from common.models import TimeStampModel
 
 
-# Create your models here.
+def get_default_boards():
+    return ['Under Review', 'Planned', 'In progress', 'Live', 'Closed']
+
 
 class GeneralSettings(TimeStampModel):
     center_board_project_view = models.BooleanField(default=True,
@@ -37,12 +40,12 @@ class GeneralSettings(TimeStampModel):
                                                                 "request.")
 
     header_script = models.TextField(null=True, blank=True)
+
     default_boards = ArrayField(
-        models.CharField(max_length=512), default=['Under Review', 'Planned', 'In progress', 'Live', 'Closed']
+        models.CharField(max_length=512), default=get_default_boards
     )
     theme_color = ColorField(default='#d42020')
-    favicon_img = models.ImageField(null=True,blank=True)
-
+    favicon_img = models.ImageField(null=True, blank=True)
 
     workflow_choice = (
         ("item_disabled", "Disabled"),
