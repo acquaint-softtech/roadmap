@@ -278,7 +278,8 @@
     let users = {{users|safe}}
     var logged_user = '{{request.user.is_authenticated}}'
     var subscribed = '{{object.is_subscribed}}'
-    var is_voted = '{{is_voted}}'
+    var is_voted = '{% if vote_data %}True{% else %}False{% endif %}'
+    console.log(is_voted,"is voted")
     var vote_count = '{{object.get_vote_count}}'
     var task_id = '{{object.id}}'
     var csrf_token = '{{csrf_token}}'

@@ -1,10 +1,8 @@
-import uuid
-
 from ckeditor.widgets import CKEditorWidget
 from django import forms
 from django.core.exceptions import ValidationError
 
-from project.models import Project, Task, Message, Board
+from project.models import Project, Task, Message, Board, Votes
 from users.models import User
 
 
@@ -274,3 +272,36 @@ class AdminUserForm(forms.ModelForm):
                 "Please select role"
             )
         return role
+
+
+class VoteForm(forms.ModelForm):
+    class Meta:
+        model = Votes
+        fields = (
+            "user",
+            "subscribed",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(VoteForm, self).__init__(*args, **kwargs)
+        self.fields['user'].widget.attrs[
+            'class'] = 'block w-full rounded-lg border-none px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ' \
+                       'transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 ' \
+                       'disabled:opacity-70 sm:py-2.5 sm:text-sm dark:bg-gray-700 dark:text-white ' \
+                       'dark:focus:ring-primary-500 ring-gray-300 dark:ring-gray-600 '
+        self.fields['subscribed'].widget.attrs[
+            'class'] = 'filament-forms-toggle-component relative inline-flex border-2 border-transparent ' \
+                       'shrink-0 ' \
+                       'h-6 w-11 rounded-full cursor-pointer transition-colors ease-in-out duration-200 ' \
+                       'focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed ' \
+                       'disabled:pointer-events-none bg-gray-200 dark:bg-white/10 '
+        self.fields['user'].empty_label = 'Select an user'
+        self.fields['user'].required = False
+
+    def clean_user(self, *args, **kwargs):
+        user = self.cleaned_data["user"]
+        if not user:
+            raise ValidationError(
+                "Please select user"
+            )
+        return user

@@ -6,7 +6,11 @@ function TaskEdit() {
       pageNumber: 0,
       sortCol:null,
       delete_popup:false,
+      vote_popup:false,
+      vote_header:'Create vote',
+      vote_button_text:'Create',
       delete_popup_header_text:'',
+      vote_id:'',
       delete_popup_url:'',
       og_popup:false,
       size: 5,
@@ -113,6 +117,21 @@ function TaskEdit() {
         this.delete_popup_header_text = 'Delete ' + name
         this.delete_popup_url = url
         this.delete_popup = true
+      },
+
+      addVote(){
+        document.querySelector('#id_user').value = ''
+        document.getElementById("id_subscribed").checked = true
+        this.vote_id = ''
+      },
+
+      editVote(user_email,subscription_status,edit_vote_id){
+          var selection = document.querySelector('#id_user');
+          var options = Array.from(selection.options);
+          var optionToSelect = options.find(item => item.text === user_email);
+          optionToSelect.selected = true;
+          document.getElementById("id_subscribed").checked = subscription_status
+          this.vote_id = edit_vote_id
       },
 
       //Next Page
