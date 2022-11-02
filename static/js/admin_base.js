@@ -2,12 +2,28 @@ function adminHome() {
     return {
         user_notifications:user_notifications,
         notification_count:0,
+        global_search:'',
+        global_search_shown:false,
+        tasks:tasks,
         open_toggle:false,
         open_notification:false,
         toggle:false,
         light:true,
         init() {
             this.notification_count = this.user_notifications.length
+        },
+        get global_items() {
+          if (this.global_search.length == 0) {
+           this.global_search_shown = false
+            return this.tasks;
+          }
+          else{
+              this.global_search_shown = true
+              return this.tasks
+              .filter((item) => {
+                     return item.name.toLowerCase().includes(this.global_search.toLowerCase())
+              })
+          }
         },
         notification(type){
             this.formData = {'type':type}

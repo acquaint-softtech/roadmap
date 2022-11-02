@@ -12,6 +12,16 @@
 {% endblock %}
 
 
+<div class="pb-4">
+      <ul class="flex items-center space-x-0.5 text-sm font-medium text-gray-600">
+          <li>
+              <a class="transition hover:underline focus:outline-none focus:text-gray-800 focus:underline" href="{{request.path}}">
+                {{project_name.title}}
+              </a>
+          </li>
+      </ul>
+</div>
+
 <div class="inline-flex h-full w-full min-w-full gap-4 flex-nowrap overflow-scroll">
     {% for task in tasks %}
         {% for key,task_data in task.items %}

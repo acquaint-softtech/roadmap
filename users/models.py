@@ -19,15 +19,6 @@ class User(AbstractUser):
     mention_name = models.CharField(max_length=100, null=True, blank=True)
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User,
-                                related_name='profile',
-                                on_delete=models.CASCADE)
-
-    photo = models.ImageField(upload_to='profile_images/%Y/%m/%d/',
-                              blank=True, null=True)
-
-
 class UserSetting(models.Model):
     user = models.OneToOneField(User,
                                 related_name='settings',

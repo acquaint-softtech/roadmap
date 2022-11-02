@@ -225,7 +225,6 @@
                                                                     {% for board_form in boards.forms %}
                                                                     <li class="bg-white border border-gray-300 shadow-sm rounded-xl relative dark:bg-gray-800 dark:border-gray-600">
                                                                             <header
-                                                                                x-on:click.stop="isCollapsed = ! isCollapsed"
                                                                                 class="flex items-center h-10 overflow-hidden border-b bg-gray-50 rounded-t-xl dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
                                                                             <button x-on:click.stop="" type="button" class="flex items-center justify-center flex-none w-10 h-10 text-gray-400 border-r transition hover:text-gray-300 dark:text-gray-400 dark:border-gray-700 dark:hover:text-gray-500">
                                                                                 <span class="sr-only">
@@ -264,9 +263,9 @@
                                                                                 </li>
 
                                                                                 <li>
-                                                                                    <button x-on:click.stop="isCollapsed = ! isCollapsed" type="button"
+                                                                                    <button  type="button"
                                                                                             class="flex items-center justify-center flex-none w-10 h-10 text-gray-400 transition hover:text-gray-300 dark:text-gray-400 dark:hover:text-gray-500">
-                                                                                        <svg x-show="! isCollapsed"
+                                                                                        <svg
                                                                                              class="w-4 h-4"
                                                                                              xmlns="http://www.w3.org/2000/svg"
                                                                                              viewBox="0 0 20 20"
@@ -277,12 +276,11 @@
                                                                                                   clip-rule="evenodd">
                                                                                             </path>
                                                                                         </svg>
-                                                                                        <span class="sr-only"
-                                                                                              x-show="! isCollapsed">
+                                                                                        <span class="sr-only">
                                                                                             Collapse
                                                                                         </span>
 
-                                                                                        <svg x-show="isCollapsed"
+                                                                                        <svg
                                                                                              class="w-4 h-4"
                                                                                              xmlns="http://www.w3.org/2000/svg"
                                                                                              viewBox="0 0 20 20"
@@ -295,7 +293,6 @@
                                                                                             </path>
                                                                                         </svg>
                                                                                         <span class="sr-only"
-                                                                                              x-show="isCollapsed"
                                                                                               style="display: none;">
                                                                                             Expand
                                                                                         </span>
@@ -303,7 +300,7 @@
                                                                                 </li>
                                                                             </ul>
                                                                         </header>
-                                                                        <div class="p-6" x-show="! isCollapsed">
+                                                                        <div class="p-6">
                                                                             <div class="grid grid-cols-1 filament-forms-component-container gap-6">
                                                                                 <div class="col-span-full">
                                                                                     <div>
@@ -498,7 +495,6 @@
                                                                         </div>
 
                                                                         <div class="p-2 text-xs text-center text-gray-400"
-                                                                             x-show="isCollapsed"
                                                                              style="display: none;">
                                                                             Content collapsed
                                                                         </div>

@@ -15,7 +15,7 @@ from django.views.generic.base import ContextMixin, View
 from custom_admin.forms import GeneralNotificationForm, ThemeForm
 from custom_admin.models import GeneralSettings
 from project.admin import BoardAdminFormSet
-from project.forms import ProjectCreateForm, AdminTaskForm, AdminCommentForm, BoardForm, AdminUserForm
+from project.forms import ProjectCreateForm, AdminTaskForm, AdminCommentForm, BoardForm, AdminUserForm, VoteForm
 from project.models import Project, Task, Message, TaskHistory, Board, Votes, TaskNotification
 from users.models import User
 from users.views import LoginRequiredMixin
@@ -33,6 +33,7 @@ class AdminContextView(ContextMixin):
             '-created')
         context['task_notifications'] = json.dumps(list(task_notifications), indent=4, sort_keys=True, default=str)
         context['general_settings'] = GeneralSettings.objects.first()
+        context['tasks'] = json.dumps(list(Task.objects.values('name','slug')), indent=4, sort_keys=True, default=str)
         return context
 
 
@@ -219,6 +220,7 @@ class TaskCreateView(AdminContextView, LoginRequiredMixin, CreateView):
 class TaskUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
     model = Task
     form_class = AdminTaskForm
+    vote_form_class = VoteForm
     success_url = reverse_lazy("custom_admin:tasks")
     template_name = "custom_admin/edit_task.html"
     success_message = 'Task updated successfully'
@@ -239,6 +241,7 @@ class TaskUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
         context['votes'] = json.dumps(list(
             Votes.objects.filter(task=self.object).values('task__is_subscribed', 'id',
                                                           'task__slug', 'task__project__slug', 'user__email',
+                                                          'subscribed','user__id',
                                                           'created').order_by('-created')),
             indent=4,
             sort_keys=True, default=str)
@@ -246,6 +249,8 @@ class TaskUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
         context['task_histories'] = json.dumps(list(
             TaskHistory.objects.filter(task=self.object).values('note', 'created', 'action_by__email').order_by(
                 '-created')), indent=4, sort_keys=True, default=str)
+
+        context['vote_form'] = self.vote_form_class
         return context
 
     def form_valid(self, form):
@@ -523,6 +528,31 @@ class VoteDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+
+class SaveTaskVote(AdminContextView, LoginRequiredMixin, View):
+    form = VoteForm
+
+    @staticmethod
+    def get_redirect_url(self, task_slug):
+        return redirect("custom_admin:update_task", slug=task_slug)
+
+    def post(self, request, *args, **kwargs):
+
+        task_slug = request.POST['task_slug']
+
+        if not request.POST['vote_id']:
+            form_data = self.form(data=request.POST)
+            if form_data.is_valid():
+                vote = form_data.save(commit=False)
+                vote.task_id = int(request.POST['task_id'])
+                vote.save()
+        else:
+            Votes.objects.filter(id=int(request.POST['vote_id'])).update(user_id=int(request.POST['user']),
+                                                                         subscribed=True if 'subscribed' in
+                                                                                            request.POST else False)
+
+        return self.get_redirect_url(self, task_slug)
 
 
 class RemoveOGImage(AdminContextView, LoginRequiredMixin, View):

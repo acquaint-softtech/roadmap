@@ -68,8 +68,8 @@ class TaskDetailView(BaseContextView, DetailView):
             task__slug=self.kwargs.get('slug'))
         context['history_data'] = TaskHistory.objects.select_related('task', 'action_by').filter(
             task__slug=self.kwargs.get('slug')).order_by('-created')[0:10]
-        context['is_voted'] = Votes.objects.filter(user=self.request.user,
-                                                   task=self.object).exists() if self.request.user.is_authenticated \
+        context['vote_data'] = Votes.objects.filter(user=self.request.user,
+                                                   task=self.object).first() if self.request.user.is_authenticated \
             else False
 
         users = list(User.objects.exclude(

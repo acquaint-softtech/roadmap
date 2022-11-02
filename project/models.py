@@ -98,6 +98,7 @@ class Votes(TimeStampModel):
                              on_delete=models.CASCADE, null=True, blank=True)
     task = models.ForeignKey(Task, related_name='user_task',
                              on_delete=models.CASCADE, null=True, blank=True)
+    subscribed = models.BooleanField(default=True)
 
 
 class TaskNotification(TimeStampModel):
