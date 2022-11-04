@@ -1,12 +1,13 @@
 from django import forms
 from django.contrib.auth.forms import (AuthenticationForm, UserCreationForm,
                                        UsernameField)
+from django.core.exceptions import ValidationError
 
+from users.auth_backend import CustomAuthBackend
 from users.models import User
 
 
 class RegisterUserForm(UserCreationForm):
-
     class Meta:
         model = User
         fields = (
@@ -28,7 +29,6 @@ class RegisterUserForm(UserCreationForm):
 
 
 class UpdateUserForm(forms.Form):
-
     class Meta:
         fields = (
             "first_name",
@@ -48,9 +48,26 @@ class LoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
+        self.user = None
         self.fields["username"].error_messages[
             "required"
         ] = "Please enter your username or email-address."
         self.fields["password"].error_messages[
             "required"
         ] = "Please enter your password."
+
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
+        if username is not None and password:
+            self.user = CustomAuthBackend.authenticate(self, self.request, username=username, password=password)
+            if not self.user:
+                raise ValidationError(
+                    "Please enter a correct %(username)s and password. Note that both fields may be case-sensitive."
+                )
+
+        return self.cleaned_data
+
+    def get_user(self):
+        return self.user

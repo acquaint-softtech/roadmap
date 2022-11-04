@@ -141,6 +141,23 @@
                                     </thead>
 
                                     <tbody class="divide-y whitespace-nowrap">
+                                    
+                                    <tr x-show="user_items.length == 0">
+                                        <td colspan="5">
+                                            <div class="flex items-center justify-center p-4">
+                                                <div class="filament-tables-empty-state flex flex-1 flex-col items-center justify-center p-6 mx-auto space-y-6 text-center bg-white">
+                                                    <div class="max-w-md space-y-1">
+                                                        <h2 class="filament-tables-empty-state-heading text-xl font-bold tracking-tight">
+                                                            No records found
+                                                        </h2>
+                                                        <p class="filament-tables-empty-state-description whitespace-normal text-sm font-medium text-gray-500">
+                                                        </p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
 
                                     <template x-for="item in user_items" :key="item">
                                             <tr class="filament-tables-row hover:bg-gray-50 dark:hover:bg-gray-500/10">
@@ -195,7 +212,7 @@
                                 </table>
                             </div>
 
-                            <div class="p-2 border-t">
+                            <div x-show="user_items.length != 0" class="p-2 border-t">
                                 <nav role="navigation" aria-label="Pagination Navigation"
                                      class="filament-tables-pagination flex items-center justify-between">
                                     <div class="flex justify-between items-center flex-1 lg:hidden">
@@ -226,8 +243,9 @@
                                             </button>
                                         </div>
                                     </div>
-
-                                    <div class="hidden flex-1 items-center lg:grid grid-cols-3">
+                                    
+                                    
+                                    <div  class="hidden flex-1 items-center lg:grid grid-cols-3">
                                         <div class="flex items-center">
                                             <div class="pl-2 text-sm font-medium dark:text-white">
                                                 Showing <span x-text="ItemstartResults()"></span> to <span x-text="ItemendResults()"></span> of <span x-text="total_of_items"></span> results
@@ -492,7 +510,7 @@
                                     </template>
                                     </tbody>
                                 </table>
-                                                            <div class="p-2 border-t">
+                                                            <div x-show="user_votes.length != 0" class="p-2 border-t">
                                 <nav role="navigation" aria-label="Pagination Navigation"
                                      class="filament-tables-pagination flex items-center justify-between">
                                     <div class="flex justify-between items-center flex-1 lg:hidden">
@@ -758,12 +776,9 @@
                                             </td>
                                         </tr>
                                     </template>
-                                    
-                                    
                                     </tbody>
-
                                 </table>
-                               <div class="p-2 border-t">
+                               <div x-show="user_mentions.length != 0" class="p-2 border-t">
                                 <nav role="navigation" aria-label="Pagination Navigation"
                                      class="filament-tables-pagination flex items-center justify-between">
                                     <div class="flex justify-between items-center flex-1 lg:hidden">
@@ -979,6 +994,26 @@
                                     </thead>
 
                                     <tbody class="divide-y whitespace-nowrap">
+                                    
+                                        <tr x-show="user_comments.length == 0">
+                                          <td colspan="3">
+                                              <div class="flex items-center justify-center p-4">
+                                                  <div class="filament-tables-empty-state flex flex-1 flex-col items-center justify-center p-6 mx-auto space-y-6 text-center bg-white">
+                                                      <div class="max-w-md space-y-1">
+                                                          <h2 class="filament-tables-empty-state-heading text-xl font-bold tracking-tight">
+                                                              No records found
+                                                          </h2>
+  
+                                                          <p class="filament-tables-empty-state-description whitespace-normal text-sm font-medium text-gray-500">
+  
+                                                          </p>
+                                                      </div>
+  
+                                                  </div>
+                                              </div>
+                                          </td>
+                                        </tr>
+                                        
                                         <template x-for="comment in user_comments" :key="comment">
                                             <tr class="filament-tables-row hover:bg-gray-50 dark:hover:bg-gray-500/10">
                                                 <td
@@ -1027,7 +1062,7 @@
                                 </table>
                             </div>
 
-                            <div class="p-2 border-t">
+                            <div class="p-2 border-t" x-show="user_comments.length != 0">
                                 <nav role="navigation" aria-label="Pagination Navigation"
                                      class="filament-tables-pagination flex items-center justify-between">
                                     <div class="flex justify-between items-center flex-1 lg:hidden">

@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from django.contrib import messages
@@ -5,11 +6,15 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetConfirmView
+from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.encoding import force_text, force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import CreateView, FormView, TemplateView
 from django.views.generic import View
 
@@ -17,7 +22,8 @@ from common.custom_messages import message_dict
 from home.views import BaseContextView
 from project.models import Task, Message, Votes
 from users.forms import RegisterUserForm, UpdateUserForm, LoginForm
-from users.models import UserSetting
+from users.models import UserSetting, User
+from users.token import account_activation_token
 
 
 class LoginRequiredMixin(object):
@@ -27,7 +33,15 @@ class LoginRequiredMixin(object):
         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 
-class RegisterView(BaseContextView,CreateView):
+class EmailVerify(LoginRequiredMixin, BaseContextView, TemplateView):
+    template_name = 'users/email_verify.html'
+
+    def post(self, request, *args, **kwargs):
+        get_user_activate_account_link(request, request.user)
+        return redirect('users:email_verify')
+
+
+class RegisterView(BaseContextView, CreateView):
     form_class = RegisterUserForm
     success_url = reverse_lazy("users:signing")
     template_name = "users/register.html"
@@ -40,16 +54,53 @@ class RegisterView(BaseContextView,CreateView):
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.role = Group.objects.get_or_create(name='user')[0]
+        obj.is_active = False
         obj.mention_name = obj.first_name.lower().replace(' ', '-')
         obj.save()
         messages.success(
             self.request,
             message_dict.get('registration')
         )
+
+        get_user_activate_account_link(self.request, obj)
         return super(RegisterView, self).form_valid(form)
 
     def form_invalid(self, form):
         return super(RegisterView, self).form_invalid(form)
+
+
+def get_user_activate_account_link(request, user):
+    current_site = get_current_site(request)
+    mail_subject = 'Activation link has been sent to your email id'
+    message = render_to_string('users/account_activation_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+    })
+    user.email_user(mail_subject, message)
+    return True
+
+
+class ActivateAccount(View):
+
+    def get(self, request, uidb64, token, *args, **kwargs):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_active = True
+            user.email_verified_at = datetime.datetime.now()
+            user.save()
+            login(request, user)
+            messages.success(request, 'Your account have been confirmed.')
+            return redirect('home:home')
+        else:
+            messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used.')
+            return redirect('users:signing')
 
 
 class EditProfileView(LoginRequiredMixin, BaseContextView, FormView):
@@ -76,7 +127,8 @@ class EditProfileView(LoginRequiredMixin, BaseContextView, FormView):
         instance.email = form.data.get('email')
         notification.mention_notifications = True if form.data.get('mention_notifications') == 'on' else False
         notification.reply_notifications = True if form.data.get('reply_notifications') == 'on' else False
-        notification.page_par_sizes = self.request.POST['selected'].split(',')
+        notification.page_par_sizes = sorted(self.request.POST['selected'].split(','), key=int)
+
         instance.save()
         notification.save()
         messages.success(self.request, "Saved Profile")
@@ -86,7 +138,7 @@ class EditProfileView(LoginRequiredMixin, BaseContextView, FormView):
         return super(EditProfileView, self).form_invalid(form)
 
 
-class CustomLoginView(BaseContextView,LoginView):
+class CustomLoginView(BaseContextView, LoginView):
     template_name = "users/login.html"
     form_class = LoginForm
     success_message = 'Login successfully'
@@ -161,7 +213,8 @@ class MyItemView(LoginRequiredMixin, BaseContextView, TemplateView):
             sort_keys=True, default=str)
 
         context['recent_mentions'] = json.dumps(
-            list(Message.objects.filter(mention_user=self.request.user).values('task__name', 'text', 'created','task__slug')),
+            list(Message.objects.filter(mention_user=self.request.user).values('task__name', 'text', 'created',
+                                                                               'task__slug')),
             indent=4,
             sort_keys=True, default=str)
         context['options'] = self.request.user.settings.page_par_sizes

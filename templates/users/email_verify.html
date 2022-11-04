@@ -1,0 +1,27 @@
+{% extends "home/base.html" %}
+{% load admin_extra_filters %}
+{% block content %}
+<div class="pb-4">
+  <ul class="flex items-center space-x-0.5 text-sm font-medium text-gray-600">
+  </ul>
+</div>
+<div class=" relative overflow-hidden flex justify-center">
+  <div class="z-10 flex-1 w-full max-w-lg py-8 md:py-16">
+    <div class="w-full max-w-lg px-4 mx-auto sm:px-6 md:px-8 space-y-4">
+      <h1 class="text-xl font-semibold tracking-tight md:text-2xl">
+        Verify email
+      </h1>
+      <div class="alert-info border-blue-500 bg-blue-300 text-blue-800">
+        Before proceeding, please check your email for a verification link.
+        If you did not receive the email,
+        <form method="POST" action="{% url 'users:email_verify' %}">{% csrf_token %}
+          <button type="submit" class="border-b border-dotted border-blue-500 font-semibold">click here to request
+            another
+          </button>
+          .
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
