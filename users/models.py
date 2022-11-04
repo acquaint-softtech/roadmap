@@ -6,7 +6,7 @@ from users.manager import CustomUserManager
 
 
 def get_default_pages():
-    return list(5, 10, 15)
+    return [5, 10, 15]
 
 
 class User(AbstractUser):
@@ -17,6 +17,7 @@ class User(AbstractUser):
     role = models.ForeignKey(Group, related_name='user_group', on_delete=models.SET_NULL, null=True)
     objects = CustomUserManager()
     mention_name = models.CharField(max_length=100, null=True, blank=True)
+    email_verified_at = models.DateTimeField(null=True,blank=True)
 
 
 class UserSetting(models.Model):

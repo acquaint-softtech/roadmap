@@ -392,7 +392,7 @@ class UserUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
             indent=4, sort_keys=True, default=str)
         context['votes'] = json.dumps(list(
             Votes.objects.filter(user=self.object).values('task__name', 'task__project__title', 'task__is_subscribed',
-                                                          'task__slug', 'task__project__slug')), indent=4,
+                                                          'task__slug', 'task__project__slug','id')), indent=4,
             sort_keys=True, default=str)
         context['data'] = {'app_name': 'User', 'type': 'Edit', 'listing_url': reverse_lazy("custom_admin:users")}
         return context

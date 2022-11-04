@@ -14,7 +14,7 @@ class CustomAuthBackend(BaseBackend):
             user = UserModel.objects.filter(email=username).first()
 
             if user:
-                if user.check_password(password) and user.is_active:
+                if user.check_password(password):
                     return user
         except UserModel.DoesNotExist:
             # Run the default password hasher once to reduce the timing
