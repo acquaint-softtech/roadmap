@@ -7,5 +7,4 @@ from users.models import User, UserSetting
 @receiver(post_save, sender=User)
 def save_user_profile(sender, created, instance, **kwargs):
     if created:
-        import pdb;pdb.set_trace()
         UserSetting.objects.create(user=instance)
