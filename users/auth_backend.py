@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import BaseBackend
+from django.contrib.auth.models import Group
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 
 UserModel = get_user_model()
@@ -31,12 +32,11 @@ class CustomAuthBackend(BaseBackend):
 
 class MyOIDCAB(OIDCAuthenticationBackend):
     def create_user(self, claims):
-        user = UserModel.objects.create(first_name=claims.get('given_name', ''),
-                                        last_name=claims.get('family_name', ''), email=claims.get('email', ''))
+        user = UserModel.objects.create(first_name=claims.get('name', ''),
+                                        last_name=claims.get('family_name', ''), email=claims.get('email', ''),
+                                        role=Group.objects.get_or_create(name='user')[0])
+
         return user
 
     def update_user(self, user, claims):
-        user.first_name = claims.get('given_name', '')
-        user.last_name = claims.get('family_name', '')
-        user.save()
         return user

@@ -53,9 +53,7 @@ class RegisterView(BaseContextView, CreateView):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.role = Group.objects.get_or_create(name='user')[0]
         obj.is_active = False
-        obj.mention_name = obj.first_name.lower().replace(' ', '-')
         obj.save()
         messages.success(
             self.request,
