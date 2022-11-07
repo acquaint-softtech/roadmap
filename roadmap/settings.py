@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "js_urls",
     "simple_open_graph",
     "colorfield",
+    "mozilla_django_oidc"
 ]
 
 CACHES = {
@@ -97,7 +98,7 @@ CKEDITOR_CONFIGS = {
             'toolbar_Custom': [
                 ['Bold', 'Link', 'Unlink', 'Image'],
             ],
-            'extraPlugins': ['mentions','tableresize','textmatch','textmatch'],
+            'extraPlugins': ['mentions', 'tableresize', 'textmatch', 'textmatch'],
             'height': 300,
             'width': 700,
         }
@@ -116,7 +117,20 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = [
     "users.auth_backend.CustomAuthBackend",
+    "users.auth_backend.MyOIDCAB"
 ]
+
+# SSO LOGIN
+
+OIDC_RP_CLIENT_ID = os.environ.get("OIDC_RP_CLIENT_ID")
+OIDC_RP_CLIENT_SECRET = os.environ.get("OIDC_RP_CLIENT_SECRET")
+OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get("OIDC_OP_AUTHORIZATION_ENDPOINT")
+OIDC_OP_TOKEN_ENDPOINT = os.environ.get("OIDC_OP_TOKEN_ENDPOINT")
+OIDC_OP_USER_ENDPOINT = os.environ.get("OIDC_OP_USER_ENDPOINT")
+OIDC_RP_SIGN_ALGO = os.environ.get("OIDC_RP_SIGN_ALGO")
+OIDC_OP_JWKS_ENDPOINT = os.environ.get("OIDC_OP_JWKS_ENDPOINT")
+LOGIN_REDIRECT_URL = os.environ.get("LOGIN_REDIRECT_URL")
+LOGOUT_REDIRECT_URL = os.environ.get("LOGOUT_REDIRECT_URL")
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
@@ -175,7 +189,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/

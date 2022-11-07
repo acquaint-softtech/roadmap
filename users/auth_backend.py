@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import BaseBackend
+from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 
 UserModel = get_user_model()
 
@@ -26,3 +27,16 @@ class CustomAuthBackend(BaseBackend):
             return UserModel.objects.get(pk=user_id)
         except UserModel.DoesNotExist:
             return None
+
+
+class MyOIDCAB(OIDCAuthenticationBackend):
+    def create_user(self, claims):
+        user = UserModel.objects.create(first_name=claims.get('given_name', ''),
+                                        last_name=claims.get('family_name', ''), email=claims.get('email', ''))
+        return user
+
+    def update_user(self, user, claims):
+        user.first_name = claims.get('given_name', '')
+        user.last_name = claims.get('family_name', '')
+        user.save()
+        return user

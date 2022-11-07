@@ -153,7 +153,7 @@ class CustomLoginView(BaseContextView, LoginView):
 
     def form_valid(self, form):
         remember_me = self.request.POST.get('remember')
-        login(self.request, form.get_user())
+        login(self.request, form.get_user(),backend='users.auth_backend.CustomAuthBackend')
         if remember_me != 'on':
             self.request.session.set_expiry(0)
         return HttpResponseRedirect(self.get_success_url())
