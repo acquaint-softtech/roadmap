@@ -11,7 +11,6 @@
 
 <div class="pb-4">
     <ul class="flex items-center space-x-0.5 text-sm font-medium text-gray-600">
-
         <li>
             <a class="transition hover:underline focus:outline-none focus:text-gray-800 focus:underline"
                href="{% url 'users:profile' %}">
@@ -20,6 +19,8 @@
         </li>
     </ul>
 </div>
+
+
 
 
 <div class="space-y-6" x-data="{login_popup:false,remove_account_popup:false}">
@@ -37,7 +38,7 @@
                         </div>
 
                     </div>
-
+                  
                     <div class="filament-forms-section-content-wrapper" aria-expanded="true">
                         <div class="filament-forms-section-content p-6">
                             <div class="grid grid-cols-1      filament-forms-component-container gap-6">
@@ -288,6 +289,7 @@
                                               </div>
                                             </div>
                                         </div>
+                                          <span class="text-red-500">{{ form.non_field_errors }}</span>
                                             <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600">
                                                 <p>Determine how many pages should be available for the items in the
                                                     "My" page for example.</p>

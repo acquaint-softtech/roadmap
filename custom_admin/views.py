@@ -12,6 +12,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, UpdateView, DeleteView, CreateView, FormView
 from django.views.generic.base import ContextMixin, View
 
+from common.custom_messages import message_dict
 from custom_admin.forms import GeneralNotificationForm, ThemeForm
 from custom_admin.models import GeneralSettings
 from project.admin import BoardAdminFormSet
@@ -33,7 +34,7 @@ class AdminContextView(ContextMixin):
             '-created')
         context['task_notifications'] = json.dumps(list(task_notifications), indent=4, sort_keys=True, default=str)
         context['general_settings'] = GeneralSettings.objects.first()
-        context['tasks'] = json.dumps(list(Task.objects.values('name','slug')), indent=4, sort_keys=True, default=str)
+        context['tasks'] = json.dumps(list(Task.objects.values('name', 'slug')), indent=4, sort_keys=True, default=str)
         return context
 
 
@@ -106,6 +107,7 @@ class ProjectCreateView(AdminContextView, LoginRequiredMixin, CreateView):
             data.save()
         self.success_url = reverse_lazy("custom_admin:projects") if 'submit' in form.data else reverse_lazy(
             "custom_admin:new_project")
+        messages.success(self.request, message_dict.get('new_record'))
         return super(ProjectCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -147,6 +149,7 @@ class ProjectUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
     def form_valid(self, formset, form):
         form.save()
         formset.save()
+        messages.success(self.request, message_dict.get('edit_record'))
         return super(ProjectUpdateView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -209,7 +212,7 @@ class TaskCreateView(AdminContextView, LoginRequiredMixin, CreateView):
             "custom_admin:new_task")
         messages.success(
             self.request,
-            "Task created successfully."
+            message_dict.get("new_record")
         )
         return super(TaskCreateView, self).form_valid(form)
 
@@ -241,7 +244,7 @@ class TaskUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
         context['votes'] = json.dumps(list(
             Votes.objects.filter(task=self.object).values('task__is_subscribed', 'id',
                                                           'task__slug', 'task__project__slug', 'user__email',
-                                                          'subscribed','user__id',
+                                                          'subscribed', 'user__id',
                                                           'created').order_by('-created')),
             indent=4,
             sort_keys=True, default=str)
@@ -257,6 +260,10 @@ class TaskUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
         obj = form.save()
         if obj.project_id and obj.type_id:
             Votes.objects.get_or_create(task=obj, user=obj.created_by)
+        messages.success(
+            self.request,
+            message_dict.get("edit_record")
+        )
         return super(TaskUpdateView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -279,7 +286,7 @@ class CommentsList(TemplateView, AdminContextView, LoginRequiredMixin):
         context = super(CommentsList, self).get_context_data(*args, **kwargs)
         message_data = Message.objects.values('id', 'text', 'task__name', 'user__email',
                                               'created', 'task__slug', 'user__id').order_by('-created')
-        context['messages'] = json.dumps(list(message_data), indent=4, sort_keys=True, default=str)
+        context['message_data'] = json.dumps(list(message_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Comments', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:comments")}
         return context
 
@@ -300,7 +307,7 @@ class CommentCreateView(AdminContextView, LoginRequiredMixin, CreateView):
             "custom_admin:new_comment")
         messages.success(
             self.request,
-            "Comment created successfully."
+            message_dict.get("new_record")
         )
         return super(CommentCreateView, self).form_valid(form)
 
@@ -319,6 +326,13 @@ class CommentUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
         context = AdminContextView.get_context_data(self)
         context['data'] = {'app_name': 'Comment', 'type': 'Edit', 'listing_url': reverse_lazy("custom_admin:comments")}
         return context
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            message_dict.get("edit_record")
+        )
+        return super(CommentUpdateView, self).form_valid(form)
 
 
 class CommentDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
@@ -339,6 +353,8 @@ class ChangeTaskStatus(LoginRequiredMixin, View):
         task_obj.save()
         TaskHistory.objects.create(task=task_obj, action_by=request.user,
                                    note=f'moved item to board {task_obj.type.name}')
+
+        messages.success(request, f"Successfully moved the item to board {task_obj.type.name}")
         return redirect('project:task_detail', slug=task_slug)
 
 
@@ -367,6 +383,7 @@ class UserCreateView(AdminContextView, LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         self.success_url = reverse_lazy("custom_admin:users") if 'submit' in form.data else reverse_lazy(
             "custom_admin:new_user")
+        messages.success(self.request, message_dict.get('new_record'))
         return super(UserCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -376,9 +393,11 @@ class UserCreateView(AdminContextView, LoginRequiredMixin, CreateView):
 class UserUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
     model = User
     form_class = AdminUserForm
-    success_url = reverse_lazy("custom_admin:users")
     template_name = "custom_admin/edit_user.html"
     success_message = 'User updated successfully'
+
+    def get_success_url(self, *args, **kwargs):
+        return reverse_lazy('custom_admin:update_user', args=[self.kwargs['pk']])
 
     def get_context_data(self, **kwargs):
         context = super(UserUpdateView, self).get_context_data()
@@ -392,10 +411,14 @@ class UserUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
             indent=4, sort_keys=True, default=str)
         context['votes'] = json.dumps(list(
             Votes.objects.filter(user=self.object).values('task__name', 'task__project__title', 'task__is_subscribed',
-                                                          'task__slug', 'task__project__slug','id')), indent=4,
+                                                          'task__slug', 'task__project__slug', 'id')), indent=4,
             sort_keys=True, default=str)
         context['data'] = {'app_name': 'User', 'type': 'Edit', 'listing_url': reverse_lazy("custom_admin:users")}
         return context
+
+    def form_valid(self, form):
+        messages.success(self.request, message_dict.get('edit_record'))
+        return super(UserUpdateView, self).form_valid(form)
 
 
 class UserDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
@@ -461,6 +484,7 @@ class AdminThemeView(LoginRequiredMixin, AdminContextView, FormView):
     def form_valid(self, form):
         form = ThemeForm(instance=GeneralSettings.objects.first(), data=self.request.POST, files=self.request.FILES)
         form.save()
+        messages.success(self.request, message_dict.get('edit_record'))
         return super(AdminThemeView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -489,6 +513,7 @@ class AdminSettingsView(LoginRequiredMixin, AdminContextView, View):
             obj = form.save(commit=False)
             obj.default_boards = request.POST.get('board_data').split(',')
             obj.save()
+        messages.success(self.request, message_dict.get('edit_record'))
         return redirect(self.success_url)
 
 
@@ -505,7 +530,8 @@ class ProjectWiseBoard(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
-        boards = Board.objects.filter(project_id=int(data['project_id'])).values('id', 'name')
+        boards = Board.objects.filter(project_id=int(data['project_id'])).values('id', 'name') if data[
+            'project_id'] else []
         data = json.dumps(list(boards), sort_keys=True, default=str)
         return JsonResponse(
             {"message": "success", "boards": data})

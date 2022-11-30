@@ -30,50 +30,6 @@
                         <div>
                             <div class="flex items-center justify-between p-2 h-14">
                                 <div class="flex items-center gap-2">
-
-                                    <div class="filament-dropdown filament-tables-bulk-actions"
-                                       >
-                                        <div x-on:click="toggle" class="filament-dropdown-trigger cursor-pointer">
-                                            <button title="Open actions" type="button"
-                                                class="filament-icon-button flex items-center justify-center rounded-full relative hover:bg-gray-500/5 focus:outline-none text-primary-500 focus:bg-primary-500/10 dark:hover:bg-gray-300/5 w-10 h-10 filament-tables-bulk-actions-trigger">
-                                                <span class="sr-only">
-                                                    Open actions
-                                                </span>
-
-                                                <svg class="filament-icon-button-icon w-5 h-5"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" aria-hidden="true">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z">
-                                                    </path>
-                                                </svg>
-                                            </button>
-                                        </div>
-
-                                        <div x-ref="panel" x-float.placement.bottom-start.flip.offset="{ offset: 8 }"
-                                            x-transition:enter-start="opacity-0 scale-95"
-                                            x-transition:leave-end="opacity-0 scale-95"
-                                            class="filament-dropdown-panel absolute z-10 w-full rounded-lg bg-white shadow-lg ring-1 ring-black/5 transition dark:bg-gray-800 dark:ring-white/10 max-w-[14rem]"
-                                            style="display: none;">
-                                            <div class="filament-tables-bulk-action">
-                                                <button type="button"
-                                                    class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-danger-600 focus:bg-danger-700"
-                                                    x-on:click="mountBulkAction('delete')">
-                                                    <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-danger-500"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                                        fill="currentColor" aria-hidden="true">
-                                                        <path fill-rule="evenodd"
-                                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                            clip-rule="evenodd"></path>
-                                                    </svg>
-                                                    <span class="truncate">
-                                                        Delete selected
-                                                    </span>
-
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div class="w-full flex items-center justify-end gap-2 md:max-w-md">
@@ -196,8 +152,25 @@
                                     </tr>
                                 </thead>
 
-                                <tbody
-                                    class="divide-y whitespace-nowrap dark:divide-gray-700">
+                                <tbody class="divide-y whitespace-nowrap dark:divide-gray-700">
+                                
+                                <tr x-show="tasks.length == 0">
+                                    <td colspan="7">
+                                        <div class="flex items-center justify-center p-4">
+                                            <div class="filament-tables-empty-state flex flex-1 flex-col items-center justify-center p-6 mx-auto space-y-6 text-center bg-white">
+                                                <div class="max-w-md space-y-1">
+                                                    <h2 class="filament-tables-empty-state-heading text-xl font-bold tracking-tight">
+                                                        No tasks found
+                                                    </h2>
+                                                    <p class="filament-tables-empty-state-description whitespace-normal text-sm font-medium text-gray-500">
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                
                                 <template x-for="task in tasks" :key="task">
                                     <tr class="filament-tables-row hover:bg-gray-50 dark:hover:bg-gray-500/10">
                                         <td
@@ -301,7 +274,7 @@
                             </table>
                         </div>
 
-                        <div class="p-2 border-t dark:border-gray-700">
+                        <div class="p-2 border-t dark:border-gray-700" x-show="tasks.length != 0">
                             <nav role="navigation" aria-label="Pagination Navigation"
                                 class="filament-tables-pagination flex items-center justify-between">
                                 <div class="flex justify-between items-center flex-1 lg:hidden">
