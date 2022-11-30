@@ -200,7 +200,7 @@
                                                         <div  x-on:change="Boards($event)" class="filament-forms-select-component flex items-center space-x-1 rtl:space-x-reverse group">
                                                             <div class="flex-1 min-w-0">
                                                                 {{form.project}}
-                                                                <span>{{form.errors.project}}</span>
+                                                                <span class="text-red-600">{{form.errors.project}}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -234,6 +234,7 @@
                                                                         <option :value="board.id" :selected="board.id ==={{ form.type.value|default_if_none:'00'}}"  x-text="board.name"></option>
                                                                     </template>
                                                                 </select>
+                                                              <span class="text-red-600">{{form.errors.type}}</span>
                                                             </div>
                                                         </div>
                                                     </div>

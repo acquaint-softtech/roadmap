@@ -2,6 +2,7 @@
 import json
 import re
 
+from django.contrib import messages
 from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -87,6 +88,7 @@ class SaveTaskView(BaseContextView, LoginRequiredMixin, View):
         name = data.get('task_title')
         description = data.get('task_description')
         Task.objects.create(name=name, description=description, created_by=request.user)
+        messages.success(request,'Item created successfully.')
         return JsonResponse({"message": "success"})
 
 

@@ -39,6 +39,15 @@ class UpdateUserForm(forms.Form):
             "mention_name"
         )
 
+    def clean(self):
+        page_par_sizes = self.data.get('selected')
+
+        if not page_par_sizes:
+            raise ValidationError(
+                "Please select page per size."
+            )
+        return self.data
+
 
 class LoginForm(AuthenticationForm):
     username = UsernameField(
@@ -64,7 +73,7 @@ class LoginForm(AuthenticationForm):
             self.user = CustomAuthBackend.authenticate(self, self.request, username=username, password=password)
             if not self.user:
                 raise ValidationError(
-                    "Please enter a correct %(username)s and password. Note that both fields may be case-sensitive."
+                    "Please enter a correct username and password. Note that both fields may be case-sensitive."
                 )
 
         return self.cleaned_data

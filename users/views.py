@@ -4,7 +4,6 @@ import json
 from django.contrib import messages
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetConfirmView
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Count
@@ -21,6 +20,7 @@ from django.views.generic import View
 from common.custom_messages import message_dict
 from home.views import BaseContextView
 from project.models import Task, Message, Votes
+from users.auth_backend import CustomAuthBackend
 from users.forms import RegisterUserForm, UpdateUserForm, LoginForm
 from users.models import UserSetting, User
 from users.token import account_activation_token
@@ -43,7 +43,7 @@ class EmailVerify(LoginRequiredMixin, BaseContextView, TemplateView):
 
 class RegisterView(BaseContextView, CreateView):
     form_class = RegisterUserForm
-    success_url = reverse_lazy("users:signing")
+    success_url = reverse_lazy("home:home")
     template_name = "users/register.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -55,12 +55,14 @@ class RegisterView(BaseContextView, CreateView):
         obj = form.save(commit=False)
         obj.is_active = False
         obj.save()
+        get_user_activate_account_link(self.request, obj)
+        user = CustomAuthBackend.authenticate(self, self.request, username=self.request.POST['email'],
+                                              password=self.request.POST['password1'])
+        login(self.request, user, backend='users.auth_backend.CustomAuthBackend')
         messages.success(
             self.request,
             message_dict.get('registration')
         )
-
-        get_user_activate_account_link(self.request, obj)
         return super(RegisterView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -129,7 +131,8 @@ class EditProfileView(LoginRequiredMixin, BaseContextView, FormView):
 
         instance.save()
         notification.save()
-        messages.success(self.request, "Saved Profile")
+
+        messages.success(self.request, message_dict.get('profile'))
         return super(EditProfileView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -142,6 +145,11 @@ class CustomLoginView(BaseContextView, LoginView):
     success_message = 'Login successfully'
     success_url = reverse_lazy("home:home")
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(self.get_success_url())
+        return super(CustomLoginView, self).dispatch(request, *args, **kwargs)
+
     def get_success_url(self):
         if self.get_redirect_url() != '':
             self.success_url = self.get_redirect_url()
@@ -151,15 +159,10 @@ class CustomLoginView(BaseContextView, LoginView):
 
     def form_valid(self, form):
         remember_me = self.request.POST.get('remember')
-        login(self.request, form.get_user(),backend='users.auth_backend.CustomAuthBackend')
+        login(self.request, form.get_user(), backend='users.auth_backend.CustomAuthBackend')
         if remember_me != 'on':
             self.request.session.set_expiry(0)
         return HttpResponseRedirect(self.get_success_url())
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return reverse_lazy("home:home")
-        return super(CustomLoginView, self).dispatch(request, *args, **kwargs)
 
     def form_invalid(self, form):
         return super(CustomLoginView, self).form_invalid(form)

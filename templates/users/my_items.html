@@ -441,7 +441,7 @@
                                            wire:sortable.options="{ animation: 100 }"
                                            class="divide-y whitespace-nowrap">
 
-                                    <tr x-show="votes.length == 0">
+                                    <tr x-show="user_votes.length == 0">
                                         <td colspan="5">
                                             <div class="flex items-center justify-center p-4">
                                                 <div class="filament-tables-empty-state flex flex-1 flex-col items-center justify-center p-6 mx-auto space-y-6 text-center bg-white">
@@ -720,7 +720,7 @@
                                            wire:end.stop="reorderTable($event.target.sortable.toArray())"
                                            wire:sortable.options="{ animation: 100 }"
                                            class="divide-y whitespace-nowrap">
-                                    <tr x-show="mentions.length == 0">
+                                    <tr x-show="user_mentions.length == 0">
                                         <td colspan="3">
                                             <div class="flex items-center justify-center p-4">
                                                 <div class="filament-tables-empty-state flex flex-1 flex-col items-center justify-center p-6 mx-auto space-y-6 text-center bg-white">
@@ -996,22 +996,19 @@
                                     <tbody class="divide-y whitespace-nowrap">
                                     
                                         <tr x-show="user_comments.length == 0">
-                                          <td colspan="3">
-                                              <div class="flex items-center justify-center p-4">
-                                                  <div class="filament-tables-empty-state flex flex-1 flex-col items-center justify-center p-6 mx-auto space-y-6 text-center bg-white">
-                                                      <div class="max-w-md space-y-1">
-                                                          <h2 class="filament-tables-empty-state-heading text-xl font-bold tracking-tight">
-                                                              No records found
-                                                          </h2>
-  
-                                                          <p class="filament-tables-empty-state-description whitespace-normal text-sm font-medium text-gray-500">
-  
-                                                          </p>
-                                                      </div>
-  
-                                                  </div>
-                                              </div>
-                                          </td>
+                                            <td colspan="5">
+                                                <div class="flex items-center justify-center p-4">
+                                                    <div class="filament-tables-empty-state flex flex-1 flex-col items-center justify-center p-6 mx-auto space-y-6 text-center bg-white">
+                                                        <div class="max-w-md space-y-1">
+                                                            <h2 class="filament-tables-empty-state-heading text-xl font-bold tracking-tight">
+                                                                No records found
+                                                            </h2>
+                                                            <p class="filament-tables-empty-state-description whitespace-normal text-sm font-medium text-gray-500">
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
                                         </tr>
                                         
                                         <template x-for="comment in user_comments" :key="comment">

@@ -5,7 +5,6 @@ function Myitems() {
       comment_search:"",
       vote_search:"",
       mention_search:"",
-      selectedOption:5,
       ItempageNumber: 0,
       VotepageNumber: 0,
       MentionpageNumber: 0,

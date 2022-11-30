@@ -1,6 +1,7 @@
 function Base(){
     return {
       showModal: false,
+      csrf_token:csrf_token,
       task_title : '',
       task_description : '',
       title_error : false,
@@ -18,7 +19,7 @@ function Base(){
           }
           fetch('/save_task/', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json','X-CSRFToken':'{{csrf_token}}' },
+              headers: { 'Content-Type': 'application/json','X-CSRFToken':csrf_token },
               body: JSON.stringify({'task_title': this.task_title,'task_description':this.task_description})
           })
           .then(response => response.json())
