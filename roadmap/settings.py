@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     "mptt",
     "crispy_forms",
     "js_urls",
-    "simple_open_graph",
     "colorfield",
     "mozilla_django_oidc"
 ]
@@ -112,7 +111,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_browser_reload.middleware.BrowserReloadMiddleware"
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 AUTHENTICATION_BACKENDS = [
