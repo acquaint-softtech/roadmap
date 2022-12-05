@@ -189,34 +189,28 @@
                                                 type="checkbox">
                                         </td>
 
-                                        <td class="filament-tables-cell dark:text-white"
-                                            wire:loading.remove.delay="wire:loading.remove.delay"
-                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
-                                               <div class="filament-tables-text-column px-4 py-3 whitespace-normal">
-                                                 <p x-text="task.name"></p>
-                                               </div>
+                                        <td class="filament-tables-cell dark:text-white">
+                                               <a @click="window.location.href=window.reverse('custom_admin:update_task', { slug: task.slug })">
+                                                <div class="filament-tables-text-column px-4 py-3 whitespace-normal">
+                                                  <p x-text="task.name" class="cursor-pointer"></p>
+                                                </div>
+                                               </a>
                                         </td>
-                                        <td class="cursor-pointer filament-tables-cell dark:text-white"
-                                            wire:loading.remove.delay="wire:loading.remove.delay"
-                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                        <td class="cursor-pointer filament-tables-cell dark:text-white">
                                             <a @click="window.location.href=window.reverse('custom_admin:update_project', { slug: task.project__slug })">
                                                <div class="filament-tables-text-column px-4 py-3 whitespace-normal">
-                                                 <p x-text="task.project__title"></p>
+                                                 <p x-text="task.project__title" class="cursor-pointer"></p>
                                                </div>
                                             </a>
                                         </td>
 
-                                        <td class="filament-tables-cell dark:text-white"
-                                            wire:loading.remove.delay="wire:loading.remove.delay"
-                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                        <td class="filament-tables-cell dark:text-white">
                                             <div class="filament-tables-text-column px-4 py-3 whitespace-normal">
                                                 <p x-text="task.type__name"></p>
                                             </div>
                                         </td>
 
-                                        <td class="cursor-pointer filament-tables-cell dark:text-white"
-                                            wire:loading.remove.delay="wire:loading.remove.delay"
-                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                        <td class="cursor-pointer filament-tables-cell dark:text-white">
                                             <a @click="window.location.href=window.reverse('custom_admin:update_user', { pk: task.created_by__id })">
                                                 <div class="filament-tables-text-column px-4 py-3 whitespace-normal">
                                                     <p x-text="task.created_by__email"></p>
@@ -232,9 +226,7 @@
                                                 </div>
                                         </td>
 
-                                        <td class="filament-tables-cell dark:text-white"
-                                            wire:loading.remove.delay="wire:loading.remove.delay"
-                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                        <td class="filament-tables-cell dark:text-white">
                                             <div class="filament-tables-text-column px-4 py-3">
                                                 <div x-show="task.is_pinned">
                                                     <svg class="w-6 h-6 text-success-500" xmlns="http://www.w3.org/2000/svg" color="green" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -250,13 +242,10 @@
                                         </td>
 
 
-                                        <td wire:loading.remove.delay=""
-                                            wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set"
-                                            class="filament-tables-actions-cell px-4 py-3 whitespace-nowrap">
+                                        <td class="filament-tables-actions-cell px-4 py-3 whitespace-nowrap">
                                             <div class="flex items-center gap-4 justify-end">
                                                 <a class="cursor-pointer text-blue-600 filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-sm text-primary-600 hover:text-primary-500 dark:text-primary-500 dark:hover:text-primary-400 filament-tables-link-action"
-                                                  @click="window.location.href=window.reverse('custom_admin:update_task', { slug: task.slug })"
-                                                    dusk="filament.tables.action.edit">
+                                                  @click="window.location.href=window.reverse('custom_admin:update_task', { slug: task.slug })">
                                                     <svg class="filament-link-icon w-4 h-4 mr-1 rtl:ml-1"
                                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                         fill="currentColor" aria-hidden="true">

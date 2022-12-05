@@ -24,9 +24,9 @@ class GeneralSettings(TimeStampModel):
                                                  help_text='This allows your users to create an item without a board.')
     enable_item_age = models.BooleanField(default=False,
                                           help_text='Enable this to show the age of an item on the details page.')
-    enable_voter_avtar = models.BooleanField(default=True,
-                                             help_text='Enabling this will show the avatars of the most recent voters '
-                                                       'when viewing an item.')
+    enable_voter_avatar = models.BooleanField(default=True,
+                                              help_text='Enabling this will show the avatars of the most recent voters '
+                                                        'when viewing an item.')
     user_select_project = models.BooleanField(default=True)
     is_project_required = models.BooleanField(default=False)
     is_select_board = models.BooleanField(default=True)

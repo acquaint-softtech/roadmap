@@ -13,6 +13,7 @@ from django.views.generic import TemplateView, UpdateView, DeleteView, CreateVie
 from django.views.generic.base import ContextMixin, View
 
 from common.custom_messages import message_dict
+from common.middleware import CustomCacheMiddleware
 from custom_admin.forms import GeneralNotificationForm, ThemeForm
 from custom_admin.models import GeneralSettings
 from project.admin import BoardAdminFormSet
@@ -43,9 +44,9 @@ class AdminHomeView(LoginRequiredMixin, AdminContextView, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AdminHomeView, self).get_context_data()
-        task_data = Task.objects.select_related('project', 'type').annotate(num_task_histories=Count('task_history'))
-        context['latest_items'] = task_data.order_by('-created')[0:5]
-        context['popular_items'] = task_data.order_by('-num_task_histories')[0:5]
+        cache_data = CustomCacheMiddleware(object)
+        context['latest_items'] = cache_data.admin_task_data.order_by('-created')[0:5]
+        context['popular_items'] = cache_data.admin_task_data.order_by('-num_task_histories')[0:5]
         return context
 
 
@@ -54,10 +55,8 @@ class ProjectList(TemplateView, AdminContextView, LoginRequiredMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super(ProjectList, self).get_context_data(*args, **kwargs)
-        project_data = Project.objects.annotate(
-            board_count=Count('category_project')).values('id', 'title', 'created',
-                                                          'is_private', 'slug', 'board_count').order_by('-created')
-        context['projects'] = json.dumps(list(project_data), indent=4, sort_keys=True, default=str)
+        cache_data = CustomCacheMiddleware(object)
+        context['projects'] = json.dumps(list(cache_data.project_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Project', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:projects")}
         return context
 
@@ -170,10 +169,8 @@ class InboxList(TemplateView, AdminContextView, LoginRequiredMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super(InboxList, self).get_context_data(*args, **kwargs)
-        inbox_data = Task.objects.filter(project__isnull=True).annotate(comment_count=Count('message_task')).values(
-            'id', 'name', 'created_by__email',
-            'created', 'slug', 'comment_count', 'created_by__id').order_by('-created')
-        context['inbox'] = json.dumps(list(inbox_data), indent=4, sort_keys=True, default=str)
+        cache_data = CustomCacheMiddleware(object)
+        context['inbox'] = json.dumps(list(cache_data.inbox_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Inbox', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:inbox")}
         return context
 
@@ -183,11 +180,8 @@ class AdminTaskList(TemplateView, AdminContextView, LoginRequiredMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super(AdminTaskList, self).get_context_data(*args, **kwargs)
-        task_data = Task.objects.filter(project__isnull=False).values('id', 'name', 'project__title', 'type__name',
-                                                                      'created_by__email', 'created', 'is_pinned',
-                                                                      'slug', 'created_by__id',
-                                                                      'project__slug').order_by('-created')
-        context['tasks'] = json.dumps(list(task_data), indent=4, sort_keys=True, default=str)
+        cache_data = CustomCacheMiddleware(object)
+        context['tasks'] = json.dumps(list(cache_data.task_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Item', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:tasks")}
         return context
 
@@ -284,9 +278,8 @@ class CommentsList(TemplateView, AdminContextView, LoginRequiredMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super(CommentsList, self).get_context_data(*args, **kwargs)
-        message_data = Message.objects.values('id', 'text', 'task__name', 'user__email',
-                                              'created', 'task__slug', 'user__id').order_by('-created')
-        context['message_data'] = json.dumps(list(message_data), indent=4, sort_keys=True, default=str)
+        cache_data = CustomCacheMiddleware(object)
+        context['message_data'] = json.dumps(list(cache_data.message_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Comments', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:comments")}
         return context
 
@@ -363,9 +356,8 @@ class AdminUserList(TemplateView, AdminContextView, LoginRequiredMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super(AdminUserList, self).get_context_data(*args, **kwargs)
-        user_data = User.objects.values('id', 'first_name', 'role__name', 'email', 'date_joined').order_by(
-            '-date_joined')
-        context['users'] = json.dumps(list(user_data), indent=4, sort_keys=True, default=str)
+        cache_data = CustomCacheMiddleware(object)
+        context['users'] = json.dumps(list(cache_data.user_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Users', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:users")}
         return context
 
@@ -435,9 +427,8 @@ class AdminVoteList(TemplateView, AdminContextView, LoginRequiredMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super(AdminVoteList, self).get_context_data(*args, **kwargs)
-        vote_data = Votes.objects.values('id', 'user__email', 'task__name', 'task__is_subscribed', 'created',
-                                         'user__id', 'task__slug').order_by('-created')
-        context['votes'] = json.dumps(list(vote_data), indent=4, sort_keys=True, default=str)
+        cache_data = CustomCacheMiddleware(object)
+        context['votes'] = json.dumps(list(cache_data.vote_data), indent=4, sort_keys=True, default=str)
         context['data'] = {'app_name': 'Votes', 'type': 'List', 'listing_url': reverse_lazy("custom_admin:votes")}
         return context
 

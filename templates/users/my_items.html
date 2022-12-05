@@ -169,38 +169,28 @@
                                                             d="M4 6h16M4 12h16M4 18h16"></path>
                                                     </svg>
                                                 </td>
-                                                <td class="filament-tables-cell dark:text-white"
-                                                    wire:loading.remove.delay="wire:loading.remove.delay"
-                                                    wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                                <td class="filament-tables-cell dark:text-white">
                                                     <div class="filament-tables-text-column px-4 py-3 whitespace-normal" @click="window.location.href=window.reverse('custom_admin:update_user', { pk: user.id })">
                                                         <p x-text="item.name"></p>
                                                     </div>
                                                 </td>
-                                                <td class="filament-tables-cell dark:text-white"
-                                                    wire:loading.remove.delay="wire:loading.remove.delay"
-                                                    wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                                <td class="filament-tables-cell dark:text-white">
                                                     <div class="filament-tables-text-column px-4 py-3 whitespace-normal" @click="window.location.href=window.reverse('custom_admin:update_user', { pk: user.id })">
                                                         <p x-text="item.num_votes"></p>
                                                     </div>
                                                 </td>
-                                                <td class="filament-tables-cell dark:text-white"
-                                                    wire:loading.remove.delay="wire:loading.remove.delay"
-                                                    wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                                <td class="filament-tables-cell dark:text-white">
                                                     <div class="filament-tables-text-column px-4 py-3 whitespace-normal" @click="window.location.href=window.reverse('custom_admin:update_user', { pk: user.id })">
                                                         <p x-text="item.project__title"></p>
                                                     </div>
                                                 </td>
-                                                <td class="filament-tables-cell dark:text-white"
-                                                    wire:loading.remove.delay="wire:loading.remove.delay"
-                                                    wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                                <td class="filament-tables-cell dark:text-white">
                                                     <div class="filament-tables-text-column px-4 py-3 whitespace-normal" @click="window.location.href=window.reverse('custom_admin:update_user', { pk: user.id })">
                                                         <p x-text="item.type__name"></p>
                                                     </div>
                                                 </td>
 
-                                                <td class="filament-tables-cell dark:text-white"
-                                                    wire:loading.remove.delay="wire:loading.remove.delay"
-                                                    wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                                                <td class="filament-tables-cell dark:text-white">
                                                         <div class="filament-tables-text-column px-4 py-3">
                                                             <p x-text="date_format(item.created)"></p>
                                                         </div>
@@ -272,7 +262,7 @@
                                                 <li>
                                                     <button type="button"
                                                         class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
-                                                         x-on:click="prevPage" :disabled="ItempageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : ItempageNumber==0 }" aria-label="Next" rel="next">
+                                                         x-on:click="ItemprevPage" :disabled="ItempageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : ItempageNumber==0 }" aria-label="Next" rel="next">
                                                         <svg class="w-5 h-5 rtl:scale-x-[-1]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                           <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
@@ -570,7 +560,7 @@
                                                 <li>
                                                     <button type="button"
                                                         class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
-                                                         x-on:click="prevPage" :disabled="VotepageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : VotepageNumber==0 }" aria-label="Next" rel="next">
+                                                         x-on:click="VoteprevPage" :disabled="VotepageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : VotepageNumber==0 }" aria-label="Next" rel="next">
                                                         <svg class="w-5 h-5 rtl:scale-x-[-1]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                           <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
@@ -830,7 +820,7 @@
                                                 <li>
                                                     <button type="button"
                                                         class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
-                                                         x-on:click="prevPage" :disabled="MentionpageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : MentionpageNumber==0 }" aria-label="Next" rel="next">
+                                                         x-on:click="MentionprevPage" :disabled="MentionpageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : MentionpageNumber==0 }" aria-label="Next" rel="next">
                                                         <svg class="w-5 h-5 rtl:scale-x-[-1]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                           <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
@@ -1111,7 +1101,7 @@
                                                 <li>
                                                     <button type="button"
                                                         class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
-                                                         x-on:click="prevPage" :disabled="CommentpageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : CommentpageNumber==0 }" aria-label="Next" rel="next">
+                                                         x-on:click="CommentprevPage" :disabled="CommentpageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : CommentpageNumber==0 }" aria-label="Next" rel="next">
                                                         <svg class="w-5 h-5 rtl:scale-x-[-1]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                           <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>

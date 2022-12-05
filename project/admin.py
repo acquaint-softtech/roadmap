@@ -10,10 +10,11 @@ admin.site.register(Votes)
 
 class BoardAdminFormSet(BaseInlineFormSet):
 
-    def __init__(self,*args, **kwargs):
-        if 'instance' in kwargs and  kwargs['instance'].pk is None:
+    def __init__(self, *args, **kwargs):
+        if 'instance' in kwargs and kwargs['instance'].pk is None:
             kwargs['initial'] = [
-                {'name': 'Under review'}, {'name': 'Planned'}, {'name': 'In progress'}, {'name': 'Live'}, {'name': 'Closed'}
+                {'name': 'Under review'}, {'name': 'Planned'}, {'name': 'In progress'}, {'name': 'Live'},
+                {'name': 'Closed'}
             ]
         super(BoardAdminFormSet, self).__init__(*args, **kwargs)
 
@@ -45,11 +46,7 @@ class ProjectAdmin(admin.ModelAdmin):
         BoardInline
     ]
     list_display = ("id", "title", "description", "created_by")
-    list_filter = ("title", "description",)
     search_fields = ("created_by__email", "created_by__username", "title")
-
-
-admin.site.register(Board)
 
 
 @admin.register(Task)

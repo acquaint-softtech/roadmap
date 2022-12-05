@@ -170,7 +170,9 @@
 
                                         <td class="filament-tables-cell dark:text-white">
                                             <div class="filament-tables-text-column px-4 py-3 whitespace-normal">
+                                              <a @click="window.location.href=window.reverse('custom_admin:update_comment', { pk: comment.id })" class="block">
                                                 <p x-html="comment.text" class="cursor-pointer"></p>
+                                              </a>
                                             </div>
                                         </td>
 

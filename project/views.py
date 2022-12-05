@@ -14,7 +14,6 @@ from project.forms import MessageForm
 from project.models import Project, Task, Message, TaskHistory, Board, Votes
 from users.models import User
 from users.views import LoginRequiredMixin
-from django.db import connection
 
 
 class ProjectList(BaseContextView, LoginRequiredMixin, ListView):
@@ -70,7 +69,7 @@ class TaskDetailView(BaseContextView, DetailView):
         context['history_data'] = TaskHistory.objects.select_related('task', 'action_by').filter(
             task__slug=self.kwargs.get('slug')).order_by('-created')[0:10]
         context['vote_data'] = Votes.objects.filter(user=self.request.user,
-                                                   task=self.object).first() if self.request.user.is_authenticated \
+                                                    task=self.object).first() if self.request.user.is_authenticated \
             else False
 
         users = list(User.objects.exclude(
@@ -88,7 +87,7 @@ class SaveTaskView(BaseContextView, LoginRequiredMixin, View):
         name = data.get('task_title')
         description = data.get('task_description')
         Task.objects.create(name=name, description=description, created_by=request.user)
-        messages.success(request,'Item created successfully.')
+        messages.success(request, 'Item created successfully.')
         return JsonResponse({"message": "success"})
 
 

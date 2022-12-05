@@ -12,7 +12,6 @@ function Comments() {
          end = start + this.size;
         if (this.search === "") {
           this.total = this.myForData.length;
-          console.log(start,end)
           return this.myForData.slice(start, end);
         }
 

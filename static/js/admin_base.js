@@ -13,9 +13,9 @@ function adminHome() {
             this.notification_count = this.user_notifications.length
         },
         get global_items() {
-          if (this.global_search.length == 0) {
+          if (this.global_search.trim().length == 0) {
            this.global_search_shown = false
-            return this.tasks;
+           return [];
           }
           else{
               this.global_search_shown = true
