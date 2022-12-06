@@ -19,7 +19,7 @@ from django.views.generic import View
 
 from common.custom_messages import message_dict
 from home.views import BaseContextView
-from project.models import Task, Message, Votes
+from project.models import Task, Message, Vote
 from users.auth_backend import CustomAuthBackend
 from users.forms import RegisterUserForm, UpdateUserForm, LoginForm
 from users.models import UserSetting, User
@@ -115,12 +115,17 @@ class EditProfileView(LoginRequiredMixin, BaseContextView, FormView):
         context['option'] = notification_obj.page_par_sizes
         return context
 
-    def get_instace(self):
+    def get_instance(self):
         return self.request.user
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         notification = self.get_context_data()['notification']
-        instance = self.get_instace()
+        instance = self.get_instance()
         instance.first_name = form.data.get('first_name')
         instance.mention_name = form.data.get('mention_name') if form.data.get('mention_name') else form.data.get(
             'first_name').lower().replace(' ', '-')
@@ -202,7 +207,7 @@ class MyItemView(LoginRequiredMixin, BaseContextView, TemplateView):
                 , 'id')),
             indent=4, sort_keys=True, default=str)
         context['votes'] = json.dumps(list(
-            Votes.objects.filter(user=self.request.user).annotate(num_votes=Count('task')).values('task__name',
+            Vote.objects.filter(user=self.request.user).annotate(num_votes=Count('task')).values('task__name',
                                                                                                   'task__project__title',
                                                                                                   'task__is_subscribed',
                                                                                                   'created',

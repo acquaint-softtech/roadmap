@@ -1,8 +1,8 @@
 from django.core.cache import cache
-from django.db.models.signals import post_save,post_delete
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
-from project.models import TaskHistory, Task, TaskNotification, Project, Message, Votes
+from project.models import TaskHistory, Task, TaskNotification, Project, Message, Vote
 from users.models import User
 
 
@@ -22,15 +22,15 @@ def save_task_history(sender, created, instance, **kwargs):
 
 
 @receiver(post_delete, sender=Project)
-def save_project(sender, created, instance, **kwargs):
+def delete_project(sender, instance, *args, **kwargs):
     cache.delete('project_data')
 
 
 @receiver(post_delete, sender=Message)
-def save_comments(sender, created, instance, **kwargs):
+def delete_comments(sender, instance, *args, **kwargs):
     cache.delete('message_data')
 
 
-@receiver(post_delete, sender=Votes)
-def save_votes(sender, created, instance, **kwargs):
+@receiver(post_delete, sender=Vote)
+def delete_votes(sender, instance, *args, **kwargs):
     cache.delete('vote_data')

@@ -1,13 +1,14 @@
 from django.core.cache import cache
 from django.db.models import Count
 
-from project.models import Project, Task, Message, Votes
+from custom_admin.models import GeneralSetting
+from project.models import Project, Task, Message, Vote
 from users.models import User
 
 
 class CustomCacheMiddleware(object):
     """
-    This class is used to activate the timezone as per the user.
+    This class is used to get data from cache.
     """
 
     def __init__(self, get_response):
@@ -19,10 +20,11 @@ class CustomCacheMiddleware(object):
         self.inbox_data = cache.get('inbox_data')
         self.vote_data = cache.get('vote_data')
         self.admin_task_data = cache.get('admin_task_data')
+        self.settings = cache.get('settings')
 
         if not any(
                 [self.user_data, self.project_data, self.task_data, self.message_data, self.inbox_data, self.vote_data,
-                 self.admin_task_data]):
+                 self.admin_task_data, self.settings]):
             self.set_cache_value()
 
     def set_cache_value(self):
@@ -60,14 +62,18 @@ class CustomCacheMiddleware(object):
             cache.set('inbox_data', self.inbox_data)
 
         if not self.vote_data:
-            self.vote_data = Votes.objects.values('id', 'user__email', 'task__name', 'task__is_subscribed', 'created',
-                                                  'user__id', 'task__slug').order_by('-created')
+            self.vote_data = Vote.objects.values('id', 'user__email', 'task__name', 'task__is_subscribed', 'created',
+                                                 'user__id', 'task__slug').order_by('-created')
             cache.set('vote_data', self.vote_data)
 
         if not self.admin_task_data:
             self.admin_task_data = Task.objects.select_related('project', 'type').annotate(
                 num_task_histories=Count('task_history'))
             cache.set('admin_task_data', self.admin_task_data)
+
+        if not self.settings:
+            self.settings = GeneralSetting.objects.first()
+            cache.set('settings', self.settings)
 
         return True
 

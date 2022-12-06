@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.views.generic.base import ContextMixin
 
-from custom_admin.models import GeneralSettings
+from custom_admin.models import GeneralSetting
 from project.forms import TaskCreateForm
 from project.models import Project
 
@@ -14,7 +14,7 @@ class BaseContextView(ContextMixin):
         context['projects'] = Project.objects.select_related('created_by').values('title', 'slug', 'is_private',
                                                                                   'created_by__email').order_by(
             '-created')
-        context['general_settings'] = GeneralSettings.objects.first()
+        context['general_settings'] = GeneralSetting.objects.first()
         return context
 
 

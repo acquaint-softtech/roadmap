@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from custom_admin.models import GeneralSettings
+from custom_admin.models import GeneralSetting
 
-admin.site.register(GeneralSettings)
+admin.site.register(GeneralSetting)
 
 admin.site.site_header = 'Roadmap'

@@ -11,7 +11,7 @@ from django.views.generic import ListView, DetailView
 
 from home.views import BaseContextView
 from project.forms import MessageForm
-from project.models import Project, Task, Message, TaskHistory, Board, Votes
+from project.models import Project, Task, Message, TaskHistory, Board, Vote
 from users.models import User
 from users.views import LoginRequiredMixin
 
@@ -62,13 +62,13 @@ class TaskDetailView(BaseContextView, DetailView):
         context["message_form"] = MessageForm()
         context["boards"] = Board.objects.filter(project=self.object.project).values('name', 'id')
         context['votes'] = list(
-            Votes.objects.select_related('task', 'user').filter(task=self.object).values_list('user__email',
+            Vote.objects.select_related('task', 'user').filter(task=self.object).values_list('user__email',
                                                                                               flat=True).distinct())
         context['message_data'] = Message.objects.select_related('task', 'user').filter(
             task__slug=self.kwargs.get('slug'))
         context['history_data'] = TaskHistory.objects.select_related('task', 'action_by').filter(
             task__slug=self.kwargs.get('slug')).order_by('-created')[0:10]
-        context['vote_data'] = Votes.objects.filter(user=self.request.user,
+        context['vote_data'] = Vote.objects.filter(user=self.request.user,
                                                     task=self.object).first() if self.request.user.is_authenticated \
             else False
 
