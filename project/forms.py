@@ -2,7 +2,7 @@ from ckeditor.widgets import CKEditorWidget
 from django import forms
 from django.core.exceptions import ValidationError
 
-from project.models import Project, Task, Message, Board, Votes
+from project.models import Project, Task, Message, Board, Vote
 from users.models import User
 
 
@@ -276,7 +276,7 @@ class AdminUserForm(forms.ModelForm):
 
 class VoteForm(forms.ModelForm):
     class Meta:
-        model = Votes
+        model = Vote
         fields = (
             "user",
             "subscribed",

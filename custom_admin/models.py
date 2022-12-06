@@ -10,7 +10,7 @@ def get_default_boards():
     return ['Under Review', 'Planned', 'In progress', 'Live', 'Closed']
 
 
-class GeneralSettings(TimeStampModel):
+class GeneralSetting(TimeStampModel):
     center_board_project_view = models.BooleanField(default=True,
                                                     help_text='When centering, this will always show the boards in '
                                                               'the center of the content area.')

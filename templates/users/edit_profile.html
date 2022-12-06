@@ -20,8 +20,7 @@
     </ul>
 </div>
 
-
-
+<span class="text-red-500">{{ form.non_field_errors }}</span>
 
 <div class="space-y-6" x-data="{login_popup:false,remove_account_popup:false}">
     <form class="space-y-4" method="post">{% csrf_token %}
@@ -34,14 +33,11 @@
                             <h3 class="font-bold tracking-tight pointer-events-none text-xl font-bold">
                                 Profile
                             </h3>
-
                         </div>
-
                     </div>
-                  
                     <div class="filament-forms-section-content-wrapper" aria-expanded="true">
                         <div class="filament-forms-section-content p-6">
-                            <div class="grid grid-cols-1      filament-forms-component-container gap-6">
+                            <div class="grid grid-cols-1  filament-forms-component-container gap-6">
                                 <div class="col-span-1">
                                     <div class="filament-forms-field-wrapper">
 
@@ -49,7 +45,6 @@
                                             <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                 <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                        for="name">
-
                                                 <span class="text-sm font-medium leading-4 text-gray-700">
                                                     Name
                                                     <sup class="font-medium text-red-600">*</sup>
@@ -289,7 +284,6 @@
                                               </div>
                                             </div>
                                         </div>
-                                          <span class="text-red-500">{{ form.non_field_errors }}</span>
                                             <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600">
                                                 <p>Determine how many pages should be available for the items in the
                                                     "My" page for example.</p>

@@ -1,11 +1,11 @@
 from django import forms
 
-from custom_admin.models import GeneralSettings
+from custom_admin.models import GeneralSetting
 
 
 class GeneralNotificationForm(forms.ModelForm):
     class Meta:
-        model = GeneralSettings
+        model = GeneralSetting
         exclude = ('created', 'modified', 'default_boards', 'theme_color', 'favicon_img',)
 
     def __init__(self, *args, **kwargs):
@@ -36,7 +36,7 @@ class GeneralNotificationForm(forms.ModelForm):
 
 class ThemeForm(forms.ModelForm):
     class Meta:
-        model = GeneralSettings
+        model = GeneralSetting
         fields = ('theme_color', 'favicon_img',)
 
     def __init__(self, *args, **kwargs):

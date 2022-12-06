@@ -37,8 +37,11 @@ class Board(TimeStampModel):
     detail = models.TextField(null=True, blank=True)
     sort_item = models.CharField(choices=(('Popular', 'Popular'), ('Latest', 'Latest')), blank=True, null=True,
                                  max_length=100)
-    project = models.ForeignKey(Project, related_name='category_project',
+    project = models.ForeignKey(Project, related_name='board_project',
                                 on_delete=models.CASCADE, null=True, blank=True)
+
+    class Meta:
+        unique_together = ('name', 'project',)
 
     def __str__(self):
         return self.name
@@ -73,10 +76,9 @@ class Task(TimeStampModel):
 class Message(TimeStampModel, MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='message_user',
-                             on_delete=models.CASCADE, null=True, blank=True)
-
+                             on_delete=models.CASCADE)
     task = models.ForeignKey(Task, related_name='message_task',
-                             on_delete=models.CASCADE, null=True, blank=True)
+                             on_delete=models.CASCADE)
     text = RichTextField(null=True, extra_plugins=['mentions'], external_plugin_resources=[
         ('mentions', '/static/ckeditor/ckeditor/plugins/mentions/', 'plugin.js',)])
     mention_user = models.ManyToManyField(User, related_name='mentioned_user', blank=True)
@@ -92,13 +94,22 @@ class TaskHistory(TimeStampModel):
                              on_delete=models.CASCADE, null=True, blank=True)
     note = models.CharField(max_length=255, null=True, blank=True)
 
+    def __str__(self):
+        return f"{self.task.name} - {self.note}"
 
-class Votes(TimeStampModel):
+
+class Vote(TimeStampModel):
     user = models.ForeignKey(User, related_name='vote_by',
                              on_delete=models.CASCADE, null=True, blank=True)
     task = models.ForeignKey(Task, related_name='user_task',
                              on_delete=models.CASCADE, null=True, blank=True)
     subscribed = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('user', 'task',)
+
+    def __str__(self):
+        return f"{self.user.email} - vote"
 
 
 class TaskNotification(TimeStampModel):

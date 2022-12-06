@@ -4,6 +4,7 @@ import platform
 
 from django.conf import settings
 from django.contrib import messages
+from django.core.cache import cache
 from django.db.models import Count
 from django.forms import inlineformset_factory
 from django.http import JsonResponse
@@ -15,10 +16,10 @@ from django.views.generic.base import ContextMixin, View
 from common.custom_messages import message_dict
 from common.middleware import CustomCacheMiddleware
 from custom_admin.forms import GeneralNotificationForm, ThemeForm
-from custom_admin.models import GeneralSettings
+from custom_admin.models import GeneralSetting
 from project.admin import BoardAdminFormSet
 from project.forms import ProjectCreateForm, AdminTaskForm, AdminCommentForm, BoardForm, AdminUserForm, VoteForm
-from project.models import Project, Task, Message, TaskHistory, Board, Votes, TaskNotification
+from project.models import Project, Task, Message, TaskHistory, Board, Vote, TaskNotification
 from users.models import User
 from users.views import LoginRequiredMixin
 
@@ -32,9 +33,9 @@ class AdminContextView(ContextMixin):
             is_read=False, is_deleted=False, assign_by=self.request.user).values('task__name', 'created', 'task__slug',
                                                                                  'task__created_by__id',
                                                                                  'task__created_by__email').order_by(
-            '-created')
+            '-created') if self.request.user.is_authenticated else []
         context['task_notifications'] = json.dumps(list(task_notifications), indent=4, sort_keys=True, default=str)
-        context['general_settings'] = GeneralSettings.objects.first()
+        context['general_settings'] = cache.get('settings')
         context['tasks'] = json.dumps(list(Task.objects.values('name', 'slug')), indent=4, sort_keys=True, default=str)
         return context
 
@@ -66,16 +67,16 @@ class ProjectCreateView(AdminContextView, LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("custom_admin:projects")
     template_name = "custom_admin/new_project.html"
 
-    general_settings = GeneralSettings.objects.first()
+    general_settings = cache.get('settings')
 
     BoardFormSet = inlineformset_factory(
         Project, Board, form=BoardForm, formset=BoardAdminFormSet,
         fields=['name', 'detail', 'is_visible', 'is_block_votes', 'is_user_delete', 'is_block_comments'],
-        extra=len(general_settings.default_boards),
+        extra=len(general_settings.default_boards if general_settings is not None else []),
         can_delete=True
     )
 
-    formset = BoardFormSet(initial=[{'name': data} for data in general_settings.default_boards])
+    formset = BoardFormSet(initial=[{'name': data} for data in general_settings.default_boards] if general_settings else [])
 
     def get_context_data(self, **kwargs):
         data = AdminContextView.get_context_data(self)
@@ -236,10 +237,10 @@ class TaskUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
                                                                  'user__email').order_by('-created')),
             indent=4, sort_keys=True, default=str)
         context['votes'] = json.dumps(list(
-            Votes.objects.filter(task=self.object).values('task__is_subscribed', 'id',
-                                                          'task__slug', 'task__project__slug', 'user__email',
-                                                          'subscribed', 'user__id',
-                                                          'created').order_by('-created')),
+            Vote.objects.filter(task=self.object).values('task__is_subscribed', 'id',
+                                                         'task__slug', 'task__project__slug', 'user__email',
+                                                         'subscribed', 'user__id',
+                                                         'created').order_by('-created')),
             indent=4,
             sort_keys=True, default=str)
 
@@ -253,7 +254,7 @@ class TaskUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         obj = form.save()
         if obj.project_id and obj.type_id:
-            Votes.objects.get_or_create(task=obj, user=obj.created_by)
+            Vote.objects.get_or_create(task=obj, user=obj.created_by)
         messages.success(
             self.request,
             message_dict.get("edit_record")
@@ -402,8 +403,8 @@ class UserUpdateView(AdminContextView, LoginRequiredMixin, UpdateView):
             list(Message.objects.filter(user=self.object).values('text', 'task__name', 'created', 'task__slug', 'id')),
             indent=4, sort_keys=True, default=str)
         context['votes'] = json.dumps(list(
-            Votes.objects.filter(user=self.object).values('task__name', 'task__project__title', 'task__is_subscribed',
-                                                          'task__slug', 'task__project__slug', 'id')), indent=4,
+            Vote.objects.filter(user=self.object).values('task__name', 'task__project__title', 'task__is_subscribed',
+                                                         'task__slug', 'task__project__slug', 'id')), indent=4,
             sort_keys=True, default=str)
         context['data'] = {'app_name': 'User', 'type': 'Edit', 'listing_url': reverse_lazy("custom_admin:users")}
         return context
@@ -437,7 +438,7 @@ class ChangeVote(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
-        vote, created = Votes.objects.get_or_create(user=request.user, task_id=data.get('task_id'))
+        vote, created = Vote.objects.get_or_create(user=request.user, task_id=data.get('task_id'))
         if not created:
             vote.task.is_subscribed = False
             vote.task.save()
@@ -539,7 +540,7 @@ class NotificationView(LoginRequiredMixin, View):
 
 
 class VoteDeleteView(AdminContextView, LoginRequiredMixin, DeleteView):
-    model = Votes
+    model = Vote
     success_url = reverse_lazy("custom_admin:votes")
     success_message = 'Vote deleted successfully'
 
@@ -565,9 +566,9 @@ class SaveTaskVote(AdminContextView, LoginRequiredMixin, View):
                 vote.task_id = int(request.POST['task_id'])
                 vote.save()
         else:
-            Votes.objects.filter(id=int(request.POST['vote_id'])).update(user_id=int(request.POST['user']),
-                                                                         subscribed=True if 'subscribed' in
-                                                                                            request.POST else False)
+            Vote.objects.filter(id=int(request.POST['vote_id'])).update(user_id=int(request.POST['user']),
+                                                                        subscribed=True if 'subscribed' in
+                                                                                           request.POST else False)
 
         return self.get_redirect_url(self, task_slug)
 
