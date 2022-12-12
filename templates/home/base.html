@@ -8,6 +8,9 @@
       <link rel="shortcut icon" href="{{general_settings.favicon_img.url}}"/>
     {% endif %}
     {% tailwind_css %}
+    {% if general_settings.header_script %}
+      {{general_settings.header_script|safe}}
+    {% endif %}
     <link href="https://unpkg.com/browse/tributejs@5.1.3/dist/tribute.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tributejs/5.1.3/tribute.js" integrity="sha512-9FdZa5G/ycmgOvFvIPFc6MLCBzCbVeMyBh49+qlqnIbP1xitvVRAon7F4q2bX8n/7mP3HBb3SgrX5GNrJGYLZQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>

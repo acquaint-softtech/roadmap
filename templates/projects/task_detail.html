@@ -26,31 +26,37 @@
                 {{object.project.title}}
             </a>
         </li>
-        <li>
-            <svg class="text-gray-400 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                    d="M10.75 8.75L14.25 12L10.75 15.25"></path>
-            </svg>
-        </li>
-
-        <li>
-            <a class="transition hover:underline focus:outline-none focus:text-gray-800 focus:underline"
-                href="#">
-                {{object.type.name}}
-            </a>
-        </li>
-        <li>
-            <svg class="text-gray-400 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                    d="M10.75 8.75L14.25 12L10.75 15.25"></path>
-            </svg>
-        </li>
-        <li>
-            <a class="transition hover:underline focus:outline-none focus:text-gray-800 focus:underline"
-                href="#">
-                {{object.name}}
-            </a>
-        </li>
+      
+        {% if object.type.name %}
+          <li>
+              <svg class="text-gray-400 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                      d="M10.75 8.75L14.25 12L10.75 15.25"></path>
+              </svg>
+          </li>
+  
+          <li>
+              <a class="transition hover:underline focus:outline-none focus:text-gray-800 focus:underline"
+                  href="#">
+                  {{object.type.name}}
+              </a>
+          </li>
+        {% endif %}
+      
+        {% if object.name %}
+          <li>
+              <svg class="text-gray-400 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                      d="M10.75 8.75L14.25 12L10.75 15.25"></path>
+              </svg>
+          </li>
+          <li>
+              <a class="transition hover:underline focus:outline-none focus:text-gray-800 focus:underline"
+                  href="#">
+                  {{object.name}}
+              </a>
+          </li>
+       {% endif %}
     </ul>
 </div>
 

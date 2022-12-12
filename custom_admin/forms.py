@@ -6,7 +6,7 @@ from custom_admin.models import GeneralSetting
 class GeneralNotificationForm(forms.ModelForm):
     class Meta:
         model = GeneralSetting
-        exclude = ('created', 'modified', 'default_boards', 'theme_color', 'favicon_img',)
+        exclude = ('created', 'modified', 'default_boards', 'theme_color', 'favicon_img','send_notifications_to',)
 
     def __init__(self, *args, **kwargs):
         super(GeneralNotificationForm, self).__init__(*args, **kwargs)

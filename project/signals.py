@@ -4,6 +4,7 @@ from django.dispatch import receiver
 
 from project.models import TaskHistory, Task, TaskNotification, Project, Message, Vote
 from users.models import User
+from django.core.mail import EmailMessage
 
 
 @receiver(post_save, sender=Task)
@@ -16,6 +17,12 @@ def save_task_history(sender, created, instance, **kwargs):
             if instance.created_by.id != user:
                 history_data.append(TaskNotification(task=instance, assign_by_id=user))
         TaskNotification.objects.bulk_create(history_data)
+
+        notify_user_data = cache.get('settings').send_notifications_to
+        for data in notify_user_data:
+            # we can add custom email template for body part
+            email = EmailMessage(data['name'], f'New item {instance.name} created', to=[data['email']])
+            email.send()
 
     cache.delete('task_data')
     cache.delete('admin_task_data')
