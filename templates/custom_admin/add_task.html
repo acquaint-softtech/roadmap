@@ -5,11 +5,11 @@
 {{form.media}}
 <div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
     <div class="filament-page filament-resources-create-record-page filament-resources-items"
-    x-data="addTask()">
+    x-data="addTask()" x-init="init()">
         <div class="space-y-6">
             <header
                 class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
-                <h1 class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
+                <h1 :class="[light ? 'text-black' : 'text-white']" class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
                     Create Item
                 </h1>
             </header>
@@ -20,22 +20,14 @@
                         <div>
                             <div class="flex gap-6">
                                 <div class=" w-2/3">
-                                    <div  class="filament-forms-tabs-component rounded-xl shadow-sm border border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-700">
-                                        <input type="hidden" value="[&quot;-item-tab&quot;,&quot;-management-tab&quot;]"
-                                            x-ref="tabsData">
-
-                                        <div aria-label="Heading" role="tablist"
+                                    <div  :class="[light ? '' : 'bg-[#26242e]']" class="filament-forms-tabs-component rounded-xl shadow-sm border border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-700">
+                                        <div :class="[light ? '' : 'bg-[#26242e]']" aria-label="Heading" role="tablist"
                                             class="filament-forms-tabs-component-header rounded-t-xl flex overflow-y-auto bg-gray-100 dark:bg-gray-700">
-                                            <button type="button" aria-controls="-item-tab"
-                                                class="filament-forms-tabs-component-button flex items-center gap-2 shrink-0 p-3 text-sm font-medium filament-forms-tabs-component-button-active bg-white text-primary-600 dark:bg-gray-800"
-                                                 aria-selected="true" tabindex="0">
-                                                <span>Item</span>
-
-                                            </button>
+                                          
                                             <button type="button" aria-controls="-management-tab"
                                                 class="filament-forms-tabs-component-button flex items-center gap-2 shrink-0 p-3 text-sm font-medium text-gray-500 dark:text-gray-400"
                                                  aria-selected="false" tabindex="-1">
-                                                <span>Management</span>
+                                                <span :class="[light ? 'text-black' : 'text-white']">Item</span>
 
                                             </button>
                                         </div>
@@ -53,7 +45,7 @@
                                                                 <label
                                                                     class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                     for="data.title">
-                                                                    <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                    <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                         Title
                                                                         <sup class="font-medium text-red-600">*</sup>
                                                                     </span>
@@ -83,7 +75,7 @@
                                                                 <label
                                                                     class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                     for="data.user_id">
-                                                                    <span
+                                                                    <span :class="[light ? 'text-black' : 'text-white']"
                                                                         class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                         User
 
@@ -114,7 +106,7 @@
                                                             <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                                 <label
                                                                     class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
-                                                                    <span
+                                                                    <span :class="[light ? 'text-black' : 'text-white']"
                                                                         class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                         Content
                                                                         <sup class="font-medium text-red-600">*</sup>
@@ -181,7 +173,7 @@
                                 </div>
 
                                 <div class=" w-1/3">
-                                    <div
+                                    <div :class="[light ? '' : 'bg-[#26242e]']"
                                         class="filament-forms-card-component p-6 bg-white rounded-xl border border-gray-300 dark:border-gray-600 dark:bg-gray-800">
                                         <div class="grid grid-cols-1 filament-forms-component-container gap-6">
                                             <div class=" col-span-1">
@@ -193,10 +185,9 @@
                                                             <label
                                                                 class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                 for="data.project_id">
-                                                                <span
+                                                                <span :class="[light ? 'text-black' : 'text-white']"
                                                                     class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                     Project
-
                                                                     <sup class="font-medium text-red-600">*</sup>
                                                                 </span>
                                                             </label>
@@ -223,7 +214,7 @@
                                                             <label
                                                                 class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                 for="data.board_id">
-                                                                <span
+                                                                <span :class="[light ? 'text-black' : 'text-white']"
                                                                     class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                     Board
 
@@ -245,56 +236,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                            </div>
-
-                                            <div class=" col-span-1">
-                                                <div class="filament-forms-field-wrapper">
-
-                                                    <div class="space-y-2">
-                                                        <div
-                                                            class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                            <label
-                                                                class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
-                                                                for="data.notify_subscribers">
-                                                                <button
-                                                                    role="switch" aria-checked="true"
-                                                                     type="button"
-                                                                    class="filament-forms-toggle-component relative inline-flex border-2 border-transparent shrink-0 h-6 w-11 rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed disabled:pointer-events-none bg-primary-600">
-                                                                    <span
-                                                                        class="pointer-events-none relative inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 ease-in-out transition duration-200 translate-x-5 rtl:-translate-x-5"
-                                                                        >
-                                                                        <span
-                                                                            class="absolute inset-0 h-full w-full flex items-center justify-center transition-opacity opacity-0 ease-out duration-100"
-                                                                            aria-hidden="true" >
-                                                                        </span>
-
-                                                                        <span
-                                                                            class="absolute inset-0 h-full w-full flex items-center justify-center transition-opacity opacity-100 ease-in duration-200"
-                                                                            aria-hidden="true" >
-                                                                        </span>
-                                                                    </span>
-                                                                </button>
-
-                                                                <span
-                                                                    class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
-                                                                    Notify subscribers
-                                                                </span>
-                                                            </label>
-                                                        </div>
-                                                        <div
-                                                            class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                            <p>Send a notification with updates about the item</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="hidden">
-                                            </div>
-
-                                            <div class="hidden">
                                             </div>
                                         </div>
 
@@ -328,14 +269,11 @@
                     </button>
 
                     <a class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action"
-                        href="{% url 'custom_admin:tasks' %}" dusk="filament.admin.action.cancel">
-
+                        href="{% url 'custom_admin:tasks' %}">
                         <span class="">
                             Cancel
                         </span>
-
                     </a>
-
                 </div>
             </form>
         </div>

@@ -2,23 +2,23 @@
 {% load widget_tweaks %}
 {% block content %}
 {{form.media}}
-<div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
+<div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full" x-data="add_comment()" x-init="init()">
     <div class="filament-page filament-resources-create-record-page filament-resources-comments">
         <div class="space-y-6">
             <header
                 class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
-                <h1 class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
+                <h1 :class="[light ? 'text-black' : 'text-white']" class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
                     Create Comment
                 </h1>
             </header>
 
             <form class="filament-form space-y-6" method="post">{% csrf_token %}
                 <div class="grid grid-cols-1 filament-forms-component-container gap-6">
-                    <div class=" col-span-full">
+                    <div class="col-span-full">
                         <div>
-                            <div class="grid grid-cols-1   lg:grid-cols-2   filament-forms-component-container gap-6">
-                                <div class=" col-span-full ">
-                                    <div
+                            <div  class="grid grid-cols-1   lg:grid-cols-2   filament-forms-component-container gap-6">
+                                <div class="col-span-full">
+                                    <div :class="[light ? '' : 'bg-[#26242e]']"
                                         class="filament-forms-card-component p-6 bg-white rounded-xl border border-gray-300 dark:border-gray-600 dark:bg-gray-800">
                                         <div
                                             class="grid grid-cols-1   lg:grid-cols-2   filament-forms-component-container gap-6">
@@ -31,7 +31,7 @@
                                                             class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                             <label
                                                                 class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
-                                                                <span
+                                                                <span :class="[light ? 'text-black' : 'text-white']"
                                                                     class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                     User
                                                                 </span>
@@ -60,7 +60,7 @@
                                                             <label
                                                                 class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                 for="data.item_id">
-                                                                <span
+                                                                <span :class="[light ? 'text-black' : 'text-white']"
                                                                     class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                     Item
                                                                 </span>
@@ -90,7 +90,7 @@
                                                             <label
                                                                 class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                 for="data.content">
-                                                                <span
+                                                                <span :class="[light ? 'text-black' : 'text-white']"
                                                                     class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                     Content
                                                                 </span>
@@ -140,4 +140,16 @@
         </div>
     </div>
 </div>
+
+
+<script>
+  function add_comment(){
+   return {
+    light : true,
+    init(){
+      this.light = localStorage.getItem("light") == 'true'
+    }
+   }
+  }
+</script>
 {% endblock content %}

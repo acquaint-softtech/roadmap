@@ -1,6 +1,10 @@
 function addTask() {
     return {
         boards: [],
+        light : true,
+        init(){
+            this.light = localStorage.getItem("light") == 'true'
+        },
         GetBoards($event) {
             let project_id = $event.target.value
             fetch('/admin/get_project_wise_board/', {

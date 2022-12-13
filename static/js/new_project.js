@@ -1,5 +1,9 @@
 function NewProject(){
     return {
+      light : true,
+      init(){
+          this.light = localStorage.getItem("light") == 'true'
+      },
       AddBoard(){
         const node = document.getElementById("id_projects").lastElementChild;
         const clone = node.cloneNode(true);

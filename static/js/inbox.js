@@ -7,6 +7,10 @@ function Inbox() {
       options:['5','15','25','50','All'],
       total: "",
       myForData: inbox,
+      light : true,
+      init(){
+        this.light = localStorage.getItem("light") == 'true'
+      },
       get inboxes() {
         const start = this.pageNumber * this.size,
           end = start + this.size;

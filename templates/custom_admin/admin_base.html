@@ -15,13 +15,13 @@
           [x-cloak] { display: none }
     </style>
 </head>
-<body class="flex bg-gray-100 min-h-screen"  x-data="adminHome()" x-init="init()">
+<body class="flex bg-gray-100 min-h-screen"  x-data="adminHome()" x-init="init()" :class="[light ? '' : 'bg-[#26242e]']">
 <div class="filament-sidebar-close-overlay fixed inset-0 z-20 w-full h-full bg-gray-900/50 lg:hidden"></div>
-<aside class="filament-sidebar fixed inset-y-0 left-0 rtl:left-auto rtl:right-0 z-20 flex flex-col h-screen overflow-hidden shadow-2xl transition-all bg-white lg:border-r rtl:lg:border-r-0 rtl:lg:border-l w-80 lg:z-0 dark:bg-gray-800 dark:border-gray-700 filament-sidebar-open translate-x-0 max-w-[20em] lg:max-w-[var(--sidebar-width)]">
-    <header class="filament-sidebar-header border-b h-[4rem] shrink-0 px-6 flex items-center dark:border-gray-700">
+<aside :class="[light ? '' : 'bg-[#26242e]']" class="filament-sidebar fixed inset-y-0 left-0 rtl:left-auto rtl:right-0 z-20 flex flex-col h-screen overflow-hidden shadow-2xl transition-all bg-white lg:border-r rtl:lg:border-r-0 rtl:lg:border-l w-80 lg:z-0 dark:bg-gray-800 dark:border-gray-700 filament-sidebar-open translate-x-0 max-w-[20em] lg:max-w-[var(--sidebar-width)]">
+    <header :class="[light ? '' : 'bg-[#26242e]']" class="filament-sidebar-header border-b h-[4rem] shrink-0 px-6 flex items-center dark:border-gray-700">
         <a href="/" class="block w-full"
            data-turbo="false" style="">
-            <div class="filament-brand text-xl font-bold tracking-tight dark:text-white">
+            <div :class="[light ? 'text-black' : 'text-white']" class="filament-brand text-xl font-bold tracking-tight dark:text-white">
                 Roadmap
             </div>
         </a>
@@ -34,13 +34,13 @@
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:admin_home' %}"
                            class="{% if request.path == '/admin/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
-                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg :class="[light ? 'text-black' : 'text-white']" class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                             </svg>
                             <div class="flex flex-1" style="">
-                                <span>
+                                <span :class="[light ? 'text-black' : 'text-white']">
                                     Dashboard
                                 </span>
                             </div>
@@ -49,13 +49,13 @@
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:theme' %}"
                            class="{% if request.path == '/admin/colors/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
-                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg :class="[light ? 'text-black' : 'text-white']" class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
                             </svg>
                             <div class="flex flex-1" style="">
-                                <span>
+                                <span  :class="[light ? 'text-black' : 'text-white']">
                                     Theme
                                 </span>
                             </div>
@@ -64,7 +64,7 @@
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:settings' %}"
                           class="{% if request.path == '/admin/settings/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
-                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg :class="[light ? 'text-black' : 'text-white']" class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
@@ -72,7 +72,7 @@
                                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             </svg>
                             <div class="flex flex-1" style="">
-                                <span>
+                                <span  :class="[light ? 'text-black' : 'text-white']">
                                     Settings
                                 </span>
                             </div>
@@ -81,13 +81,13 @@
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:users' %}"
                            class="{% if request.path == '/admin/users/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
-                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg :class="[light ? 'text-black' : 'text-white']" class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                             </svg>
                             <div class="flex flex-1" style="">
-                                <span>
+                                <span :class="[light ? 'text-black' : 'text-white']">
                                     Users
                                 </span>
                             </div>
@@ -96,13 +96,13 @@
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:system' %}"
                            class="{% if request.path == '/admin/system/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
-                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg :class="[light ? 'text-black' : 'text-white']" class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
                             </svg>
                             <div class="flex flex-1" style="">
-                                <span>
+                                <span :class="[light ? 'text-black' : 'text-white']">
                                     System
                                 </span>
                                 <span class="inline-flex items-center justify-center ml-auto rtl:ml-0 rtl:mr-auto min-h-4 px-2 py-0.5 text-xs font-medium tracking-tight rounded-xl whitespace-normal text-blue-700 bg-[#3b82f61a] dark:text-primary-500">
@@ -120,11 +120,11 @@
             <li  class="filament-sidebar-group">
                 <button class="flex items-center justify-between w-full">
                     <div class="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-                        <p class="flex-1 font-bold uppercase text-xs tracking-wider">
+                        <p :class="[light ? 'text-black' : 'text-white']" class="flex-1 font-bold uppercase text-xs tracking-wider">
                             Manage
                         </p>
                     </div>
-                    <svg
+                    <svg :class="[light ? 'text-black' : 'text-white']"
                          class="w-3 h-3 text-gray-600 transition-all dark:text-gray-300 -rotate-180"
                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                          stroke="currentColor" aria-hidden="true">
@@ -136,13 +136,13 @@
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:comments' %}"
                            class="{% if request.path == '/admin/comments/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
-                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg :class="[light ? 'text-black' : 'text-white']" class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                             </svg>
                             <div class="flex flex-1" style="">
-                                <span>
+                                <span :class="[light ? 'text-black' : 'text-white']">
                                     Comments
                                 </span>
                             </div>
@@ -151,16 +151,16 @@
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:inbox' %}"
                            class="{% if request.path == '/admin/inbox/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
-                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg :class="[light ? 'text-black' : 'text-white']" class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
                             </svg>
                             <div class="flex flex-1" style="">
-                                <span>
+                                <span :class="[light ? 'text-black' : 'text-white']">
                                     Inbox
                                 </span>
-                                <span class="inline-flex items-center justify-center ml-auto rtl:ml-0 rtl:mr-auto min-h-4 px-2 py-0.5 text-xs font-medium tracking-tight rounded-xl whitespace-normal  bg-[#3b82f61a] dark:text-primary-500">
+                                <span :class="[light ? 'text-black' : 'text-white']" class="inline-flex items-center justify-center ml-auto rtl:ml-0 rtl:mr-auto min-h-4 px-2 py-0.5 text-xs font-medium tracking-tight rounded-xl whitespace-normal  bg-[#3b82f61a] dark:text-primary-500">
                                     {{inbox_count}}
                                 </span>
                             </div>
@@ -169,13 +169,13 @@
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:tasks' %}"
                            class="{% if request.path == '/admin/items/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
-                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg :class="[light ? 'text-black' : 'text-white']" class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
                             </svg>
                             <div class="flex flex-1">
-                                <span>
+                                <span :class="[light ? 'text-black' : 'text-white']">
                                     Items
                                 </span>
                             </div>
@@ -184,13 +184,13 @@
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:projects' %}"
                            class="{% if request.path == '/admin/projects/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
-                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg :class="[light ? 'text-black' : 'text-white']" class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                             </svg>
                             <div class="flex flex-1">
-                                <span>
+                                <span :class="[light ? 'text-black' : 'text-white']">
                                     Projects
                                 </span>
                             </div>
@@ -199,13 +199,13 @@
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:votes' %}"
                            class="{% if request.path == '/admin/votes/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
-                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg :class="[light ? 'text-black' : 'text-white']" class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
                             </svg>
                             <div class="flex flex-1" style="">
-                                <span>
+                                <span :class="[light ? 'text-black' : 'text-white']">
                                     Votes
                                 </span>
                             </div>
@@ -216,33 +216,32 @@
             <li>
                 <div class="border-t -mr-6 rtl:-mr-auto rtl:-ml-6 dark:border-gray-700"></div>
             </li>
-            <li x-data="{ label: 'External' }" class="filament-sidebar-group">
+            <li class="filament-sidebar-group">
                 <button class="flex items-center justify-between w-full" style="">
                     <div class="flex items-center gap-4 text-gray-600 dark:text-gray-300">
 
-                        <p class="flex-1 font-bold uppercase text-xs tracking-wider">
+                        <p :class="[light ? 'text-black' : 'text-white']" class="flex-1 font-bold uppercase text-xs tracking-wider">
                             External
                         </p>
                     </div>
-                    <svg
+                    <svg :class="[light ? 'text-black' : 'text-white']"
                          class="w-3 h-3 text-gray-600 transition-all dark:text-gray-300 -rotate-180"
                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                          stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
-                <ul
-                        x-collapse.duration.200ms="" class="text-sm space-y-1 -mx-3 mt-2">
+                <ul class="text-sm space-y-1 -mx-3 mt-2">
                     <li class="filament-sidebar-item">
                         <a href="/"
                            class="flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700">
-                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg :class="[light ? 'text-black' : 'text-white']" class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"></path>
                             </svg>
                             <div class="flex flex-1" style="">
-                                <span>
+                                <span :class="[light ? 'text-black' : 'text-white']">
                                     Public view
                                 </span>
                             </div>
@@ -256,7 +255,7 @@
 <body>
 <div class="filament-main flex-col gap-y-6 w-screen flex-1 rtl:lg:pl-0 hidden h-full transition-all lg:pl-[20rem] rtl:lg:pr-[20rem]"
     style="display: flex;">
-    <header class="filament-main-topbar sticky top-0 z-10 flex h-16 w-full shrink-0 items-center border-b bg-white dark:bg-gray-800 dark:border-gray-700">
+    <header :class="[light ? '' : 'bg-[#26242e]']" class="filament-main-topbar sticky top-0 z-10 flex h-16 w-full shrink-0 items-center border-b bg-white dark:bg-gray-800 dark:border-gray-700">
         <div class="flex items-center w-full px-2 sm:px-4 md:px-6 lg:px-8">
             <button
                 class="filament-sidebar-open-button shrink-0 flex items-center justify-center w-10 h-10 transition text-primary-500 rounded-full hover:bg-gray-500/5 focus:bg-primary-500/10 focus:outline-none lg:z-10 lg:hover:bg-white lg:focus:bg-white lg:hover:text-gray-600 lg:focus:text-gray-600 lg:-ml-[44px] lg:w-6 lg:h-6 lg:text-gray-500 lg:bg-white lg:shadow lg:dark:bg-gray-900 lg:dark:hover:text-gray-400 lg:dark:focus:text-gray-400 lg:mr-4 rtl:lg:ml-4 rtl:lg:-mr-[44px]">
@@ -268,12 +267,9 @@
                 </div>
 
                 <div class="absolute ltr:lg:relative invisible ltr:lg:visible">
-                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                    </svg>
-                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="display: none;">
-                      <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                    </svg>
+                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                  </svg>
                 </div>
 
                 <div class="absolute rtl:lg:relative invisible rtl:lg:visible">
@@ -294,16 +290,16 @@
 
             <div class="flex items-center justify-between flex-1">
                     <div class="filament-breadcrumbs flex-1">
-                        {% if data %}
+                        {% if data and data.app_name and data.type %}
                             <ul class="hidden gap-4 items-center font-medium text-sm lg:flex dark:text-white">
                                 <li>
-                                    <a href="{{data.listing_url}}" class="dark:text-gray-300">
+                                    <a :class="[light ? 'text-black' : 'text-white']" href="{{data.listing_url}}" class="dark:text-gray-300">
                                         {{data.app_name}}
                                     </a>
                                 </li>
                                 <li class="h-6 border-r border-gray-300 -skew-x-12 dark:border-gray-500"></li>
                                 <li>
-                                    <a href="#" class="text-gray-500 dark:text-gray-400">
+                                    <a :class="[light ? 'text-black' : 'text-white']" href="#" class="text-gray-500 dark:text-gray-400">
                                         {{data.type}}
                                     </a>
                                 </li>
@@ -356,16 +352,16 @@
                             </div>
                         </div>
                       
-                      <div x-cloak x-show="global_search.length > 0" class="filament-global-search-results-container absolute right-0 rtl:right-auto rtl:left-0 top-auto z-10 mt-2 shadow-xl overflow-hidden rounded-xl w-screen max-w-xs sm:max-w-lg">
-                        <div class="overflow-y-scroll overflow-x-hidden max-h-96 bg-white shadow rounded-xl dark:bg-gray-800">
-                          <div x-show="global_items.length == 0" class="filament-global-search-no-results-message px-6 py-4 dark:text-gray-200">
+                      <div :class="[light ? '' : 'bg-[#26242e]']" x-cloak x-show="global_search.length > 0" class="filament-global-search-results-container absolute right-0 rtl:right-auto rtl:left-0 top-auto z-10 mt-2 shadow-xl overflow-hidden rounded-xl w-screen max-w-xs sm:max-w-lg">
+                        <div :class="[light ? '' : 'bg-[#26242e]']" class="overflow-y-scroll overflow-x-hidden max-h-96 bg-white shadow rounded-xl dark:bg-gray-800">
+                          <div :class="[light ? 'text-black' : 'text-white']" x-show="global_items.length == 0" class="filament-global-search-no-results-message px-6 py-4 dark:text-gray-200">
                               No search results found.
                           </div>
-                          <ul x-show="global_items.length > 0" class="filament-global-search-result-group divide-y dark:divide-gray-700">
+                          <ul x-show="global_items.length > 0"  class="filament-global-search-result-group divide-y dark:divide-gray-700">
                             <li class="sticky top-0 z-10">
                               <header
                                 class="px-6 py-2 bg-gray-50/80 backdrop-blur-xl backdrop-saturate-150 dark:bg-gray-700">
-                                <p class="text-xs font-bold tracking-wider text-gray-500 uppercase dark:text-gray-400">
+                                <p :class="[light ? 'text-black' : 'text-white']" class="text-xs font-bold tracking-wider text-gray-500 uppercase dark:text-gray-400">
                                   items
                                 </p>
                               </header>
@@ -374,7 +370,7 @@
                                 <li class="filament-global-search-result cursor-pointer">
                                   <a @click="window.location.href=window.reverse('custom_admin:update_task', { slug: global_item.slug })"
                                      class="relative block px-6 py-4 focus:bg-gray-500/5 hover:bg-gray-500/5 focus:ring-1 focus:ring-gray-300">
-                                    <p class="font-medium dark:text-gray-200" x-text="global_item.name"></p>
+                                    <p :class="[light ? 'text-black' : 'text-white']" class="font-medium dark:text-gray-200" x-text="global_item.name"></p>
                                     <p class="text-sm space-x-2 rtl:space-x-reverse font-medium text-gray-500 dark:text-gray-400"></p>
                                   </a>
                                </li>
@@ -532,50 +528,50 @@
                         </div>
                     </div>
 
-                    <div x-cloak class="filament-dropdown-panel absolute z-10 w-full rounded-lg bg-white shadow-lg ring-1 ring-black/5 transition dark:bg-gray-800 dark:ring-white/10 max-w-[14rem] absolute top-12 right-9"
+                    <div :class="[light ? '' : 'bg-[#26242e]']" x-cloak class="filament-dropdown-panel absolute z-10 w-full rounded-lg bg-white shadow-lg ring-1 ring-black/5 transition dark:bg-gray-800 dark:ring-white/10 max-w-[14rem] absolute top-12 right-9"
                          x-show="open_toggle">
                         <ul class="py-1 space-y-1">
                             <div>
                                 <a
                                     class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap">
-                                    <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 text-gray-500"
+                                    <svg :class="[light ? 'text-black' : 'text-white']" class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 text-gray-500"
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                         aria-hidden="true">
                                         <path fill-rule="evenodd"
                                             d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
                                             clip-rule="evenodd"></path>
                                     </svg>
-                                    <span class="truncate">
+                                    <span :class="[light ? 'text-black' : 'text-white']" class="truncate">
                                         {{request.user.email}}
                                     </span>
                                 </a>
                             </div>
-                            <div x-show="light">
-                                <div>
-                                    <button type="button"
+                            <div>
+                                <div x-show="light">
+                                    <button type="button" x-on:click="lightmode()"
                                         class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-[#3b82f6] focus:bg-primary-700">
-                                        <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-primary-500"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                            aria-hidden="true">
-                                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
-                                            </path>
-                                        </svg>
-                                        <span class="truncate">
-                                            Toggle light mode
-                                        </span>
-                                    </button>
-                                </div>
-                                <div x-show="!light">
-                                    <button type="button"
-                                        class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-[#3b82f6] focus:bg-primary-700">
-                                        <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-primary-500"
+                                        <svg :class="[light ? 'text-black' : 'text-white']" class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-primary-500"
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                             aria-hidden="true">
                                             <path fill-rule="evenodd"
                                                 d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
                                                 clip-rule="evenodd"></path>
                                         </svg>
-                                        <span class="truncate">
+                                        <span :class="[light ? 'text-black' : 'text-white']" class="truncate">
+                                            Toggle light mode
+                                        </span>
+                                    </button>
+                                </div>
+                                <div x-show="light == false">
+                                    <button type="button" x-on:click="lightmode()"
+                                        class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-[#3b82f6] focus:bg-primary-700">
+                                        <svg :class="[light ? 'text-black' : 'text-white']" class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-primary-500"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                                            </path>
+                                        </svg>
+                                        <span :class="[light ? 'text-black' : 'text-white']" class="truncate">
                                             Toggle dark mode
                                         </span>
                                     </button>
@@ -585,14 +581,14 @@
                                 <a href="{% url 'users:logout' %}">
                                     <button type="button"
                                         class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-[#3b82f6] focus:bg-primary-700">
-                                        <svg class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-gray-500"
+                                        <svg :class="[light ? 'text-black' : 'text-white']" class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-gray-500"
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                             aria-hidden="true">
                                             <path fill-rule="evenodd"
                                                 d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
                                                 clip-rule="evenodd"></path>
                                         </svg>
-                                        <span class="truncate">
+                                        <span :class="[light ? 'text-black' : 'text-white']" class="truncate">
                                             Sign out
                                         </span>
                                     </button>

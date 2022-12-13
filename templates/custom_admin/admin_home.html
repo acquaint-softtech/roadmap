@@ -6,24 +6,24 @@
         <div class="filament-page filament-dashboard-page">
             <div class="space-y-6">
                 <header class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
-                    <h1 class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
+                    <h1  :class="[light ? 'text-black' : 'text-white']" class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
                         Dashboard
                     </h1>
                 </header>
                 <div class="filament-widgets-container grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8 mb-6">
                     <div class="filament-widget col-span-1 filament-account-widget">
-                        <div class="p-2 space-y-2 bg-white rounded-xl shadow dark:border-gray-600 dark:bg-gray-800">
+                        <div  :class="[light ? '' : 'bg-[#26242e]']" class="p-2 space-y-2 bg-white rounded-xl shadow dark:border-gray-600 dark:bg-gray-800">
                             <div class="space-y-2">
                                 <div class="px-4 py-2 space-y-4">
                                     <div class="h-12 flex items-center space-x-4 rtl:space-x-reverse">
                                         <div class="w-10 h-10 rounded-full bg-gray-200 bg-cover bg-center dark:bg-gray-900"
                                              style="background-image: url('https://www.gravatar.com/avatar/4544c6cd4cd4fd104b407fc176491507?s=150')"></div>
                                         <div>
-                                            <h2 class="text-lg sm:text-xl font-bold tracking-tight">
+                                            <h2 :class="[light ? 'text-black' : 'text-white']" class="text-lg sm:text-xl font-bold tracking-tight">
                                                 Welcome, {{request.user.email}}
                                             </h2>
                                             <a href="{% url 'users:logout' %}">
-                                            <button type="submit"
+                                            <button :class="[light ? 'text-black' : 'text-white']" type="submit"
                                                     class="text-gray-600 hover:text-primary-500 focus:outline-none focus:underline dark:text-gray-300 dark:hover:text-primary-500">
                                                 Sign out
                                             </button></a>
@@ -39,13 +39,13 @@
 
                     <div class="filament-widget col-span-1 filament-widgets-table-widget">
                         <div class="filament-tables-component">
-                            <div class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700">
+                            <div :class="[light ? '' : 'bg-[#26242e]']" class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700">
                                 <div>
                                     <div class="px-2 pt-2">
                                         <div class="filament-tables-header px-4 py-2 mb-2">
                                             <div class="flex flex-col gap-4 md:justify-between md:items-start md:flex-row md:-mr-2">
                                                 <div>
-                                                    <h2 class="filament-tables-header-heading text-xl font-bold tracking-tight">
+                                                    <h2 :class="[light ? 'text-black' : 'text-white']" class="filament-tables-header-heading text-xl font-bold tracking-tight">
                                                         Latest Items
                                                     </h2>
 
@@ -68,7 +68,7 @@
                                             <th class="filament-tables-header-cell p-0">
                                                 <button type="button"
                                                         class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
-                                                    <span>
+                                                    <span :class="[light ? 'text-black' : 'text-white']">
                                                         Title
                                                     </span>
 
@@ -77,7 +77,7 @@
                                             <th class="filament-tables-header-cell p-0">
                                                 <button type="button"
                                                         class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
-                                                <span>
+                                                <span :class="[light ? 'text-black' : 'text-white']">
                                                     Total votes
                                                 </span>
 
@@ -86,7 +86,7 @@
                                             <th class="filament-tables-header-cell p-0">
                                                 <button type="button"
                                                         class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
-                                                    <span>
+                                                    <span :class="[light ? 'text-black' : 'text-white']">
                                                         Project
                                                     </span>
 
@@ -95,7 +95,7 @@
                                             <th class="filament-tables-header-cell p-0">
                                                 <button type="button"
                                                         class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
-                                                    <span>
+                                                    <span :class="[light ? 'text-black' : 'text-white']">
                                                         Board
                                                     </span>
                                                 </button>
@@ -106,27 +106,27 @@
                                         <tbody class="divide-y whitespace-nowrap dark:divide-gray-700">
                                         {% for latest_item in latest_items %}
 
-                                            <tr class="filament-tables-row hover:bg-gray-50 dark:hover:bg-gray-500/10">
+                                            <tr :class="[light ? 'hover:bg-gray-50 dark:hover:bg-gray-500/10' :'hover:bg-black-50 dark:hover:bg-black-500/10']" class="filament-tables-row">
                                                 <td class="filament-tables-cell dark:text-white">
                                                     <a href="{% url 'custom_admin:update_task' latest_item.slug %}" target="_blank">
-                                                        <div class="filament-tables-text-column px-4 py-3">
+                                                        <div :class="[light ? 'text-black' : 'text-white']" class="filament-tables-text-column px-4 py-3">
                                                             {{latest_item.name}}
                                                         </div>
                                                     </a>
                                                 </td>
 
                                                 <td class="filament-tables-cell dark:text-white">
-                                                    <div class="filament-tables-text-column px-4 py-3">
+                                                    <div :class="[light ? 'text-black' : 'text-white']" class="filament-tables-text-column px-4 py-3">
                                                         {{latest_item.get_vote_count}}
                                                     </div>
                                                 </td>
                                                 <td class="filament-tables-cell dark:text-white">
-                                                    <div class="filament-tables-text-column px-4 py-3">
+                                                    <div :class="[light ? 'text-black' : 'text-white']" class="filament-tables-text-column px-4 py-3">
                                                         {{latest_item.project.title|default_if_none:"-"}}
                                                     </div>
                                                 </td>
                                                 <td class="filament-tables-cell dark:text-white">
-                                                    <div class="filament-tables-text-column px-4 py-3">
+                                                    <div :class="[light ? 'text-black' : 'text-white']" class="filament-tables-text-column px-4 py-3">
                                                         {{latest_item.type.name}}
                                                     </div>
                                                 </td>
@@ -139,16 +139,15 @@
                         </div>
                     </div>
 
-                    <div wire:id="zJfL5XGtE5V4y4CU1UGx"
-                         class="filament-widget col-span-1 filament-widgets-table-widget">
-                        <div class="filament-tables-component">
-                            <div class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700">
+                    <div class="filament-widget col-span-1 filament-widgets-table-widget">
+                        <div  class="filament-tables-component">
+                            <div :class="[light ? '' : 'bg-[#26242e]']" class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700">
                                 <div>
                                     <div class="px-2 pt-2">
                                         <div class="filament-tables-header px-4 py-2 mb-2">
                                             <div class="flex flex-col gap-4 md:justify-between md:items-start md:flex-row md:-mr-2">
                                                 <div>
-                                                    <h2 class="filament-tables-header-heading text-xl font-bold tracking-tight">
+                                                    <h2 :class="[light ? 'text-black' : 'text-white']" class="filament-tables-header-heading text-xl font-bold tracking-tight">
                                                         Popular Items
                                                     </h2>
                                                 </div>
@@ -164,7 +163,7 @@
                                         <tr class="bg-gray-500/5">
                                             <th class="filament-tables-header-cell p-0">
                                                 <button type="button" class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
-                                                    <span>
+                                                    <span :class="[light ? 'text-black' : 'text-white']">
                                                         Title
                                                     </span>
                                                 </button>
@@ -172,14 +171,14 @@
                                             <th class="filament-tables-header-cell p-0">
                                                 <button type="button"
                                                         class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
-                                                    <span>
+                                                    <span :class="[light ? 'text-black' : 'text-white']">
                                                         Total votes
                                                     </span>
                                                 </button>
                                             </th>
                                             <th class="filament-tables-header-cell p-0">
                                                 <button type="button" class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
-                                                <span>
+                                                <span :class="[light ? 'text-black' : 'text-white']">
                                                     Project
                                                 </span>
 
@@ -187,7 +186,7 @@
                                             </th>
                                             <th class="filament-tables-header-cell p-0">
                                                 <button type="button" class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
-                                                <span>
+                                                <span :class="[light ? 'text-black' : 'text-white']">
                                                     Board
                                                 </span>
                                                 </button>
@@ -197,27 +196,27 @@
 
                                         <tbody class="divide-y whitespace-nowrap dark:divide-gray-700">
                                             {% for popular_item in popular_items %}
-                                                <tr class="filament-tables-row hover:bg-gray-50 dark:hover:bg-gray-500/10">
+                                                <tr :class="[light ? 'hover:bg-gray-50 dark:hover:bg-gray-500/10' :'hover:bg-black-50 dark:hover:bg-black-500/10']" class="filament-tables-row">
                                                             <td class="filament-tables-cell dark:text-white">
                                                                 <a href="{% url 'custom_admin:update_task' popular_item.slug %}" target="_blank">
-                                                                    <div class="filament-tables-text-column px-4 py-3">
+                                                                    <div :class="[light ? 'text-black' : 'text-white']" class="filament-tables-text-column px-4 py-3">
                                                                         {{popular_item.name}}
                                                                     </div>
                                                                 </a>
                                                             </td>
                                                         </a>
                                                     <td class="filament-tables-cell dark:text-white">
-                                                        <div class="filament-tables-text-column px-4 py-3">
+                                                        <div :class="[light ? 'text-black' : 'text-white']" class="filament-tables-text-column px-4 py-3">
                                                             {{popular_item.get_vote_count}}
                                                         </div>
                                                     </td>
                                                     <td class="filament-tables-cell dark:text-white">
-                                                        <div class="filament-tables-text-column px-4 py-3">
+                                                        <div :class="[light ? 'text-black' : 'text-white']" class="filament-tables-text-column px-4 py-3">
                                                             {{popular_item.project.title|default_if_none:"-"}}
                                                         </div>
                                                     </td>
                                                     <td class="filament-tables-cell dark:text-white">
-                                                        <div class="filament-tables-text-column px-4 py-3">
+                                                        <div :class="[light ? 'text-black' : 'text-white']" class="filament-tables-text-column px-4 py-3">
                                                             {{popular_item.type.name|default_if_none:""}}
                                                         </div>
                                                     </td>

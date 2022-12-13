@@ -27,8 +27,10 @@ function TaskEdit() {
       project_id: project_id,
       csrf_token:csrf_token,
       boards : [],
+      light : true,
       init() {
         this.Boards(this.project_id)
+        this.light = localStorage.getItem("light") == 'true'
       },
       Boards($event,project_id){
         $event.target ? project_id = $event.target.value : project_id = $event

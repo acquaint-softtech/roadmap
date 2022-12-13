@@ -7,21 +7,21 @@
                 <div class="space-y-6">
                     <header
                         class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
-                        <h1 class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
+                        <h1 :class="[light ? 'text-black' : 'text-white']" class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
                             Comments
                         </h1>
                         <div class="filament-page-actions flex flex-wrap items-center gap-4 justify-start shrink-0">
                             <a href="{% url 'custom_admin:new_comment' %}">
                                 <button class=" bg-blue-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300  focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800  dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
                                 type="button">
-                                 <span class="flex items-center gap-1 text-white"> <span class=""> New Comments</span></span>
+                                 <span class="flex items-center gap-1 text-white"> <span class=""> New Comment</span></span>
                                 </button>
                             </a>
                         </div>
                     </header>
 
-                    <div
-                        class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700" x-data="Comments()" x-effect="">
+                    <div :class="[light ? '' : 'bg-[#26242e]']"
+                        class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700" x-data="Comments()" x-effect="" x-init="init()">
                         <div>
                             <div class="flex items-center justify-between p-2 h-14">
                                 <div class="flex items-center gap-2">
@@ -88,7 +88,7 @@
                                         <th class="filament-tables-header-cell p-0" @click="sort('text')">
                                             <button type="button"
                                                 class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
-                                                <span>
+                                                <span :class="[light ? 'text-black' : 'text-white']">
                                                     Content
                                                 </span>
 
@@ -97,7 +97,7 @@
                                         <th class="filament-tables-header-cell p-0" @click="sort('task__name')">
                                             <button type="button"
                                                 class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
-                                                <span>
+                                                <span :class="[light ? 'text-black' : 'text-white']">
                                                     Item
                                                 </span>
 
@@ -106,7 +106,7 @@
                                         <th class="filament-tables-header-cell p-0" @click="sort('user__email')">
                                             <button type="button"
                                                 class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 cursor-default ">
-                                                <span>
+                                                <span :class="[light ? 'text-black' : 'text-white']">
                                                     User
                                                 </span>
 
@@ -115,7 +115,7 @@
                                         <th class="filament-tables-header-cell p-0" @click="sort('created')">
                                             <button wire:click="sortTable('created_at')" type="button"
                                                 class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 dark:text-gray-300 ">
-                                                <span>
+                                                <span :class="[light ? 'text-black' : 'text-white']">
                                                     Date
                                                 </span>
 
@@ -136,9 +136,9 @@
                                 <tr x-show="comments.length == 0">
                                     <td colspan="5">
                                         <div class="flex items-center justify-center p-4">
-                                            <div class="filament-tables-empty-state flex flex-1 flex-col items-center justify-center p-6 mx-auto space-y-6 text-center bg-white">
+                                            <div :class="[light ? '' : 'bg-[#26242e]']" class="filament-tables-empty-state flex flex-1 flex-col items-center justify-center p-6 mx-auto space-y-6 text-center bg-white">
                                                 <div class="max-w-md space-y-1">
-                                                    <h2 class="filament-tables-empty-state-heading text-xl font-bold tracking-tight">
+                                                    <h2 :class="[light ? 'text-black' : 'text-white']" class="filament-tables-empty-state-heading text-xl font-bold tracking-tight">
                                                         No comments found
                                                     </h2>
                                                     <p class="filament-tables-empty-state-description whitespace-normal text-sm font-medium text-gray-500">
@@ -151,7 +151,7 @@
                                 
                                 
                                 <template x-for="comment in comments" :key="comment">
-                                    <tr class="filament-tables-row hover:bg-gray-50 dark:hover:bg-gray-500/10">
+                                    <tr :class="[light ? 'hover:bg-gray-50 dark:hover:bg-gray-500/10' :'hover:bg-black-50 dark:hover:bg-black-500/10']" class="filament-tables-row">
                                         <td
                                             class="filament-tables-reorder-cell w-4 px-4 whitespace-nowrap text-gray-500 transition group-hover:text-primary-500 dark:text-gray-400 dark:group-hover:text-primary-400 hidden">
                                             <svg class="block h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -171,7 +171,7 @@
                                         <td class="filament-tables-cell dark:text-white">
                                             <div class="filament-tables-text-column px-4 py-3 whitespace-normal">
                                               <a @click="window.location.href=window.reverse('custom_admin:update_comment', { pk: comment.id })" class="block">
-                                                <p x-html="comment.text" class="cursor-pointer"></p>
+                                                <p :class="[light ? 'text-black' : 'text-white']" x-html="comment.text" class="cursor-pointer"></p>
                                               </a>
                                             </div>
                                         </td>
@@ -179,7 +179,7 @@
                                         <td class="filament-tables-cell dark:text-white">
                                             <a @click="window.location.href=window.reverse('custom_admin:update_task', { slug: comment.task__slug })" class="block">
                                                 <div class="filament-tables-text-column px-4 py-3 whitespace-normal">
-                                                    <p x-text="comment.task__name"></p>
+                                                    <p :class="[light ? 'text-black' : 'text-white']" x-text="comment.task__name"></p>
                                                 </div>
                                             </a>
                                         </td>
@@ -187,14 +187,14 @@
                                         <td class="filament-tables-cell dark:text-white">
                                             <a @click="window.location.href=window.reverse('custom_admin:update_user', { pk: comment.user__id })" class="block">
                                                 <div class="filament-tables-text-column px-4 py-3">
-                                                    <p x-text="comment.user__email"></p>
+                                                    <p :class="[light ? 'text-black' : 'text-white']" x-text="comment.user__email"></p>
                                                 </div>
                                             </a>
                                         </td>
 
                                         <td class="filament-tables-cell dark:text-white">
                                             <div class="filament-tables-text-column px-4 py-3">
-                                                <p x-text="date_format(comment.created)"></p>
+                                                <p :class="[light ? 'text-black' : 'text-white']" x-text="date_format(comment.created)"></p>
                                             </div>
                                         </td>
 
@@ -238,8 +238,8 @@
                                               <option :value="option" x-text="option"></option>
                                             </template>
                                         </select>
-                                        <label for="tableRecordsPerPageSelect"
-                                            class="text-sm font-medium dark:text-white">
+                                        <label :class="[light ? 'text-black' : 'text-white']" for="tableRecordsPerPageSelect"
+                                            class="text-sm font-medium">
                                             per page
                                         </label>
                                     </div>
@@ -264,7 +264,7 @@
 
                                 <div class="hidden flex-1 items-center lg:grid grid-cols-3">
                                     <div class="flex items-center">
-                                        <div class="pl-2 text-sm font-medium dark:text-white">
+                                        <div :class="[light ? 'text-black' : 'text-white']" class="pl-2 text-sm font-medium dark:text-white">
                                             Showing <span x-text="startResults()"></span> to <span x-text="endResults()"></span> of <span x-text="total"></span> results
                                         </div>
                                     </div>
@@ -278,7 +278,7 @@
                                                 </template>
                                             </select>
 
-                                            <label for="tableRecordsPerPageSelect"
+                                            <label :class="[light ? 'text-black' : 'text-white']" for="tableRecordsPerPageSelect"
                                                 class="text-sm font-medium dark:text-white">
                                                 per page
                                             </label>
@@ -288,7 +288,7 @@
                                         <div class="py-3 border rounded-lg dark:border-gray-600">
                                             <ol class="flex items-center text-sm text-gray-500 divide-x rtl:divide-x-reverse divide-gray-300 dark:text-gray-400 dark:divide-gray-600">
                                                 <li>
-                                                    <button type="button"
+                                                    <button :class="[light ? 'text-black' : 'text-white']" type="button"
                                                         class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
                                                          x-on:click="prevPage" :disabled="pageNumber==0" :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber==0 }" aria-label="Next" rel="next">
                                                         <svg class="w-5 h-5 rtl:scale-x-[-1]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -299,7 +299,7 @@
                                                 </li>
                                                 <template x-for="(page,index) in pages()" :key="index">
                                                     <li>
-                                                        <button type="button"
+                                                        <button :class="[light ? 'text-black' : 'text-white']" type="button"
                                                             class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 focus:text-primary-600 transition"
                                                              x-on:click="viewPage(index)">
                                                             <span x-text="index+1"></span>
@@ -307,7 +307,7 @@
                                                     </li>
                                                 </template>
                                                 <li>
-                                                    <button type="button"
+                                                    <button type="button" :class="[light ? 'text-black' : 'text-white']"
                                                         class="filament-tables-pagination-item relative flex items-center justify-center font-medium min-w-[2rem] px-1.5 h-8 -my-3 rounded-md focus:outline-none hover:bg-gray-500/5 focus:bg-primary-500/10 focus:ring-2 focus:ring-primary-500 dark:hover:bg-gray-400/5 transition text-primary-600"
                                                           x-on:click="viewPage(Math.ceil(total/size)-1)" :disabled="pageNumber >= pageCount() -1" :class="{ 'disabled cursor-not-allowed text-gray-600' : pageNumber >= pageCount() -1 }">
                                                         <svg class="w-5 h-5 rtl:scale-x-[-1]"

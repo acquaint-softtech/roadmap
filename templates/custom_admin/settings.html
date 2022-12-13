@@ -4,10 +4,10 @@
 {% load static %}
 {% block content %}
     <div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full"  x-data="GeneralSettings()" x-init="init()">
-        <div wire:id="e035FVaqMOEFeIhtlblN" class="filament-page">
+        <div class="filament-page">
             <div class="space-y-6">
                 <header class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
-                    <h1 class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
+                    <h1 :class="[light ? 'text-black' : 'text-white']" class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
                         Settings
                     </h1>
                   {{form.media}}
@@ -78,7 +78,7 @@
                     <div class="grid grid-cols-1  lg:grid-cols-2   filament-forms-component-container gap-6">
                         <div class=" col-span-2">
                             <div class="filament-forms-tabs-component rounded-xl shadow-sm border border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-700">
-                                <div aria-label="main" role="tablist"
+                                <div :class="[light ? '' : 'bg-[#26242e]']" aria-label="main" role="tablist"
                                      class="filament-forms-tabs-component-header rounded-t-xl flex overflow-y-auto bg-gray-100 dark:bg-gray-700">
                                     <button type="button" @click="activeTab = 0"  :class="{ 'active': activeTab === 0,'bg-white': activeTab === 0 }"
                                             class="filament-forms-tabs-component-button flex items-center gap-2 shrink-0 p-3 text-sm font-medium filament-forms-tabs-component-button-active bg-white text-primary-600 dark:bg-gray-800"
@@ -116,7 +116,7 @@
                                     </button>
                                 </div>
 
-                                <div x-show="activeTab == 0" aria-labelledby="-general-tab" id="-general-tab" role="tabpanel" tabindex="0"
+                                <div x-show="activeTab == 0" :class="[light ? '' : 'bg-[#26242e]']" aria-labelledby="-general-tab" id="-general-tab" role="tabpanel" tabindex="0"
                                     
                                      class="filament-forms-tabs-component-tab focus:outline-none p-6">
                                     <div class="grid grid-cols-1   lg:grid-cols-2   filament-forms-component-container gap-6">
@@ -131,11 +131,11 @@
                                                           
                                                             
                                                          {{form.center_board_project_view}}
-                                                        <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                        <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                 Center boards in project views
                                                     </span></label></div>
                                                     <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                        <p>When centering, this will always show the boards in the
+                                                        <p :class="[light ? 'text-black' : 'text-white']">When centering, this will always show the boards in the
                                                             center of the content area.</p>
                                                     </div>
                                                 </div>
@@ -153,7 +153,7 @@
                                                           
                                                           {{form.center_default_board}}
                                                           
-                                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
 Create default boards for new projects
 
     </span>
@@ -165,7 +165,7 @@ Create default boards for new projects
 
 
                                                     <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                        <p>When creating a new project, some default boards can be
+                                                        <p :class="[light ? 'text-black' : 'text-white']">When creating a new project, some default boards can be
                                                             created.</p>
                                                     </div>
                                                 </div>
@@ -183,7 +183,7 @@ Create default boards for new projects
                                                                 <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                                     <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                            for="data.default_boards">
-                                                                      <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                      <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                          Default boards
                                                                       </span>
                                                                     </label>
@@ -239,7 +239,7 @@ Create default boards for new projects
 
 
                                                                 <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                                    <p>These boards will automatically be prefilled when
+                                                                    <p :class="[light ? 'text-black' : 'text-white']">These boards will automatically be prefilled when
                                                                         you create a project.</p>
                                                                 </div>
                                                             </div>
@@ -261,11 +261,11 @@ Create default boards for new projects
                                                         <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                for="data.show_projects_sidebar_without_boards">
                                                             {{form.project_in_sidebar}}
-                                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Show projects in sidebar without boards</span>
+                                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Show projects in sidebar without boards</span>
                                                         </label>
                                                     </div>
                                                     <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                        <p>If you don't want to show projects without boards in the
+                                                        <p :class="[light ? 'text-black' : 'text-white']">If you don't want to show projects without boards in the
                                                             sidebar, toggle this off.</p>
                                                     </div>
                                                 </div>
@@ -282,13 +282,13 @@ Create default boards for new projects
                                                         <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                for="data.allow_general_creation_of_item">
                                                           {{form.allow_general_creation}}
-                                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Allow general creation of an item</span>
+                                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Allow general creation of an item</span>
                                                         </label>
                                                     </div>
 
 
                                                     <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                        <p>This allows your users to create an item without a board.</p>
+                                                        <p :class="[light ? 'text-black' : 'text-white']">This allows your users to create an item without a board.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -304,11 +304,11 @@ Create default boards for new projects
                                                         <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                for="data.enable_item_age">
                                                             {{form.enable_item_age}}
-                                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Enable item age</span>
+                                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Enable item age</span>
                                                         </label>
                                                     </div>
                                                     <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                        <p>Enable this to show the age of an item on the details
+                                                        <p :class="[light ? 'text-black' : 'text-white']">Enable this to show the age of an item on the details
                                                             page.</p>
                                                     </div>
                                                 </div>
@@ -326,7 +326,7 @@ Create default boards for new projects
                                                                for="data.show_voter_avatars">
                                                             {{form.enable_voter_avatar}}
 
-                                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
 Enable voter avatars when viewing an item
 
     </span>
@@ -338,7 +338,7 @@ Enable voter avatars when viewing an item
 
 
                                                     <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                        <p>Enabling this will show the avatars of the most recent voters
+                                                        <p :class="[light ? 'text-black' : 'text-white']">Enabling this will show the avatars of the most recent voters
                                                             when viewing an item.</p>
                                                     </div>
                                                 </div>
@@ -355,7 +355,7 @@ Enable voter avatars when viewing an item
                                                         <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                for="data.select_project_when_creating_item">
                                                             {{form.user_select_project}}
-                                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Users can select a project when creating an item</span>
+                                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Users can select a project when creating an item</span>
                                                         </label>
 
                                                     </div>
@@ -377,7 +377,7 @@ Enable voter avatars when viewing an item
                                                             {{form.is_project_required}}
                                                           
 
-                                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
 Project is required when creating an item
 
     </span>
@@ -402,7 +402,7 @@ Project is required when creating an item
                                                         <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                for="data.select_board_when_creating_item">
                                                             {{form.is_select_board}}
-                                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Users can select a board when creating an item
+                                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Users can select a board when creating an item
                                                             </span>
                                                         </label>
 
@@ -424,7 +424,7 @@ Project is required when creating an item
                                                                for="data.board_required_when_creating_item">
                                                             {{form.is_board_required}}
 
-                                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Board is required when creating an item
+                                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Board is required when creating an item
     </span>
                                                         </label>
                                                     </div>
@@ -440,7 +440,7 @@ Project is required when creating an item
                                                     <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                         <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
                                                             {{form.is_user_verify_email}}
-                                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Users must verify their email before they can submit items, or reply to items.</span>
+                                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Users must verify their email before they can submit items, or reply to items.</span>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -455,7 +455,7 @@ Project is required when creating an item
                                                             <div class="space-y-2">
                                                                 <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                                     <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
-                                                                      <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Inbox workflow</span>
+                                                                      <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Inbox workflow</span>
                                                                     </label>
                                                                 </div>
 
@@ -465,7 +465,7 @@ Project is required when creating an item
                                                                     </div>
                                                                 </div>
                                                                 <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                                    <p>This allows you to change which items show up in
+                                                                    <p :class="[light ? 'text-black' : 'text-white']">This allows you to change which items show up in
                                                                         the inbox in the sidebar.</p>
                                                                 </div>
                                                             </div>
@@ -482,7 +482,7 @@ Project is required when creating an item
                                                 <div class="space-y-2">
                                                     <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                         <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
-                                                          <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                          <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                           Password</span>
                                                         </label>
                                                     </div>
@@ -492,7 +492,7 @@ Project is required when creating an item
                                                         </div>
                                                     </div>
                                                     <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                        <p>Entering a password here will ask your users to enter a
+                                                        <p :class="[light ? 'text-black' : 'text-white']">Entering a password here will ask your users to enter a
                                                             password before entering the roadmap.</p>
                                                     </div>
                                                 </div>
@@ -505,7 +505,7 @@ Project is required when creating an item
                                                 <div class="space-y-2">
                                                     <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                         <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
-                                                        <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                        <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                         Welcome text
                                                         </span>
                                                         </label>
@@ -518,7 +518,7 @@ Project is required when creating an item
 
 
                                                     <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                        <p>This content will show at the top of the dashboard for (for
+                                                        <p :class="[light ? 'text-black' : 'text-white']">This content will show at the top of the dashboard for (for
                                                             all users).</p>
                                                     </div>
                                                 </div>
@@ -529,7 +529,7 @@ Project is required when creating an item
 
                                 </div>
                               
-                                <div x-show="activeTab == 1" tabindex="0"
+                                <div x-show="activeTab == 1" :class="[light ? '' : 'bg-[#26242e]']" tabindex="0"
                                      class="filament-forms-tabs-component-tab focus:outline-none p-6">
                                   <div
                                     class="grid grid-cols-1 lg:grid-cols-2 filament-forms-component-container gap-6">
@@ -537,9 +537,9 @@ Project is required when creating an item
                                       <div class="filament-forms-field-wrapper">
                                         <div class="space-y-2">
                                           <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                            <label
+                                            <label :class="[light ? 'text-black' : 'text-white']"
                                               class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
-    <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+    <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
         Dashboard items
 
             </span>
@@ -560,7 +560,7 @@ Project is required when creating an item
                                                         <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                for="data.board_centered">
                                                          {{form.showing_recent_comments}}
-                                                        <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                        <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                Showing recent comment in dashboard
                                                     </span></label></div>
                                                 </div>
@@ -572,7 +572,7 @@ Project is required when creating an item
                                                         <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                for="data.board_centered">
                                                          {{form.showing_recent_items}}
-                                                        <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                        <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                 Showing recent items in dashboard
                                                     </span></label></div>
                                                 </div>
@@ -585,7 +585,7 @@ Project is required when creating an item
                                   </div>
                                 </div>
   
-                                <div x-show="activeTab == 2" aria-labelledby="-changelog-tab" tabindex="0"
+                                <div x-show="activeTab == 2" :class="[light ? '' : 'bg-[#26242e]']" aria-labelledby="-changelog-tab" tabindex="0"
                                    class="filament-forms-tabs-component-tab focus:outline-none p-6">
                                 <div
                                   class="grid grid-cols-1 lg:grid-cols-2 filament-forms-component-container gap-6">
@@ -596,7 +596,7 @@ Project is required when creating an item
                                           <label
                                             class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
                                             {{form.enable_change_log}}
-                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Enable changelog in the roadmap</span>
+                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Enable changelog in the roadmap</span>
                                           </label>
                                         </div>
                                       </div>
@@ -609,7 +609,7 @@ Project is required when creating an item
                                           <label
                                             class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
                                             {{form.show_author_log}}
-                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Show the author of the changelog.</span>
+                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Show the author of the changelog.</span>
                                           </label>
                                         </div>
                                       </div>
@@ -619,7 +619,7 @@ Project is required when creating an item
                                             <label
                                               class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
                                               {{form.show_related_item_log}}
-                                              <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Show the related items on the changelog.</span>
+                                              <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Show the related items on the changelog.</span>
                                             </label>
                                           </div>
                                         </div>
@@ -629,7 +629,7 @@ Project is required when creating an item
                                 </div>
                               </div>
   
-                                <div x-show="activeTab == 3"  class="filament-forms-tabs-component-tab focus:outline-none p-6">
+                                <div x-show="activeTab == 3" :class="[light ? '' : 'bg-[#26242e]']"  class="filament-forms-tabs-component-tab focus:outline-none p-6">
                                   <div
                                     class="grid grid-cols-1 lg:grid-cols-2 filament-forms-component-container gap-6">
                                     <div
@@ -639,7 +639,7 @@ Project is required when creating an item
                                           <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                             <label
                                               class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
-                                              <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                              <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                   Send notifications to
                                                       </span>
                                             </label>
@@ -651,7 +651,7 @@ Project is required when creating an item
                                             <ul>
                                               <div class="grid grid-cols-1 gap-6" id="notify_users">
                                                 {% for notify_user in data.send_notifications_to %}
-                                                <li id="id_notify_user" class="bg-white border border-gray-300 shadow-sm rounded-xl relative dark:bg-gray-800 dark:border-gray-600">
+                                                <li :class="[light ? '' : 'bg-[#26242e]']" id="id_notify_user" class="bg-white border border-gray-300 shadow-sm rounded-xl relative dark:bg-gray-800 dark:border-gray-600">
                                                   <header class="flex items-center h-10 overflow-hidden border-b bg-gray-50 rounded-t-xl dark:bg-gray-800 dark:border-gray-700">
                                                     <button type="button" class="flex items-center justify-center flex-none w-10 h-10 text-gray-400 border-r transition hover:text-gray-300 dark:text-gray-400 dark:border-gray-700 dark:hover:text-gray-500" data-ol-has-click-handler="">
                                               <span class="sr-only">Move down</span>
@@ -683,7 +683,7 @@ Project is required when creating an item
                                                         <div class="filament-forms-field-wrapper">
                                                           <div class="space-y-2">
                                                             <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                              <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"><span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Name<sup class="font-medium text-danger-700">*</sup></span>
+                                                              <label :class="[light ? 'text-black' : 'text-white']" class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"><span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Name<sup class="font-medium text-danger-700">*</sup></span>
                                                               </label>
                                                             </div>
                                                             <div class="filament-forms-text-input-component flex items-center space-x-2 rtl:space-x-reverse group">
@@ -700,7 +700,7 @@ Project is required when creating an item
                                                           <div class="space-y-2">
                                                             <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                               <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
-                                                                  <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                  <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                                   Email<sup class="font-medium text-danger-700">*</sup></span>
                                                               </label>
                                                             </div>
@@ -735,7 +735,7 @@ Project is required when creating an item
                                             </div>
                                           </div>
                                           <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                            <p>This will send email notifications once a new item has been created or when
+                                            <p :class="[light ? 'text-black' : 'text-white']">This will send email notifications once a new item has been created or when
                                               there is a new version of the roadmap software.</p>
                                           </div>
                                         </div>
@@ -746,7 +746,7 @@ Project is required when creating an item
   
                                 </div>
   
-                              <div x-show="activeTab == 4" class="filament-forms-tabs-component-tab focus:outline-none p-6">
+                              <div x-show="activeTab == 4" :class="[light ? '' : 'bg-[#26242e]']" class="filament-forms-tabs-component-tab focus:outline-none p-6">
                                 <div
                                   class="grid grid-cols-1 lg:grid-cols-2 filament-forms-component-container gap-6">
                                   <div class="col-span-1">
@@ -756,12 +756,12 @@ Project is required when creating an item
                                           <label
                                             class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
                                             {{form.block_robost}}
-                                            <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Block robots</span>
+                                            <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Block robots</span>
                                           </label>
                                         </div>
                                         <div
                                           class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                          <p>Instructs your roadmap to add the block robots META tag, it's
+                                          <p :class="[light ? 'text-black' : 'text-white']">Instructs your roadmap to add the block robots META tag, it's
                                             up to the search engines to honor this request.</p>
                                         </div>
                                       </div>
@@ -770,14 +770,14 @@ Project is required when creating an item
                                 </div>
                               </div>
   
-                              <div x-show="activeTab == 5" class="filament-forms-tabs-component-tab focus:outline-none p-6">
+                              <div x-show="activeTab == 5" :class="[light ? '' : 'bg-[#26242e]']" class="filament-forms-tabs-component-tab focus:outline-none p-6">
                                     <div class="grid grid-cols-1 lg:grid-cols-2 filament-forms-component-container gap-6">
                                         <div class=" col-span-2">
                                             <div class="filament-forms-field-wrapper">
                                                 <div class="space-y-2">
                                                     <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                         <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
-                                                        <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                        <span :class="[light ? 'text-black' : 'text-white']" class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
                                                         Custom header script
                                                             </span>
                                                         </label>
@@ -786,7 +786,7 @@ Project is required when creating an item
                                                       {{form.header_script}}
                                                     </div>
                                                     <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                        <p>This allows you to add your own custom widget, or tracking
+                                                        <p :class="[light ? 'text-black' : 'text-white']">This allows you to add your own custom widget, or tracking
                                                             tool. Code inside here will always be placed inside the head
                                                             section.</p>
                                                     </div>

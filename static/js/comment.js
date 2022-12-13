@@ -7,6 +7,10 @@ function Comments() {
       total: "",
       myForData: messages,
       options:['5','15','25','50','All'],
+      light : true,
+      init(){
+        this.light = localStorage.getItem("light") == 'true'
+      },
       get comments() {
         const start = this.pageNumber * this.size,
          end = start + this.size;

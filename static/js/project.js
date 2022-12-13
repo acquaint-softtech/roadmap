@@ -7,6 +7,10 @@ function Projects() {
       options:['5','15','25','50','All'],
       total: "",
       myForData: projects,
+      light : true,
+      init(){
+        this.light = localStorage.getItem("light") == 'true'
+      },
       get projects() {
         const start = this.pageNumber * this.size,
           end = start + this.size;

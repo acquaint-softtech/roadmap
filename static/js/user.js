@@ -8,10 +8,13 @@ function Users() {
       total: "",
       myForData: users,
       options:['5','10','25','50','All'],
+      light : true,
+      init(){
+        this.light = localStorage.getItem("light") == 'true'
+      },
       get users() {
         const start = this.pageNumber * this.size,
           end = start + this.size;
-
         if (this.search === "") {
           this.total = this.myForData.length;
           return this.myForData.slice(start, end);
