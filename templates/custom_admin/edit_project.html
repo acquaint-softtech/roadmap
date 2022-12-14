@@ -4,14 +4,14 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
+<div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full" x-data="edit_project()" x-init="init()">
 
 
     <div class="filament-page filament-resources-create-record-page filament-resources-projects">
         <div class="space-y-6">
             <header
                     class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
-                <h1 class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
+                <h1 :class="[light ? 'text-black' : 'text-white']" class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
                     Edit Project
                 </h1>
             </header>
@@ -23,14 +23,14 @@
                         <div>
                             <div class="grid grid-cols-1   lg:grid-cols-2   filament-forms-component-container gap-6">
                                 <div class="col-span-full">
-                                    <div class="filament-forms-card-component p-6 bg-white rounded-xl border border-gray-300 dark:border-gray-600 dark:bg-gray-800">
+                                    <div :class="[light ? 'bg-white' : 'bg-[#26242e]']" class="filament-forms-card-component p-6 rounded-xl border border-gray-300 dark:border-gray-600 dark:bg-gray-800">
                                         <div class="grid grid-cols-1   lg:grid-cols-2   filament-forms-component-container gap-6">
                                             <div class=" col-span-1">
                                                 <div class="filament-forms-field-wrapper">
                                                     <div class="space-y-2">
                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                             <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.title">
-                                                                <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">
                                                                     Title
                                                                     <sup class="font-medium text-red-600">*</sup>
                                                                 </span>
@@ -54,10 +54,8 @@
 
                                                     <div class="space-y-2">
                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                            <label
-                                                                    class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
-                                                                    for="data.url">
-                                                                <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
+                                                                <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">
                                                                     Url
                                                                 </span>
                                                             </label>
@@ -79,9 +77,8 @@
 
                                                     <div class="space-y-2">
                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
-                                                                   for="data.slug">
-                                                                <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
+                                                                <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">
                                                                     Slug
                                                                 </span>
                                                             </label>
@@ -93,8 +90,8 @@
                                                                 <input type="text" value="{{object.slug}}" class="block w-full rounded-lg border-none px-3 py-2 shadow-sm ring-1 ring-inset transition duration-75 focus:ring-2 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 sm:py-2.5 sm:text-sm dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 ring-gray-300 dark:ring-gray-600">
                                                             </div>
                                                         </div>
-                                                        <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                            <p>Leave blank to generate one automatically</p>
+                                                        <div class="filament-forms-field-wrapper-helper-text text-sm">
+                                                            <p :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']">Leave blank to generate one automatically</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -104,25 +101,6 @@
                                             <div class=" col-span-1">
                                                 <div class="filament-forms-field-wrapper">
                                                     <div class="space-y-2">
-                                                        <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.icon">
-                                                                <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
-                                                                    Icon
-                                                                </span>
-                                                            </label>
-                                                        </div>
-
-                                                        <div class="filament-forms-select-component flex items-center space-x-1 rtl:space-x-reverse group">
-                                                            <div class="flex-1 min-w-0">
-                                                                <div>
-                                                                    <select class="w-full rounded-lg border-gray-300">
-                                                                        <option value="">Select an option</option>
-                                                                        <option value="">Hello</option>
-                                                                        <option value="">Prakash</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -133,16 +111,16 @@
 
                                                     <div class="space-y-2">
                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.private">
+                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
                                                                 {{form.is_private}}
-                                                                <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">
                                                                     Private
                                                                 </span>
                                                                 <span>{{form.errors.is_private}}</span>
                                                             </label>
                                                         </div>
-                                                        <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                            <p>Private projects are only visible for employees and admins</p>
+                                                        <div class="filament-forms-field-wrapper-helper-text text-sm">
+                                                            <p :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']">Private projects are only visible for employees and admins</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -154,9 +132,8 @@
 
                                                     <div class="space-y-2">
                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
-                                                                    for="data.description">
-                                                                <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
+                                                                <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">
                                                                     Description
                                                                 </span>
                                                             </label>
@@ -183,47 +160,19 @@
                                                         <div
                                                                 class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                             <label
-                                                                    class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
-                                                                    for="data.boards">
-
-
-                                                                <span
-                                                                        class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                    class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
+                                                                <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">
                                                                     Boards
-
                                                                 </span>
-
-
                                                             </label>
-
                                                         </div>
-
-                                                        <div>
-                                                            <div class="space-x-2 rtl:space-x-reverse">
-                                                                <button type="button"
-                                                                        class="filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-sm text-primary-600 hover:text-primary-500 dark:text-primary-500 dark:hover:text-primary-400"
-                                                                        x-on:click="$dispatch('repeater-collapse', 'data.boards')">
-
-                                                                    Collapse all
-
-                                                                </button>
-
-                                                                <button type="button"
-                                                                        class="filament-link inline-flex items-center justify-center gap-0.5 font-medium hover:underline focus:outline-none focus:underline text-sm text-primary-600 hover:text-primary-500 dark:text-primary-500 dark:hover:text-primary-400"
-                                                                        x-on:click="$dispatch('repeater-expand', 'data.boards')">
-
-                                                                    Expand all
-
-                                                                </button>
-                                                            </div>
-                                                        </div>
-
+                                                      
                                                         <div class="filament-forms-repeater-component space-y-6 rounded-xl">
                                                             <ul>
                                                                 {{ boards.management_form }}
                                                                 <div class="grid grid-cols-1 gap-6">
                                                                     {% for board_form in boards.forms %}
-                                                                    <li class="bg-white border border-gray-300 shadow-sm rounded-xl relative dark:bg-gray-800 dark:border-gray-600">
+                                                                    <li :class="[light ? 'bg-white' : 'bg-[#26242e]']" class="border border-gray-300 shadow-sm rounded-xl relative dark:bg-gray-800 dark:border-gray-600">
                                                                             <header
                                                                                 class="flex items-center h-10 overflow-hidden border-b bg-gray-50 rounded-t-xl dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
                                                                             <button x-on:click.stop="" type="button" class="flex items-center justify-center flex-none w-10 h-10 text-gray-400 border-r transition hover:text-gray-300 dark:text-gray-400 dark:border-gray-700 dark:hover:text-gray-500">
@@ -261,43 +210,6 @@
                                                                                         </svg>
                                                                                     </button>
                                                                                 </li>
-
-                                                                                <li>
-                                                                                    <button  type="button"
-                                                                                            class="flex items-center justify-center flex-none w-10 h-10 text-gray-400 transition hover:text-gray-300 dark:text-gray-400 dark:hover:text-gray-500">
-                                                                                        <svg
-                                                                                             class="w-4 h-4"
-                                                                                             xmlns="http://www.w3.org/2000/svg"
-                                                                                             viewBox="0 0 20 20"
-                                                                                             fill="currentColor"
-                                                                                             aria-hidden="true">
-                                                                                            <path fill-rule="evenodd"
-                                                                                                  d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
-                                                                                                  clip-rule="evenodd">
-                                                                                            </path>
-                                                                                        </svg>
-                                                                                        <span class="sr-only">
-                                                                                            Collapse
-                                                                                        </span>
-
-                                                                                        <svg
-                                                                                             class="w-4 h-4"
-                                                                                             xmlns="http://www.w3.org/2000/svg"
-                                                                                             viewBox="0 0 20 20"
-                                                                                             fill="currentColor"
-                                                                                             aria-hidden="true"
-                                                                                             style="display: none;">
-                                                                                            <path fill-rule="evenodd"
-                                                                                                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                                                                  clip-rule="evenodd">
-                                                                                            </path>
-                                                                                        </svg>
-                                                                                        <span class="sr-only"
-                                                                                              style="display: none;">
-                                                                                            Expand
-                                                                                        </span>
-                                                                                    </button>
-                                                                                </li>
                                                                             </ul>
                                                                         </header>
                                                                         <div class="p-6">
@@ -311,15 +223,15 @@
                                                                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                                                                              <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.boards.1fcf8173-8cc5-474a-8b12-776ad5c9fdcc.block_votes">
                                                                                                                 {{board_form.is_visible}}
-                                                                                                               <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                                                               <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">
                                                                                                                     Visible
                                                                                                                 </span>
                                                                                                             </label>
                                                                                                         </div>
 
 
-                                                                                                        <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
-                                                                                                            <p>Hides the
+                                                                                                        <div class="filament-forms-field-wrapper-helper-text text-sm">
+                                                                                                            <p :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']">Hides the
                                                                                                                 board
                                                                                                                 from the
                                                                                                                 public
@@ -341,16 +253,16 @@
                                                                                                 <div class="filament-forms-field-wrapper">
                                                                                                     <div class="space-y-2">
                                                                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.boards.1fcf8173-8cc5-474a-8b12-776ad5c9fdcc.can_users_create">
+                                                                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
                                                                                                                 {{board_form.is_user_delete}}
-                                                                                                              <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                                                              <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">
                                                                                                                     Can
                                                                                                                     users
                                                                                                                     create
                                                                                                                 </span>
                                                                                                             </label>
                                                                                                         </div>
-                                                                                                        <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
+                                                                                                        <div :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="filament-forms-field-wrapper-helper-text text-sm">
                                                                                                             <p>Allow
                                                                                                                 users to
                                                                                                                 create
@@ -370,13 +282,13 @@
                                                                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                                                                             <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.boards.1fcf8173-8cc5-474a-8b12-776ad5c9fdcc.block_comments">
                                                                                                                 {{board_form.is_block_comments}}
-                                                                                                                <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                                                                <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">
                                                                                                                     Block
                                                                                                                     comments
                                                                                                                 </span>
                                                                                                             </label>
                                                                                                         </div>
-                                                                                                        <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
+                                                                                                        <div :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="filament-forms-field-wrapper-helper-text text-sm">
                                                                                                             <p>Block
                                                                                                                 users
                                                                                                                 from
@@ -395,15 +307,15 @@
                                                                                                 <div class="filament-forms-field-wrapper">
                                                                                                     <div class="space-y-2">
                                                                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.boards.1fcf8173-8cc5-474a-8b12-776ad5c9fdcc.block_votes">
+                                                                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
                                                                                                                 {{board_form.is_block_votes}}
-                                                                                                              <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                                                              <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">
                                                                                                                     Block
                                                                                                                     votes
                                                                                                                 </span>
                                                                                                             </label>
                                                                                                         </div>
-                                                                                                        <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
+                                                                                                        <div :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="filament-forms-field-wrapper-helper-text text-sm">
                                                                                                             <p>Block
                                                                                                                 users
                                                                                                                 from
@@ -429,8 +341,8 @@
                                                                                                 <div class="filament-forms-field-wrapper">
                                                                                                     <div class="space-y-2">
                                                                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.boards.1fcf8173-8cc5-474a-8b12-776ad5c9fdcc.title">
-                                                                                                                <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">Title
+                                                                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
+                                                                                                                <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">Title
                                                                                                                     <sup class="font-medium text-red-600">*</sup>
                                                                                                                 </span>
                                                                                                             </label>
@@ -450,8 +362,8 @@
                                                                                                 <div class="filament-forms-field-wrapper">
                                                                                                     <div class="space-y-2">
                                                                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.boards.1fcf8173-8cc5-474a-8b12-776ad5c9fdcc.sort_items_by">
-                                                                                                                <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                                                            <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" >
+                                                                                                                <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">
                                                                                                                     Sort
                                                                                                                     items
                                                                                                                     by
@@ -476,14 +388,14 @@
                                                                                     <div class="filament-forms-field-wrapper">
                                                                                         <div class="space-y-2">
                                                                                             <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                                                                                                <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse" for="data.boards.1fcf8173-8cc5-474a-8b12-776ad5c9fdcc.description">
-                                                                                                    <span class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                                                <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
+                                                                                                    <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="text-sm font-medium leading-4">
                                                                                                         Description
                                                                                                     </span>
                                                                                                 </label>
                                                                                             </div>
                                                                                             {{board_form.detail}}
-                                                                                            <div class="filament-forms-field-wrapper-helper-text text-sm text-gray-600 dark:text-gray-300">
+                                                                                            <div :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']" class="filament-forms-field-wrapper-helper-text text-sm">
                                                                                                 <p>Used as META
                                                                                                     description for SEO
                                                                                                     purposes.</p>
@@ -515,16 +427,6 @@
                                                             <div class="relative flex justify-center">
                                                                 <button type="button"
                                                                         class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2rem] px-3 text-sm text-white shadow focus:ring-white border-transparent bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700">
-                                                                    <svg viewBox="0 0 24 24" fill="none"
-                                                                         xmlns="http://www.w3.org/2000/svg"
-                                                                         class="animate-spin filament-button-icon w-4 h-4 mr-1 -ml-1.5 rtl:ml-1 rtl:-mr-1.5">
-                                                                        <path opacity="0.2" fill-rule="evenodd"
-                                                                              clip-rule="evenodd"
-                                                                              d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                                                              fill="currentColor"></path>
-                                                                        <path d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z" fill="currentColor"></path>
-                                                                    </svg>
-
                                                                     <span class="flex items-center gap-1">
                                                                         <span class="">
                                                                             Add to boards
@@ -566,4 +468,17 @@
         </div>
     </div>
 </div>
+<script>
+  function edit_project(){
+   return {
+    light : localStorage.getItem('light') == 'true',
+    delete_popup : false,
+    init(){
+       window.addEventListener('storage', () => {
+            this.light = localStorage.getItem('light') == 'true'
+       })
+    }
+   }
+  }
+</script>
 {% endblock content %}

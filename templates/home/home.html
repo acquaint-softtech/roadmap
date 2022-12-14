@@ -5,11 +5,200 @@
 {% load admin_extra_filters %}
 {% block extra_head %}
 {{ block.super }}
-  <meta property="og:title" content="Roadmap Dashboard">
-  <meta property="og:url" content="{{ request.path }}">
-  <meta property="og:image" content="{% generate_og_image 'Dashboard' '' '' %}">
-  <meta name="description" property="og:description" content="Roadmap Dashboard page">
-    <div class="prose mb-4">{{general_settings.welcome_text|safe}}</div>
+<meta property="og:title" content="Roadmap Dashboard">
+<meta property="og:url" content="{{ request.path }}">
+<meta property="og:image" content="{% generate_og_image 'Dashboard' '' '' %}">
+<meta name="description" property="og:description" content="Roadmap Dashboard page">
+<div class="prose mb-4">{{general_settings.welcome_text|safe}}</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+  
+  {% if general_settings.showing_recent_comments %}
+    <div class="space-y-2 col-span-2">
+    <h2 class="text-lg tracking-tight font-bold">Recent comments</h2>
+    <div wire:id="RmJ0nmCMd5vsHE8OB2J6">
+      <div class="filament-tables-component">
+        <div class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container">
+          <div class="overflow-y-auto relative rounded-t-xl" x-bind:class="{
+                'rounded-t-xl': ! hasHeader,
+                'border-t': hasHeader,
+            }">
+            <table class="filament-tables-table w-full text-left rtl:text-right divide-y table-auto">
+              <thead>
+              <tr class="bg-gray-500/5">
+                <th class="filament-tables-header-cell p-0">
+                  <button type="button"
+                          class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 cursor-default ">
+        <span>
+            Content
+        </span>
+                  
+                  </button>
+                </th>
+                <th class="filament-tables-header-cell p-0">
+                  <button wire:click="sortTable('total_votes')" type="button"
+                          class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 "
+                          data-ol-has-click-handler="">
+        <span>
+            Item
+        </span>
+                  </button>
+                </th>
+              </tr>
+              </thead>
+              
+              <tbody class="divide-y whitespace-nowrap">
+              
+              {% for recent_comment in recent_comments %}
+              <tr class="filament-tables-row hover:bg-gray-50">
+                <td
+                  class="filament-tables-reorder-cell w-4 px-4 whitespace-nowrap text-gray-500 transition group-hover:text-primary-500 hidden">
+                  <svg class="block h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                       stroke-width="2" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+                  </svg>
+                </td>
+                
+                <td class="filament-tables-cell" wire:loading.remove.delay="wire:loading.remove.delay"
+                    wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                  <a href="#" class="block">
+                    <div class="filament-tables-text-column px-4 py-3">
+                      {{recent_comment.text|safe}}
+                    </div>
+                  </a>
+                </td>
+                
+                <td class="filament-tables-cell" wire:loading.remove.delay="wire:loading.remove.delay"
+                    wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                  <a href="#" class="block">
+                    <div class="filament-tables-text-column px-4 py-3">
+                      {{recent_comment.task__name|safe}}
+                    </div>
+                  </a>
+                </td>
+                <td class="w-full px-4 py-4 animate-pulse hidden" colspan="4" wire:loading.class.remove.delay="hidden"
+                    wire:target="previousPage,nextPage,gotoPage,sortTable,tableFilters,resetTableFiltersForm,tableSearchQuery,tableColumnSearchQueries,tableRecordsPerPage,$set">
+                  <div class="h-4 bg-gray-300 rounded-md"></div>
+                </td>
+              </tr>
+              {% endfor %}
+              </tbody>
+            
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  
+  {% if general_settings.showing_recent_items %}
+    <div class="space-y-2 col-span-1">
+    <h2 class="text-lg tracking-tight font-bold">Recent items</h2>
+    <div>
+      <div class="filament-tables-component">
+        <div class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container">
+          <div class="overflow-y-auto relative rounded-t-xl">
+            <table class="filament-tables-table w-full text-left rtl:text-right divide-y table-auto">
+              <thead>
+              <tr class="bg-gray-500/5">
+                <th class="filament-tables-header-cell p-0">
+                  <button type="button" class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 cursor-default ">
+                    <span>
+                        Title
+                    </span>
+                  </button>
+                </th>
+                <th class="filament-tables-header-cell p-0">
+                  <button type="button" class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600">
+                <span>
+                    Votes
+                </span>
+                  </button>
+                </th>
+                <th class="filament-tables-header-cell p-0">
+                  <button type="button"
+                          class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 cursor-default ">
+                  <span>
+                      Project
+                  </span>
+                  </button>
+                </th>
+                <th class="filament-tables-header-cell p-0">
+                  <button type="button"
+                          class="flex items-center w-full px-4 py-2 whitespace-nowrap space-x-1 rtl:space-x-reverse font-medium text-sm text-gray-600 cursor-default ">
+                  <span>
+                      Board
+                  </span>
+                  </button>
+                </th>
+              </tr>
+              </thead>
+              
+              <tbody class="divide-y whitespace-nowrap">
+              
+              {% for recent_item in recent_items %}
+              <tr class="filament-tables-row hover:bg-gray-50">
+                <td
+                  class="filament-tables-reorder-cell w-4 px-4 whitespace-nowrap text-gray-500 transition group-hover:text-primary-500 hidden">
+                  <svg class="block h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                       stroke-width="2" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+                  </svg>
+                </td>
+                <td class="filament-tables-cell">
+                  <a class="block">
+                    <div class="filament-tables-text-column px-4 py-3">
+                      {{recent_item.name}}
+                    </div>
+                  </a>
+                </td>
+                
+                <td class="filament-tables-cell">
+                  <a class="block">
+                    <div class="filament-tables-text-column px-4 py-3">
+                      {{recent_item.num_votes}}
+                    </div>
+                  </a>
+                </td>
+                
+                <td class="filament-tables-cell">
+                  <a
+                    href="{% if recent_item.project %}{% url 'project:project_detail' recent_item.project.slug %}{% else %}#{% endif %}"
+                    class="block">
+                    <div
+                      class="filament-tables-text-column px-4 py-3 text-primary-600 transition hover:underline hover:text-primary-500 focus:underline focus:text-primary-500">
+                      {{recent_item.project.title}}
+                    </div>
+                  </a>
+                </td>
+                
+                <td class="filament-tables-cell">
+                  <a class="block">
+                    <div
+                      class="filament-tables-text-column px-4 py-3 text-primary-600 transition hover:underline hover:text-primary-500 focus:underline focus:text-primary-500">
+                      {{recent_item.type.name}}
+                    </div>
+                  </a>
+                </td>
+                
+                <td class="w-full px-4 py-4 animate-pulse hidden" colspan="4">
+                  <div class="h-4 bg-gray-300 rounded-md"></div>
+                </td>
+              </tr>
+              {% endfor %}
+              
+              
+              </tbody>
+            
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
 {% endblock %}
 {% endblock content %}
 

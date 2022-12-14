@@ -11,6 +11,7 @@ function adminHome() {
         light:true,
         init() {
             this.notification_count = this.user_notifications.length
+            this.light = localStorage.getItem("light") == 'true'
         },
         get global_items() {
           if (this.global_search.trim().length == 0) {
@@ -24,6 +25,12 @@ function adminHome() {
                      return item.name.toLowerCase().includes(this.global_search.toLowerCase())
               })
           }
+        },
+        lightmode(){
+          this.light = !(this.light)
+          this.open_toggle = !(this.open_toggle)
+          localStorage.setItem("light",this.light);
+          window.dispatchEvent(new Event("storage"));
         },
         notification(type){
             this.formData = {'type':type}

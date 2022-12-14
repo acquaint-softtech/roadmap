@@ -22,9 +22,9 @@ class CustomCacheMiddleware(object):
         self.admin_task_data = cache.get('admin_task_data')
         self.settings = cache.get('settings')
 
-        if not any(
-                [self.user_data, self.project_data, self.task_data, self.message_data, self.inbox_data, self.vote_data,
-                 self.admin_task_data, self.settings]):
+        if any(data is None for data in
+               [self.user_data, self.project_data, self.task_data, self.message_data, self.inbox_data, self.vote_data,
+                self.admin_task_data, self.settings]):
             self.set_cache_value()
 
     def set_cache_value(self):
@@ -35,8 +35,8 @@ class CustomCacheMiddleware(object):
 
         if not self.project_data:
             self.project_data = Project.objects.annotate(
-                board_count=Count('category_project')).values('id', 'title', 'created',
-                                                              'is_private', 'slug', 'board_count').order_by('-created')
+                board_count=Count('board_project')).values('id', 'title', 'created',
+                                                           'is_private', 'slug', 'board_count').order_by('-created')
             cache.set('project_data', self.project_data)
 
         if not self.task_data:

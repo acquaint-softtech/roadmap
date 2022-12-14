@@ -3,159 +3,93 @@
 {% load static %}
 {% block content %}
 
-<div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
-                
-
-                <div wire:id="Ct3OaQIPkFlD9xH4PJBo" class="filament-page">
+<div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full" x-data="system()"
+     x-init="init()">
+  
+  
+  <div class="filament-page">
     <div class="space-y-6">
-                    <header class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
-    <h1 class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
-    System
-</h1>
-
-    <div class="filament-page-actions flex flex-wrap items-center gap-4 justify-start shrink-0">
-                            <button type="button" class="bg-blue-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action">
+      <header
+        class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
+        <h1 :class="[light ? 'text-black' : 'text-white']"
+            class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
+          System
+        </h1>
+  
+        <div class="filament-page-actions flex flex-wrap items-center gap-4 justify-start shrink-0">
+          <button type="button"
+                  class="bg-blue-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action">
         <span class="flex items-center gap-1">
                             <span class="text-white">
                     Refresh versions
                 </span>
                     </span>
-
-            </button>
-
-                    </div>
-    </header>
+    
+          </button>
         
-                    <div class="filament-widgets-container grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8 mb-6">
-                        <div wire:id="nFZupRj6Z5YKvYidkHzF" class="filament-widget col-span-2 space-y-4">
-    <p class="text-gray-500 dark:text-gray-400">
-        This page describes your system information, as well as your current installed version.
-    </p>
-
-
-    <div class="p-2 space-y-2 bg-white rounded-xl shadow dark:border-gray-600 dark:bg-gray-800">
-    
-    
-    <div class="space-y-2">
-                    <div class="px-4 py-2 space-y-4">
+        </div>
+      </header>
+      
+      <div class="filament-widgets-container grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8 mb-6">
+        <div class="filament-widget col-span-2 space-y-4">
+          <p :class="[light ? 'text-black' : 'text-white']" class="text-gray-500 dark:text-gray-400">
+            This page describes your system information, as well as your current installed version.
+          </p>
+          
+          <div :class="[light ? 'bg-white' : 'bg-[#26242e]']" class="p-2 space-y-2 rounded-xl shadow dark:border-gray-600 dark:bg-gray-800">
+            <div class="space-y-2">
+              <div class="px-4 py-2 space-y-4">
                 <dl class="md:grid md:grid-cols-4">
-            <div class="flex flex-col border-b border-gray-100 p-6 text-center md:border-0 md:border-r">
-                <dt class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">Current version</dt>
-                <dd class="order-1 text-2xl font-extrabold text-primary-600">1.21</dd>
+                  <div class="flex flex-col border-b border-gray-100 p-6 text-center md:border-0 md:border-r">
+                    <dt :class="[light ? 'text-black' : 'font-extrabold text-primary-600']" class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">Current version</dt>
+                    <dd :class="[light ? 'text-black' : 'text-white']" class="order-1 text-2xl">1.21</dd>
+                  </div>
+                  <div
+                    class="flex flex-col border-t border-b border-gray-100 p-6 text-center md:border-0 md:border-l md:border-r">
+                    <dt :class="[light ? 'text-black' : 'text-primary-600']" class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">Remote version</dt>
+                    <dd :class="[light ? 'text-black' : 'text-white']" class="order-1 text-2xl">1.25</dd>
+                  </div>
+                  <div class="flex flex-col border-t border-gray-100 p-6 text-center md:border-0 md:border-l">
+                    <dt class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">
+                      <a class="border-b border-dotted border-gray-500"
+                         href="#" target="_blank">
+                        Update available
+                      </a>
+                    </dt>
+                    <dd class="order-1 text-2xl font-extrabold flex justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange-500" fill="none"
+                           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                    </dd>
+                  </div>
+                  <div class="flex flex-col border-t border-gray-100 p-6 text-center md:border-0 md:border-l">
+                    <dt :class="[light ? 'text-black' : 'font-extrabold text-primary-600']" class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">Python version</dt>
+                    <dd :class="[light ? 'text-black' : 'text-white']"  class="order-1 text-2xl">{{python_version}}</dd>
+                  </div>
+                </dl>
+              </div>
             </div>
-            <div class="flex flex-col border-t border-b border-gray-100 p-6 text-center md:border-0 md:border-l md:border-r">
-                <dt class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">Remote version</dt>
-                <dd class="order-1 text-2xl font-extrabold text-primary-600">1.25</dd>
-            </div>
-            <div class="flex flex-col border-t border-gray-100 p-6 text-center md:border-0 md:border-l">
-                <dt class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">
-                                            <a class="border-b border-dotted border-gray-500" href="https://github.com/ploi-deploy/roadmap/releases/tag/1.25" target="_blank">
-                            Update available
-                        </a>
-                                    </dt>
-                <dd class="order-1 text-2xl font-extrabold flex justify-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                                    </dd>
-            </div>
-
-            <div class="flex flex-col border-t border-gray-100 p-6 text-center md:border-0 md:border-l">
-                <dt class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">Python version</dt>
-                <dd class="order-1 text-2xl font-extrabold text-primary-600">{{python_version}}</dd>
-            </div>
-        </dl>
-            </div>
-            </div>
-
-    
-    </div>
-</div>
-
-<!-- Livewire Component wire-end:nFZupRj6Z5YKvYidkHzF -->            </div>
-        
-        
-
-        
-            </div>
-
-    <form wire:submit.prevent="callMountedAction">
-        
-        <div x-data="{ isOpen: false }" x-trap.noscroll="isOpen" x-on:close-modal.window="if ($event.detail.id === 'page-action') isOpen = false" x-on:open-modal.window="if ($event.detail.id === 'page-action') isOpen = true" role="dialog" aria-modal="true" class="filament-modal block">
-    
-
-    <div x-show="isOpen" x-transition:enter="ease duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-40 flex items-center min-h-screen overflow-y-auto transition p-4" style="display: none;">
-        <div x-on:click="$dispatch('close-modal', { id: 'page-action' })" aria-hidden="true" class="filament-modal-close-overlay fixed inset-0 w-full h-full bg-black/50 cursor-pointer" data-ol-has-click-handler=""></div>
-
-        <div x-show="isOpen" x-on:keydown.window.escape="$dispatch('close-modal', { id: 'page-action' })" x-transition:enter="ease duration-300" x-transition:leave="ease duration-300" x-transition:enter-start="translate-y-8" x-transition:enter-end="translate-y-0" x-transition:leave-start="translate-y-0" x-transition:leave-end="translate-y-8" class="relative w-full cursor-pointer pointer-events-none my-auto" style="display: none;">
-            <div class="filament-modal-window w-full p-2 bg-white cursor-default pointer-events-auto dark:bg-gray-800 relative rounded-xl mx-auto hidden max-w-sm">
-                                    <button tabindex="-1" type="button" class="absolute top-2 right-2">
-                        <svg title="__('filament-support::components/modal.actions.close.label')" x-on:click="isOpen = false" tabindex="-1" class="filament-modal-close-button h-4 w-4 cursor-pointer text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-ol-has-click-handler="">
-  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-</svg>
-                        <span class="sr-only">
-                            Close
-                        </span>
-                    </button>
-                
-                <div class="space-y-2">
-                    
-                    
-                    <div class="filament-modal-content space-y-2">
-                    
-                    
-                    
-                    </div>
-
-                    
-                                    </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-    </form>
 
-    <form wire:submit.prevent="callMountedFormComponentAction">
-    <div x-data="{ isOpen: false }" x-trap.noscroll="isOpen" x-on:close-modal.window="if ($event.detail.id === 'Ct3OaQIPkFlD9xH4PJBo-form-component-action') isOpen = false" x-on:open-modal.window="if ($event.detail.id === 'Ct3OaQIPkFlD9xH4PJBo-form-component-action') isOpen = true" role="dialog" aria-modal="true" class="filament-modal block">
-    
+<script>
+  function system(){
+   return {
+    light :  localStorage.getItem('light') == 'true',
+    delete_popup : false,
+    init(){
+      window.addEventListener('storage', () => {
+         this.light = localStorage.getItem('light') == 'true'
+      })
+    }
+   }
+  }
 
-    <div x-show="isOpen" x-transition:enter="ease duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-40 flex items-center min-h-screen overflow-y-auto transition p-4" style="display: none;">
-        <div x-on:click="$dispatch('close-modal', { id: 'Ct3OaQIPkFlD9xH4PJBo-form-component-action' })" aria-hidden="true" class="filament-modal-close-overlay fixed inset-0 w-full h-full bg-black/50 cursor-pointer" data-ol-has-click-handler=""></div>
-
-        <div x-show="isOpen" x-on:keydown.window.escape="$dispatch('close-modal', { id: 'Ct3OaQIPkFlD9xH4PJBo-form-component-action' })" x-transition:enter="ease duration-300" x-transition:leave="ease duration-300" x-transition:enter-start="translate-y-8" x-transition:enter-end="translate-y-0" x-transition:leave-start="translate-y-0" x-transition:leave-end="translate-y-8" class="relative w-full cursor-pointer pointer-events-none my-auto" style="display: none;">
-            <div class="filament-modal-window w-full p-2 bg-white cursor-default pointer-events-auto dark:bg-gray-800 relative rounded-xl mx-auto hidden max-w-sm">
-                                    <button tabindex="-1" type="button" class="absolute top-2 right-2">
-                        <svg title="__('filament-support::components/modal.actions.close.label')" x-on:click="isOpen = false" tabindex="-1" class="filament-modal-close-button h-4 w-4 cursor-pointer text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-ol-has-click-handler="">
-  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-</svg>
-                        <span class="sr-only">
-                            Close
-                        </span>
-                    </button>
-                
-                <div class="space-y-2">
-                    
-                    
-                    <div class="filament-modal-content space-y-2">
-                    
-                    
-                    
-                    </div>
-
-                    
-                                    </div>
-            </div>
-        </div>
-    </div>
-</div>
-</form>
-
-
-    </div>
-
-<!-- Livewire Component wire-end:Ct3OaQIPkFlD9xH4PJBo -->
-
-            
-            </div>
-
+</script>
 {% endblock %}

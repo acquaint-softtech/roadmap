@@ -18,7 +18,6 @@ class ProjectCreateForm(forms.ModelForm):
             "is_private"
         )
 
-
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super(ProjectCreateForm, self).__init__(*args, **kwargs)
@@ -33,7 +32,7 @@ class ProjectCreateForm(forms.ModelForm):
                        'sm:py-2.5 sm:text-sm dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 ' \
                        'ring-gray-300 dark:ring-gray-600'
         self.fields['is_private'].widget.attrs[
-            'class'] = 'filament-forms-toggle-component relative inline-flex border-2 border-transparent shrink-0 h-6 ' \
+            'class'] = 'filament-forms-toggle-component relative inline-flex border-2 border-transparent shrink-0 h-6 '\
                        'w-11 rounded-full cursor-pointer transition-colors ease-in-out duration-200 ' \
                        'focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed ' \
                        'disabled:pointer-events-none bg-gray-200 dark:bg-white/10 '

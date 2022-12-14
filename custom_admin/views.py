@@ -46,8 +46,10 @@ class AdminHomeView(LoginRequiredMixin, AdminContextView, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AdminHomeView, self).get_context_data()
         cache_data = CustomCacheMiddleware(object)
-        context['latest_items'] = cache_data.admin_task_data.order_by('-created')[0:5]
-        context['popular_items'] = cache_data.admin_task_data.order_by('-num_task_histories')[0:5]
+        context['latest_items'] = cache_data.admin_task_data.order_by('-created')[
+                                  0:5] if cache_data.admin_task_data else []
+        context['popular_items'] = cache_data.admin_task_data.order_by('-num_task_histories')[
+                                   0:5] if cache_data.admin_task_data else []
         return context
 
 
@@ -67,16 +69,19 @@ class ProjectCreateView(AdminContextView, LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("custom_admin:projects")
     template_name = "custom_admin/new_project.html"
 
-    general_settings = cache.get('settings')
+    cache_data = CustomCacheMiddleware(object)
+    general_settings = cache_data.settings
 
     BoardFormSet = inlineformset_factory(
         Project, Board, form=BoardForm, formset=BoardAdminFormSet,
         fields=['name', 'detail', 'is_visible', 'is_block_votes', 'is_user_delete', 'is_block_comments'],
-        extra=len(general_settings.default_boards if general_settings is not None else []),
+        extra=len(general_settings.default_boards if general_settings and general_settings.center_default_board else []),
         can_delete=True
     )
 
-    formset = BoardFormSet(initial=[{'name': data} for data in general_settings.default_boards] if general_settings else [])
+    formset = BoardFormSet(
+        initial=[{'name': data} for data in
+                 general_settings.default_boards] if general_settings and general_settings.center_default_board else [])
 
     def get_context_data(self, **kwargs):
         data = AdminContextView.get_context_data(self)
@@ -455,7 +460,7 @@ class ChangeTaskSubscription(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
         task_data = Task.objects.filter(id=int(data.get('task_id'))).first()
-        task_data.is_subscribed = not (task_data.is_subscribed)
+        task_data.is_subscribed = not task_data.is_subscribed
         task_data.save()
         return JsonResponse(
             {"message": "success", "btn_status": 'Unsubscribe' if task_data.is_subscribed else 'Subscribe'})
@@ -468,13 +473,13 @@ class AdminThemeView(LoginRequiredMixin, AdminContextView, FormView):
 
     def get_context_data(self, **kwargs):
         context = AdminContextView.get_context_data(self)
-        data = GeneralSettings.objects.first()
+        data = GeneralSetting.objects.first()
         form = ThemeForm(instance=data)
         context['form'] = form
         return context
 
     def form_valid(self, form):
-        form = ThemeForm(instance=GeneralSettings.objects.first(), data=self.request.POST, files=self.request.FILES)
+        form = ThemeForm(instance=GeneralSetting.objects.first(), data=self.request.POST, files=self.request.FILES)
         form.save()
         messages.success(self.request, message_dict.get('edit_record'))
         return super(AdminThemeView, self).form_valid(form)
@@ -490,20 +495,22 @@ class AdminSettingsView(LoginRequiredMixin, AdminContextView, View):
 
     def get(self, request, *args, **kwargs):
         context = AdminContextView.get_context_data(self)
-        data = GeneralSettings.objects.first()
+        data = GeneralSetting.objects.first()
         form = GeneralNotificationForm(instance=data)
         context['total_og_img'] = len(
             os.listdir(os.path.join(settings.MEDIA_ROOT, 'project_og_img'))) if os.path.exists(
             os.path.join(settings.MEDIA_ROOT, 'project_og_img')) else 0
         context['form'] = form
         context['board_data'] = data.default_boards
+        context['data'] = data
         return render(request, self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-        form = GeneralNotificationForm(instance=GeneralSettings.objects.first(), data=request.POST)
+        form = GeneralNotificationForm(instance=GeneralSetting.objects.first(), data=request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.default_boards = request.POST.get('board_data').split(',')
+            obj.send_notifications_to = json.loads(request.POST.get('notify_user'))
             obj.save()
         messages.success(self.request, message_dict.get('edit_record'))
         return redirect(self.success_url)

@@ -1,4 +1,3 @@
-import os
 import uuid
 
 from ckeditor.fields import RichTextField
@@ -63,7 +62,7 @@ class Task(TimeStampModel):
 
     @property
     def get_vote_count(self):
-        return Votes.objects.filter(task=self).count()
+        return Vote.objects.filter(task=self).count()
 
     def save(self, **kwargs):
         unique_slugify(self, self.name)

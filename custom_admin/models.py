@@ -35,6 +35,12 @@ class GeneralSetting(TimeStampModel):
     welcome_text = RichTextField(null=True, default='Welcome to our roadmap!')
     password_protect = models.CharField(max_length=100, blank=True, null=True)
     enable_change_log = models.BooleanField(default=False)
+    show_author_log = models.BooleanField(default=False)
+    show_related_item_log = models.BooleanField(default=False)
+
+    showing_recent_comments = models.BooleanField(default=False)
+    showing_recent_items = models.BooleanField(default=False)
+
     block_robost = models.BooleanField(default=False, help_text="Instructs your roadmap to add the block robots META "
                                                                 "tag, it's up to the search engines to honor this "
                                                                 "request.")
@@ -46,6 +52,7 @@ class GeneralSetting(TimeStampModel):
     )
     theme_color = ColorField(default='#d42020')
     favicon_img = models.ImageField(null=True, blank=True)
+    send_notifications_to = models.JSONField(null=True, blank=True)
 
     workflow_choice = (
         ("item_disabled", "Disabled"),

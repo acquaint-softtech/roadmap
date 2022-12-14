@@ -2,12 +2,12 @@
 {% load widget_tweaks %}
 {% block content %}
 {{form.media}}
-<div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full" x-data="{delete_popup:false}">
+<div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full" x-data="edit_comment()" x-init="init()">
     <div class="filament-page filament-resources-edit-record-page filament-resources-comments filament-resources-record-22">
         <div class="space-y-6">
             <header
                 class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
-                <h1 class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
+                <h1 :class="[light ? 'text-black' : 'text-white']" class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
                     Edit Comment
                 </h1>
                 <div class="filament-page-actions flex flex-wrap items-center gap-4 justify-start shrink-0">
@@ -31,8 +31,8 @@
                         <div>
                             <div class="grid grid-cols-1  lg:grid-cols-2 filament-forms-component-container gap-6">
                                 <div class=" col-span-full">
-                                    <div
-                                        class="filament-forms-card-component p-6 bg-white rounded-xl border border-gray-300 dark:border-gray-600 dark:bg-gray-800">
+                                    <div :class="[light ? 'bg-white' : 'bg-[#26242e]']"
+                                        class="filament-forms-card-component p-6 rounded-xl border border-gray-300 dark:border-gray-600 dark:bg-gray-800">
                                         <div
                                             class="grid grid-cols-1 lg:grid-cols-2 filament-forms-component-container gap-6">
                                             <div
@@ -44,8 +44,8 @@
                                                             <label
                                                                 class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                 for="data.user_id">
-                                                                <span
-                                                                    class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']"
+                                                                    class="text-sm font-medium leading-4">
                                                                     User
                                                                 </span>
                                                             </label>
@@ -72,8 +72,8 @@
                                                             <label
                                                                 class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse"
                                                                 for="data.item_id">
-                                                                <span
-                                                                    class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']"
+                                                                    class="text-sm font-medium leading-4">
                                                                     Item
                                                                 </span>
                                                             </label>
@@ -102,8 +102,8 @@
                                                             class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                             <label
                                                                 class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
-                                                                <span
-                                                                    class="text-sm font-medium leading-4 text-gray-700 dark:text-gray-300">
+                                                                <span :class="[light ? 'text-gray-700 dark:text-gray-300' : 'text-white']"
+                                                                    class="text-sm font-medium leading-4">
                                                                     Content
                                                                 </span>
                                                             </label>
@@ -185,15 +185,23 @@
                               </span>
                           </button>
                     </footer>
-            
-                
         </div>
-            
             </div>
-          
-          
         </div>
     </div>
 </div>
 </div>
+<script>
+  function edit_comment(){
+   return {
+    light : localStorage.getItem('light') == 'true',
+    delete_popup : false,
+    init(){
+      window.addEventListener('storage', () => {
+            this.light = localStorage.getItem('light') == 'true'
+      })
+    }
+   }
+  }
+</script>
 {% endblock content %}

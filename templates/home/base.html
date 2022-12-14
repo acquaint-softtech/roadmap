@@ -2,12 +2,16 @@
 <head>
     {% load static tailwind_tags %}
     {% load widget_tweaks %}
+    {% load admin_extra_filters %}
     {% load static %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% if general_settings.favicon_img %}
       <link rel="shortcut icon" href="{{general_settings.favicon_img.url}}"/>
     {% endif %}
     {% tailwind_css %}
+    {% if general_settings.header_script %}
+      {{general_settings.header_script|safe}}
+    {% endif %}
     <link href="https://unpkg.com/browse/tributejs@5.1.3/dist/tribute.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tributejs/5.1.3/tribute.js" integrity="sha512-9FdZa5G/ycmgOvFvIPFc6MLCBzCbVeMyBh49+qlqnIbP1xitvVRAon7F4q2bX8n/7mP3HBb3SgrX5GNrJGYLZQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
@@ -32,14 +36,10 @@
     </div>
 {% endif %}
 
-
-<header class="sticky top-0 z-10 w-full bg-[#d11515] shadow text-white" x-data="Base()" x-init="init()">
+<header class="sticky top-0 z-10 w-full shadow text-white" style="background-color:{{general_settings.theme_color}}" x-data="Base()" x-init="init()">
     <div class="w-full px-4 mx-auto sm:px-6 md:px-8 max-w-[1500px]">
         <nav class="flex items-center justify-between h-20">
-            <a class="text-2xl font-semibold tracking-tight" href="/">
-                Roadmap
-            </a>
-          
+            <a class="text-2xl font-semibold tracking-tight" href="/">Roadmap</a>
             {% if messages %}
               {% for message in messages %}
                 <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" class="filament-notifications-notification pointer-events-auto invisible flex gap-3 w-full transition duration-300 shadow-lg max-w-sm bg-white rounded-xl p-4 border border-gray-200 dark:border-gray-700 dark:bg-gray-800" x-transition:enter-start="opacity-0 translate-x-12" x-transition:leave-end="scale-95 opacity-0" x-data="notificationComponent({ notification: JSON.parse('{\u0022id\u0022:\u002297b1d103-9da3-4321-8b2f-2ab6ff9cda09\u0022,\u0022actions\u0022:[],\u0022body\u0022:null,\u0022duration\u0022:6000,\u0022icon\u0022:\u0022heroicon-o-check-circle\u0022,\u0022iconColor\u0022:\u0022success\u0022,\u0022title\u0022:\u0022Profile has been saved.\u0022}') })" wire:key="eGBWevU5HivCenQcRYA6.notifications.97b1d103-9da3-4321-8b2f-2ab6ff9cda09" dusk="filament.notifications.notification" style="display: flex; visibility: visible;">
@@ -251,7 +251,6 @@
 
             <ul class="flex flex-col py-2 space-y-1 text-sm font-medium text-white">
                 <li>
-                  {{request.path}}
                     <a class="block p-2 transition rounded-lg focus:outline-none hover:bg-brand-500-400"
                        href="{% url 'home:home' %}">
                         Dashboard
@@ -352,7 +351,7 @@
         <aside class="w-60" aria-label="Sidebar">
             <div class="overflow-y-auto space-y-4">
                 <ul class="space-y-2">
-                    <li  class="{% if request.path == '/' %}bg-red-600{% endif %}">
+                    <li  style="{% if request.path == '/' %}background-color: {{ general_settings.theme_color}}{% endif %}">
                         <a class="flex items-center h-10 px-2 space-x-2 transition rounded-lg  hover:bg-gray-500/5 focus:bg-brand-500/10 focus:text-brand-600 focus:outline-none"
                            href="{% url 'home:home' %}">
                             <svg class="w-5 h-5 text-gray-500 {% if request.path == '/' %}text-white{% endif %}" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -364,7 +363,7 @@
                         </a>
                     </li>
 
-                    <li class="{% if request.path == '/my/' %}bg-red-600{% endif %}">
+                    <li style="{% if request.path == '/my/' %}background-color: {{ general_settings.theme_color}}{% endif %}">
                         <a class="flex items-center h-10 px-2 space-x-2 transition rounded-lg  hover:bg-gray-500/5 focus:bg-brand-500/10 focus:text-brand-600 focus:outline-none"
                            href="{% url 'users:my_items' %}">
                             <svg class="w-5 h-5 text-gray-500 {% if request.path == '/my/' %}text-white{% endif %}" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -376,7 +375,7 @@
                         </a>
                     </li>
 
-                    <li class="{% if request.path == '/profile/' %}bg-red-600{% endif %}">
+                    <li style="{% if request.path == '/profile/' %}background-color: {{ general_settings.theme_color}}{% endif %}">
                         <a class="flex items-center h-10 px-2 space-x-2 transition rounded-lg  hover:bg-gray-500/5 focus:bg-brand-500/10 focus:text-brand-600 focus:outline-none"
                            href="{% url 'users:profile' %}">
                             <svg class="w-5 h-5 text-gray-500 {% if request.path == '/profile/' %}text-white{% endif %}" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -395,7 +394,7 @@
                         {% for project in projects %}
                             {% if not project.is_private or project.created_by__email == request.user.email %}
                               {% url 'project:project_detail' project.slug as project_url %}
-                                <li class="{% if request.path == project_url or project.title == object.project.title  %}bg-red-600{% endif %}">
+                                <li style="{% if request.path == project_url or project.title == object.project.title  %}background-color: {{ general_settings.theme_color}}{% endif %}">
                                     <a title="{{ project.title }}"
                                        class="flex items-center h-10 px-2 space-x-2 transition rounded-lg  hover:bg-gray-500/5 focus:bg-brand-500/10 focus:text-brand-600 focus:outline-none"
                                        href="{{project_url}}">

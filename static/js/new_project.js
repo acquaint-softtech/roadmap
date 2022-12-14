@@ -1,5 +1,11 @@
 function NewProject(){
     return {
+      light : localStorage.getItem('light') == 'true',
+      init(){
+          window.addEventListener('storage', () => {
+            this.light = localStorage.getItem('light') == 'true'
+          })
+      },
       AddBoard(){
         const node = document.getElementById("id_projects").lastElementChild;
         const clone = node.cloneNode(true);

@@ -7,6 +7,12 @@ function Votes() {
       options:['5','15','25','50','All'],
       total: "",
       myForData: votes,
+      light : localStorage.getItem('light') == 'true',
+      init(){
+        window.addEventListener('storage', () => {
+            this.light = localStorage.getItem('light') == 'true'
+        })
+      },
       get votes() {
         const start = this.pageNumber * this.size,
           end = start + this.size;

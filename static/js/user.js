@@ -8,10 +8,16 @@ function Users() {
       total: "",
       myForData: users,
       options:['5','10','25','50','All'],
+      light : localStorage.getItem('light') == 'true',
+      init(){
+          window.addEventListener('storage', () => {
+            this.light = localStorage.getItem('light') == 'true'
+          })
+      },
+
       get users() {
         const start = this.pageNumber * this.size,
           end = start + this.size;
-
         if (this.search === "") {
           this.total = this.myForData.length;
           return this.myForData.slice(start, end);
@@ -29,7 +35,6 @@ function Users() {
           })
           .slice(start, end);
       },
-
       sort(col) {
           if(this.sortCol === col) this.sortAsc = !this.sortAsc;
           this.sortCol = col;
