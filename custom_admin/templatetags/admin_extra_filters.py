@@ -42,5 +42,4 @@ def generate_og_image(text_data, slug=None, type=None):
 @register.simple_tag
 def set_bg_color(code):
     color_code = f'bg-[{code}]' if code else 'bg-[#d42020]'
-    print(color_code,"color_code")
     return color_code
