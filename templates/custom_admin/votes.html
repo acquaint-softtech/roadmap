@@ -12,8 +12,8 @@
                         </h1>
                     </header>
 
-                    <div :class="[light ? '' : 'bg-[#26242e]']"
-                        class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700" x-data="Votes()" x-init="init()">
+                    <div :class="[light ? 'bg-white' : 'bg-[#26242e]']"
+                        class="border border-gray-300 shadow-sm rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700" x-data="Votes()" x-init="init()">
                         <div>
                             <div class="flex items-center justify-between p-2 h-14">
                                 <div class="flex items-center gap-2">
@@ -50,22 +50,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div wire:key="ySOoly1CvoPY5k7s1w4y.table.selection.indicator"
-                            class="filament-tables-selection-indicator bg-primary-500/10 px-4 py-2 whitespace-nowrap text-sm border-t dark:border-gray-700"
-                             style="display: none;">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                class="animate-spin inline-block animate-spin w-4 h-4 mr-3 text-primary-500"
-                                 style="display: none;">
-                                <path opacity="0.2" fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                    fill="currentColor"></path>
-                                <path d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z"
-                                    fill="currentColor"></path>
-                            </svg>
-                        </div>
-
-
+                      
                         <div class="overflow-y-auto relative dark:border-gray-700 border-t">
                             <table
                                 class="filament-tables-table w-full text-left rtl:text-right divide-y table-auto dark:divide-gray-700">

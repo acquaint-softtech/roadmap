@@ -30,6 +30,7 @@ function adminHome() {
           this.light = !(this.light)
           this.open_toggle = !(this.open_toggle)
           localStorage.setItem("light",this.light);
+          window.dispatchEvent(new Event("storage"));
         },
         notification(type){
             this.formData = {'type':type}

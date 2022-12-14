@@ -7,9 +7,11 @@ function Inbox() {
       options:['5','15','25','50','All'],
       total: "",
       myForData: inbox,
-      light : true,
+      light : localStorage.getItem('light') == 'true',
       init(){
-        this.light = localStorage.getItem("light") == 'true'
+        window.addEventListener('storage', () => {
+            this.light = localStorage.getItem('light') == 'true'
+        })
       },
       get inboxes() {
         const start = this.pageNumber * this.size,

@@ -1,9 +1,11 @@
 function addTask() {
     return {
         boards: [],
-        light : true,
+        light : localStorage.getItem('light') == 'true',
         init(){
-            this.light = localStorage.getItem("light") == 'true'
+            window.addEventListener('storage', () => {
+              this.light = localStorage.getItem('light') == 'true'
+            })
         },
         GetBoards($event) {
             let project_id = $event.target.value

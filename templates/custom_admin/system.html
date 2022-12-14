@@ -3,17 +3,19 @@
 {% load static %}
 {% block content %}
 
-<div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full" x-data="system()" x-init="init()">
+<div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full" x-data="system()"
+     x-init="init()">
   
   
-  <div wire:id="Ct3OaQIPkFlD9xH4PJBo" class="filament-page">
+  <div class="filament-page">
     <div class="space-y-6">
       <header
         class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
-        <h1 :class="[light ? 'text-black' : 'text-white']" class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
+        <h1 :class="[light ? 'text-black' : 'text-white']"
+            class="text-2xl font-bold tracking-tight md:text-3xl filament-header-heading">
           System
         </h1>
-        
+  
         <div class="filament-page-actions flex flex-wrap items-center gap-4 justify-start shrink-0">
           <button type="button"
                   class="bg-blue-600 filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800 filament-page-button-action">
@@ -22,38 +24,35 @@
                     Refresh versions
                 </span>
                     </span>
-          
+    
           </button>
         
         </div>
       </header>
       
       <div class="filament-widgets-container grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8 mb-6">
-        <div wire:id="nFZupRj6Z5YKvYidkHzF" class="filament-widget col-span-2 space-y-4">
+        <div class="filament-widget col-span-2 space-y-4">
           <p :class="[light ? 'text-black' : 'text-white']" class="text-gray-500 dark:text-gray-400">
             This page describes your system information, as well as your current installed version.
           </p>
           
-          
-          <div class="p-2 space-y-2 bg-white rounded-xl shadow dark:border-gray-600 dark:bg-gray-800">
-            
-            
+          <div :class="[light ? 'bg-white' : 'bg-[#26242e]']" class="p-2 space-y-2 rounded-xl shadow dark:border-gray-600 dark:bg-gray-800">
             <div class="space-y-2">
               <div class="px-4 py-2 space-y-4">
                 <dl class="md:grid md:grid-cols-4">
                   <div class="flex flex-col border-b border-gray-100 p-6 text-center md:border-0 md:border-r">
-                    <dt class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">Current version</dt>
-                    <dd class="order-1 text-2xl font-extrabold text-primary-600">1.21</dd>
+                    <dt :class="[light ? 'text-black' : 'font-extrabold text-primary-600']" class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">Current version</dt>
+                    <dd :class="[light ? 'text-black' : 'text-white']" class="order-1 text-2xl">1.21</dd>
                   </div>
                   <div
                     class="flex flex-col border-t border-b border-gray-100 p-6 text-center md:border-0 md:border-l md:border-r">
-                    <dt class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">Remote version</dt>
-                    <dd class="order-1 text-2xl font-extrabold text-primary-600">1.25</dd>
+                    <dt :class="[light ? 'text-black' : 'text-primary-600']" class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">Remote version</dt>
+                    <dd :class="[light ? 'text-black' : 'text-white']" class="order-1 text-2xl">1.25</dd>
                   </div>
                   <div class="flex flex-col border-t border-gray-100 p-6 text-center md:border-0 md:border-l">
                     <dt class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">
                       <a class="border-b border-dotted border-gray-500"
-                         href="https://github.com/ploi-deploy/roadmap/releases/tag/1.25" target="_blank">
+                         href="#" target="_blank">
                         Update available
                       </a>
                     </dt>
@@ -65,36 +64,32 @@
                       </svg>
                     </dd>
                   </div>
-                  
                   <div class="flex flex-col border-t border-gray-100 p-6 text-center md:border-0 md:border-l">
-                    <dt class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">Python version</dt>
-                    <dd class="order-1 text-2xl font-extrabold text-primary-600">{{python_version}}</dd>
+                    <dt :class="[light ? 'text-black' : 'font-extrabold text-primary-600']" class="order-2 mt-2 text-md leading-6 font-medium text-gray-500">Python version</dt>
+                    <dd :class="[light ? 'text-black' : 'text-white']"  class="order-1 text-2xl">{{python_version}}</dd>
                   </div>
                 </dl>
               </div>
             </div>
-          
-          
           </div>
         </div>
-    </div>
+      </div>
     </div>
   </div>
-  
-  <!-- Livewire Component wire-end:Ct3OaQIPkFlD9xH4PJBo -->
-
-
 </div>
 
 <script>
   function system(){
    return {
-    light : true,
+    light :  localStorage.getItem('light') == 'true',
     delete_popup : false,
     init(){
-      this.light = localStorage.getItem("light") == 'true'
+      window.addEventListener('storage', () => {
+         this.light = localStorage.getItem('light') == 'true'
+      })
     }
    }
   }
+
 </script>
 {% endblock %}

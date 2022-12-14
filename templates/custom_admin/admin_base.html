@@ -15,7 +15,7 @@
           [x-cloak] { display: none }
     </style>
 </head>
-<body class="flex bg-gray-100 min-h-screen"  x-data="adminHome()" x-init="init()" :class="[light ? '' : 'bg-[#26242e]']">
+<body class="flex min-h-screen"  x-data="adminHome()" x-init="init()" :class="[light ? 'bg-gray-100' : 'bg-[#26242e]']">
 <div class="filament-sidebar-close-overlay fixed inset-0 z-20 w-full h-full bg-gray-900/50 lg:hidden"></div>
 <aside :class="[light ? '' : 'bg-[#26242e]']" class="filament-sidebar fixed inset-y-0 left-0 rtl:left-auto rtl:right-0 z-20 flex flex-col h-screen overflow-hidden shadow-2xl transition-all bg-white lg:border-r rtl:lg:border-r-0 rtl:lg:border-l w-80 lg:z-0 dark:bg-gray-800 dark:border-gray-700 filament-sidebar-open translate-x-0 max-w-[20em] lg:max-w-[var(--sidebar-width)]">
     <header :class="[light ? '' : 'bg-[#26242e]']" class="filament-sidebar-header border-b h-[4rem] shrink-0 px-6 flex items-center dark:border-gray-700">
@@ -26,11 +26,10 @@
             </div>
         </a>
     </header>
-    <nav class="flex-1 py-6 overflow-y-auto filament-sidebar-nav">
+    <nav :class="[light ? '' : 'bg-[#26242e]']" class="flex-1 py-6 overflow-y-auto filament-sidebar-nav">
         <ul class="px-6 space-y-6">
             <li class="filament-sidebar-group">
-                <ul
-                        class="text-sm space-y-1 -mx-3">
+                <ul class="text-sm space-y-1 -mx-3">
                     <li class="filament-sidebar-item">
                         <a href="{% url 'custom_admin:admin_home' %}"
                            class="{% if request.path == '/admin/' %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-[#3b82f6] text-white {% else %}flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700{% endif %}">
@@ -253,9 +252,9 @@
     </nav>
 </aside>
 <body>
-<div class="filament-main flex-col gap-y-6 w-screen flex-1 rtl:lg:pl-0 hidden h-full transition-all lg:pl-[20rem] rtl:lg:pr-[20rem]"
+<div :class="[light ? 'bg-white' : 'bg-[#26242e]']" class="filament-main flex-col gap-y-6 w-screen flex-1 rtl:lg:pl-0 hidden h-full transition-all lg:pl-[20rem] rtl:lg:pr-[20rem]"
     style="display: flex;">
-    <header :class="[light ? '' : 'bg-[#26242e]']" class="filament-main-topbar sticky top-0 z-10 flex h-16 w-full shrink-0 items-center border-b bg-white dark:bg-gray-800 dark:border-gray-700">
+    <header :class="[light ? 'bg-white' : 'bg-[#26242e]']" class="filament-main-topbar sticky top-0 z-10 flex h-16 w-full shrink-0 items-center border-b dark:bg-gray-800 dark:border-gray-700">
         <div class="flex items-center w-full px-2 sm:px-4 md:px-6 lg:px-8">
             <button
                 class="filament-sidebar-open-button shrink-0 flex items-center justify-center w-10 h-10 transition text-primary-500 rounded-full hover:bg-gray-500/5 focus:bg-primary-500/10 focus:outline-none lg:z-10 lg:hover:bg-white lg:focus:bg-white lg:hover:text-gray-600 lg:focus:text-gray-600 lg:-ml-[44px] lg:w-6 lg:h-6 lg:text-gray-500 lg:bg-white lg:shadow lg:dark:bg-gray-900 lg:dark:hover:text-gray-400 lg:dark:focus:text-gray-400 lg:mr-4 rtl:lg:ml-4 rtl:lg:-mr-[44px]">
@@ -299,7 +298,7 @@
                                 </li>
                                 <li class="h-6 border-r border-gray-300 -skew-x-12 dark:border-gray-500"></li>
                                 <li>
-                                    <a :class="[light ? 'text-black' : 'text-white']" href="#" class="text-gray-500 dark:text-gray-400">
+                                    <a :class="[light ? 'text-gray-500' : 'text-white']" href="#" class="dark:text-gray-400">
                                         {{data.type}}
                                     </a>
                                 </li>
@@ -353,7 +352,7 @@
                         </div>
                       
                       <div :class="[light ? '' : 'bg-[#26242e]']" x-cloak x-show="global_search.length > 0" class="filament-global-search-results-container absolute right-0 rtl:right-auto rtl:left-0 top-auto z-10 mt-2 shadow-xl overflow-hidden rounded-xl w-screen max-w-xs sm:max-w-lg">
-                        <div :class="[light ? '' : 'bg-[#26242e]']" class="overflow-y-scroll overflow-x-hidden max-h-96 bg-white shadow rounded-xl dark:bg-gray-800">
+                        <div :class="[light ? 'bg-white' : 'bg-[#26242e]']" class="overflow-y-scroll overflow-x-hidden max-h-96 shadow rounded-xl dark:bg-gray-800">
                           <div :class="[light ? 'text-black' : 'text-white']" x-show="global_items.length == 0" class="filament-global-search-no-results-message px-6 py-4 dark:text-gray-200">
                               No search results found.
                           </div>
@@ -528,7 +527,7 @@
                         </div>
                     </div>
 
-                    <div :class="[light ? '' : 'bg-[#26242e]']" x-cloak class="filament-dropdown-panel absolute z-10 w-full rounded-lg bg-white shadow-lg ring-1 ring-black/5 transition dark:bg-gray-800 dark:ring-white/10 max-w-[14rem] absolute top-12 right-9"
+                    <div :class="[light ? 'bg-white' : 'bg-[#26242e]']" x-cloak class="filament-dropdown-panel absolute z-10 w-full rounded-lg shadow-lg ring-1 ring-black/5 transition dark:bg-gray-800 dark:ring-white/10 max-w-[14rem] absolute top-12 right-9"
                          x-show="open_toggle">
                         <ul class="py-1 space-y-1">
                             <div>
@@ -547,7 +546,7 @@
                                 </a>
                             </div>
                             <div>
-                                <div x-show="light">
+                                <div x-show="light == false">
                                     <button type="button" x-on:click="lightmode()"
                                         class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-[#3b82f6] focus:bg-primary-700">
                                         <svg :class="[light ? 'text-black' : 'text-white']" class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-primary-500"
@@ -562,7 +561,7 @@
                                         </span>
                                     </button>
                                 </div>
-                                <div x-show="light == false">
+                                <div x-show="light == true">
                                     <button type="button" x-on:click="lightmode()"
                                         class="filament-dropdown-item flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-[#3b82f6] focus:bg-primary-700">
                                         <svg :class="[light ? 'text-black' : 'text-white']" class="mr-2 -ml-1 w-5 h-5 flex-shrink-0 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-primary-500"

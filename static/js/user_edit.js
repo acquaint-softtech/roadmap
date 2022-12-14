@@ -14,11 +14,14 @@ function UserEdit() {
       items: items,
       comments: comments,
       votes:votes,
-      light : true,
+      light : localStorage.getItem('light') == 'true',
       options:['5','10','25','50','All'],
       activeTab:0,
       init(){
         this.light = localStorage.getItem("light") == 'true'
+         window.addEventListener('storage', () => {
+            this.light = localStorage.getItem('light') == 'true'
+        })
       },
       get user_items() {
         const start = this.pageNumber * this.size,

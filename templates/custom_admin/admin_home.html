@@ -2,7 +2,7 @@
 {% load humanize %}
 
 {% block content %}
-    <div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full">
+    <div class="filament-main-content flex-1 w-full px-4 mx-auto md:px-6 lg:px-8 max-w-full" :class="[light ? 'bg-white' : 'bg-[#26242e]']">
         <div class="filament-page filament-dashboard-page">
             <div class="space-y-6">
                 <header class="filament-header space-y-2 items-start justify-between sm:flex sm:space-y-0 sm:space-x-4  sm:rtl:space-x-reverse sm:py-4">
@@ -12,7 +12,7 @@
                 </header>
                 <div class="filament-widgets-container grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8 mb-6">
                     <div class="filament-widget col-span-1 filament-account-widget">
-                        <div  :class="[light ? '' : 'bg-[#26242e]']" class="p-2 space-y-2 bg-white rounded-xl shadow dark:border-gray-600 dark:bg-gray-800">
+                        <div  :class="[light ? 'bg-white' : 'bg-[#26242e]']" class="p-2 space-y-2 rounded-xl shadow dark:border-gray-600 dark:bg-gray-800">
                             <div class="space-y-2">
                                 <div class="px-4 py-2 space-y-4">
                                     <div class="h-12 flex items-center space-x-4 rtl:space-x-reverse">
@@ -23,8 +23,8 @@
                                                 Welcome, {{request.user.email}}
                                             </h2>
                                             <a href="{% url 'users:logout' %}">
-                                            <button :class="[light ? 'text-black' : 'text-white']" type="submit"
-                                                    class="text-gray-600 hover:text-primary-500 focus:outline-none focus:underline dark:text-gray-300 dark:hover:text-primary-500">
+                                            <button :class="[light ? 'text-black ' : 'text-white']" type="submit"
+                                                    class="hover:text-primary-500 focus:outline-none focus:underline">
                                                 Sign out
                                             </button></a>
                                         </div>
@@ -39,7 +39,7 @@
 
                     <div class="filament-widget col-span-1 filament-widgets-table-widget">
                         <div class="filament-tables-component">
-                            <div :class="[light ? '' : 'bg-[#26242e]']" class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700">
+                            <div class="border border-gray-300 shadow-sm rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700" :class="[light ? 'bg-white' : 'bg-[#26242e]']">
                                 <div>
                                     <div class="px-2 pt-2">
                                         <div class="filament-tables-header px-4 py-2 mb-2">
@@ -141,7 +141,7 @@
 
                     <div class="filament-widget col-span-1 filament-widgets-table-widget">
                         <div  class="filament-tables-component">
-                            <div :class="[light ? '' : 'bg-[#26242e]']" class="border border-gray-300 shadow-sm bg-white rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700">
+                            <div :class="[light ? 'bg-white' : 'bg-[#26242e]']" class="border border-gray-300 shadow-sm rounded-xl filament-tables-container dark:bg-gray-800 dark:border-gray-700">
                                 <div>
                                     <div class="px-2 pt-2">
                                         <div class="filament-tables-header px-4 py-2 mb-2">

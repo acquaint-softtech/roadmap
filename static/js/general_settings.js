@@ -4,10 +4,12 @@
         og_popup : false,
         boards : boards,
         show_changelog : false,
-        light : true,
+        light : localStorage.getItem('light') == 'true',
         init() {
           document.getElementById('id_enable_change_log').checked == true  ? this.show_changelog = true : this.show_changelog = false
-          this.light = localStorage.getItem("light") == 'true'
+          window.addEventListener('storage', () => {
+            this.light = localStorage.getItem('light') == 'true'
+          })
         },
         Changelog(event){
           var checked_value = document.getElementById('id_enable_change_log').checked

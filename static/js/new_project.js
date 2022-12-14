@@ -1,8 +1,10 @@
 function NewProject(){
     return {
-      light : true,
+      light : localStorage.getItem('light') == 'true',
       init(){
-          this.light = localStorage.getItem("light") == 'true'
+          window.addEventListener('storage', () => {
+            this.light = localStorage.getItem('light') == 'true'
+          })
       },
       AddBoard(){
         const node = document.getElementById("id_projects").lastElementChild;
